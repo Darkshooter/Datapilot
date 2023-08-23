@@ -1,0 +1,168 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,700');
+
+
+html,body {
+    height:100%;
+    width: 100%;
+    font-family: 'Poppins', sans-serif;
+    color: rgb(29, 27, 27); /* all color */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url('img/micro_back\ \(1\).png');
+    
+    
+}
+
+
+#logos {
+    height: 147px ;
+    width: auto;
+    position: relative;
+    top: -112px;
+    right: -572px;
+}
+
+/* NAVBAR */
+.bg-body-tertiary {
+    background-color: transparent !important;
+    font-size: 20px;
+    margin-top: 4rem;
+    
+    }
+
+.navbar-nav li /* list items */
+{
+        padding-right:50px; /* list item padding */
+}
+
+
+#heading {
+    font-size: 60px;
+    font-weight: bold;
+    
+}
+
+#para {
+    font-size: 27px;
+    width: 70%;
+    
+}
+
+.bottom-data {
+    padding-top: 4rem;
+}
+
+/* NUMBERING */
+span.number {
+    font-size: 30px;
+    font-weight: bold;
+    margin-right: 2rem;
+}
+
+/* EXPLANANTION OF THE BUTTONS */
+p.explain {
+    font-size: 20px;
+}
+
+#extract-btn {
+    margin-left: 130px;
+}
+
+#setup-btn {
+    margin-left: 270px;
+}
+
+#convert-btn {
+    margin-left: 225px;
+}
+
+.convert-btn-body{
+    width: 92%;
+}
+
+.offcanvas {
+    width: 700px !important;
+    
+    background: rgb(255, 255, 255);
+  }
+
+.accordion-button {
+    font-size: 20px !important;
+}
+
+
+hr {
+    width: 92%;
+}
+
+/* CONVERT DATA INPUTS */
+input.text {
+    height: 70px;
+    width: 600px;
+    outline: none;
+    color: #8b949e;
+    font-size: 20px;
+    padding: 10px 20px;
+    border: 2px solid ;
+    font-family: 'Poppins';
+    border-radius: 30px;
+    margin: 10px;
+}
+
+.form-check {
+    padding-left: 3rem;
+    font-size: 20px;
+    display: inline-block;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    
+}
+
+.convert-data-btn-canvas {
+    height: 70px;
+    width: 600px;
+    color: white;
+    outline: none;
+    background-color: #2cb34a ;
+    font-size: 20px;
+    padding: 10px 20px;
+    border: 2px solid transparent;
+    font-family: 'Poppins';
+    border-radius: 30px;
+    margin: 10px;
+}
+
+/* -------------------   COVERT DROPDOWN CONTENT   -------------------------- */
+
+
+
+
+/*---Media Queries --*/
+@media (max-width: 1670px) {
+ 
+    p.explain {
+        font-size: 27px;
+        width: 40%;
+    }
+    
+  
+}
+
+@media (max-width: 992px) {
+
+    #heading {
+        font-size: 30px;
+        font-weight: bold;
+        margin-top: 6rem;
+    }
+  
+  
+    }
+  @media (max-width: 768px) {
+    
+   
+  
+  }
+  @media (max-width: 576px) {
+    
+  }

@@ -1,0 +1,135 @@
+VERSION "HIPBNYYYYYYYYYYYYYYYYYYYYYYYYYYYNNNNNNNNNN/4/%%%/4/'%**4NNN///"
+
+NS_ : 
+
+BS_: 
+
+BU_: Vector__XXX
+
+BO_ 2167208960 Accelerationinx(longitudinal): 8 Vector__XXX
+ SG_ SG_Accelerationinx(longitudinal)1 : 32|32@1- (1,0) [0|255] "m/s2" Vector__XXX
+
+BO_ 2167274496 Accelerationiny(lateral): 8 Vector__XXX
+ SG_ SG_Accelerationiny(lateral)1 : 32|32@1- (1,0) [0|255] "m/s2" Vector__XXX
+
+BO_ 2167340032 Accelerationinz(normal): 8 Vector__XXX
+ SG_ SG_Accelerationinz(normal)1 : 32|32@1- (1,0) [0|255] "m/s2" Vector__XXX
+
+BO_ 2168126208 Verticalspeed_B: 8 Vector__XXX
+ SG_ SG_Verticalspeed_B1 : 32|32@1- (1,0) [0|255] "m/s" Vector__XXX
+
+BO_ 2168192512 Indicatedairspeed: 8 Vector__XXX
+ SG_ SG_Indicatedairspeed1 : 32|32@1- (1,0) [0|255] "m/s" Vector__XXX
+
+BO_ 2168453888 Barometriccorrection(QNH)_B: 8 Vector__XXX
+ SG_ SG_Barometriccorrection(QNH)_B1 : 32|32@1- (1,0) [0|255] "hPa" Vector__XXX
+
+BO_ 2168519424 Barocorrectedaltitude_B: 8 Vector__XXX
+ SG_ SG_Barocorrectedaltitude_B1 : 32|32@1- (1,0) [0|255] "m" Vector__XXX
+
+BO_ 2168650496 Standard_altitude_B: 8 Vector__XXX
+ SG_ SG_Standard_altitude_B1 : 32|32@1- (1,0) [0|255] "m" Vector__XXX
+
+BO_ 2168847872 Differentialpressure: 8 Vector__XXX
+ SG_ SG_Differentialpressure1 : 32|32@1- (1,0) [0|255] "hPa" Vector__XXX
+
+BO_ 2168912640 Static_pressure_B: 8 Vector__XXX
+ SG_ SG_Static_pressure_B1 : 32|32@1- (1,0) [0|255] "hPa" Vector__XXX
+
+BO_ 2180316416 EngineRPM1: 8 Vector__XXX
+ SG_ SG_EngineRPM11 : 32|32@1- (1,0) [0|255] " RPM" Vector__XXX
+
+BO_ 2181889280 Enginefuelflowrate: 8 Vector__XXX
+ SG_ SG_Enginefuelflowrate1 : 32|32@1- (1,0) [0|255] "l/h" Vector__XXX
+
+BO_ 2182151424 Manifoldpressure1: 8 Vector__XXX
+ SG_ SG_Manifoldpressure11 : 32|32@1- (1,0) [0|255] "bar" Vector__XXX
+
+BO_ 2182413568 Engineoilpressure1: 8 Vector__XXX
+ SG_ SG_Engineoilpressure11 : 32|32@1- (1,0) [0|255] "bar" Vector__XXX
+
+BO_ 2182675712 Engine_oil_temperature1: 8 Vector__XXX
+ SG_ SG_Engine_oil_temperature11 : 32|32@1- (1,0) [0|255] "?C" Vector__XXX
+
+BO_ 2191326464 Fuellevel1: 8 Vector__XXX
+ SG_ SG_Fuellevel11 : 32|32@1- (1,0) [0|255] "liters" Vector__XXX
+
+BO_ 2192375040 Fuelsystempressure1: 8 Vector__XXX
+ SG_ SG_Fuelsystempressure11 : 32|32@1- (1,0) [0|255] "bar" Vector__XXX
+
+BO_ 2207841536 Voltage(DC)1: 8 Vector__XXX
+ SG_ SG_Voltage(DC)11 : 32|32@1- (1,0) [0|255] "V" Vector__XXX
+
+BO_ 2245852416 CHT+indexinregisterA: 8 Vector__XXX
+ SG_ SG_CHT+indexinregisterA1 : 32|32@1- (1,0) [0|255] "?C" Vector__XXX
+
+BO_ 2245917952 EGT+indexinregisterA: 8 Vector__XXX
+ SG_ SG_EGT+indexinregisterA1 : 32|32@1- (1,0) [0|255] "?C" Vector__XXX
+
+BO_ 2246507264 Enginetotaltime_B: 8 Vector__XXX
+ SG_ SG_Enginetotaltime_B1 : 32|32@1- (1,0) [0|255] "h" Vector__XXX
+
+BO_ 2247294464 Flighttime(section2.2.3): 8 Vector__XXX
+ SG_ SG_Flighttime(section2.2.3)1 : 32|32@1- (1,0) [0|255] "" Vector__XXX
+
+BO_ 2168125440 Verticalspeed_8: 8 Vector__XXX
+ SG_ SG_Verticalspeed_81 : 32|32@1- (1,0) [0|255] "m/s" Vector__XXX
+
+BO_ 2168453120 Barometriccorrection(QNH)_8: 8 Vector__XXX
+ SG_ SG_Barometriccorrection(QNH)_81 : 32|32@1- (1,0) [0|255] "hPa" Vector__XXX
+
+BO_ 2168518656 Barocorrectedaltitude_8: 8 Vector__XXX
+ SG_ SG_Barocorrectedaltitude_81 : 32|32@1- (1,0) [0|255] "m" Vector__XXX
+
+BO_ 2168649728 Standard_altitude_8: 8 Vector__XXX
+ SG_ SG_Standard_altitude_81 : 32|32@1- (1,0) [0|255] "m" Vector__XXX
+
+BO_ 2168911872 Static_pressure_8: 8 Vector__XXX
+ SG_ SG_Static_pressure_81 : 32|32@1- (1,0) [0|255] "hPa" Vector__XXX
+
+BO_ 2246506496 Enginetotaltime_8: 8 Vector__XXX
+ SG_ SG_Enginetotaltime_81 : 32|32@1- (1,0) [0|255] "h" Vector__XXX
+
+BO_ 2149535696 EngineRPM: 8 Vector__XXX
+ SG_ SG_EngineRPM1 : 0|32@1+ (1,0) [0|10000] "" Vector__XXX
+
+BA_DEF_ SG_  "GenSigSendType" ENUM  "Cyclic","OnWrite","OnWriteWithRepetition","OnChange","OnChangeWithRepetition","IfActive","IfActiveWithRepetition","NoSigSendType";
+BA_DEF_ SG_  "GenSigInactiveValue" INT  0 0;
+BA_DEF_ BO_  "GenMsgCycleTime" INT  0 0;
+BA_DEF_ BO_  "GenMsgSendType" ENUM  "Cyclic","not_used","not_used","not_used","not_used","Cyclic","not_used","IfActive","NoMsgSendType";
+BA_DEF_ BU_  "NmStationAddress" HEX  0 0;
+BA_DEF_  "BusType" STRING  ;
+BA_DEF_DEF_  "GenSigSendType" "Cyclic";
+BA_DEF_DEF_  "GenSigInactiveValue" 0;
+BA_DEF_DEF_  "GenMsgCycleTime" 0;
+BA_DEF_DEF_  "GenMsgSendType" "NoMsgSendType";
+BA_DEF_DEF_  "NmStationAddress" 0;
+BA_DEF_DEF_  "BusType" "CAN";
+SIG_VALTYPE_ 2167208960 SG_Accelerationinx(longitudinal)1 : 1;
+SIG_VALTYPE_ 2167274496 SG_Accelerationiny(lateral)1 : 1;
+SIG_VALTYPE_ 2167340032 SG_Accelerationinz(normal)1 : 1;
+SIG_VALTYPE_ 2168126208 SG_Verticalspeed_B1 : 1;
+SIG_VALTYPE_ 2168192512 SG_Indicatedairspeed1 : 1;
+SIG_VALTYPE_ 2168453888 SG_Barometriccorrection(QNH)_B1 : 1;
+SIG_VALTYPE_ 2168519424 SG_Barocorrectedaltitude_B1 : 1;
+SIG_VALTYPE_ 2168650496 SG_Standard_altitude_B1 : 1;
+SIG_VALTYPE_ 2168847872 SG_Differentialpressure1 : 1;
+SIG_VALTYPE_ 2168912640 SG_Static_pressure_B1 : 1;
+SIG_VALTYPE_ 2180316416 SG_EngineRPM11 : 1;
+SIG_VALTYPE_ 2181889280 SG_Enginefuelflowrate1 : 1;
+SIG_VALTYPE_ 2182151424 SG_Manifoldpressure11 : 1;
+SIG_VALTYPE_ 2182413568 SG_Engineoilpressure11 : 1;
+SIG_VALTYPE_ 2182675712 SG_Engine_oil_temperature11 : 1;
+SIG_VALTYPE_ 2191326464 SG_Fuellevel11 : 1;
+SIG_VALTYPE_ 2192375040 SG_Fuelsystempressure11 : 1;
+SIG_VALTYPE_ 2207841536 SG_Voltage(DC)11 : 1;
+SIG_VALTYPE_ 2245852416 SG_CHT+indexinregisterA1 : 1;
+SIG_VALTYPE_ 2245917952 SG_EGT+indexinregisterA1 : 1;
+SIG_VALTYPE_ 2246507264 SG_Enginetotaltime_B1 : 1;
+SIG_VALTYPE_ 2247294464 SG_Flighttime(section2.2.3)1 : 1;
+SIG_VALTYPE_ 2168125440 SG_Verticalspeed_81 : 1;
+SIG_VALTYPE_ 2168453120 SG_Barometriccorrection(QNH)_81 : 1;
+SIG_VALTYPE_ 2168518656 SG_Barocorrectedaltitude_81 : 1;
+SIG_VALTYPE_ 2168649728 SG_Standard_altitude_81 : 1;
+SIG_VALTYPE_ 2168911872 SG_Static_pressure_81 : 1;
+SIG_VALTYPE_ 2246506496 SG_Enginetotaltime_81 : 1;

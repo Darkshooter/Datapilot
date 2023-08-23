@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+    <link href="home_style.css" rel="stylesheet" />
+
+    
+  </head>
+  <body>
+
+    <!-- LEFT SIDE -->
+    <div class="container.fluid content">
+      <div class="row">
+          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <!-- <img src="/img/micro_back (1).png"> -->
+            
+          </div>
+
+          <!-- RIGHT SIDE -->
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+
+          <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+              <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+              >
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a
+                      class="nav-link"
+                      aria-current="page"
+                      href="https://www.influxbigdata.in/blog"
+                      target="_blank"
+                      >Blogs</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Documentation</a>
+                  </li>
+                  <li class="nav-item">
+                    <a
+                      class="nav-link"
+                      href="img/Product_catalog_final_updated2.pdf"
+                      download="Influx_Product_Catalog.pdf"         
+                      >Products</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+          <img id="logos" src="/img/logos.png">
+          <h1 id="heading">CHARTING NEW FRONTIERS, <span id="powering">POWERING </span>THE SKIES.</h1>
+          <p id="para">
+            Data analysis may just be numbers, but it holds the <span style="font-weight: bold;" >stories & tales</span>  of every
+            flight taken.
+          </p>
+
+                    <div class="bottom-data">
+                        <!-- EXTRACT DATA -->
+                        <hr />
+                        <p class="explain">
+                          <span class="number">01</span>Extract Data from your logger and save it in a
+                          file.<button id="extract-btn" type="button" class="btn btn-primary">
+                            Extract Data
+                          </button>
+                        </p>
+
+                        <!-- SETUP LOGGER -->
+                        <hr />
+                        <p class="explain">
+                          <span class="number">02</span>Setup your logger using functions.<button id="setup-btn" type="button" class="btn btn-primary">
+                            Setup Logger
+                          </button>
+                        </p>
+
+                        <!-- CONVERT DATA -->
+                        <hr />
+                        <p class="explain">
+                          <span class="number">03</span>Convert your files to MF4/.CSV format.
+
+                          <!-- CONVERT BUTTON CANVAS -->
+                          <button class="btn btn-primary" id="convert-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                            Convert Data
+                          </button>               
+                          
+                          <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                            <div class="offcanvas-header">
+                              <h5 class="offcanvas-title" id="offcanvasExampleLabel" style="font-size: 40px; font-weight: bold;" ></h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                            </div>
+                            <!-- CONVERT DATA BUTTON CANVAS BODY -->
+                            <div class="offcanvas-body">
+
+                              <h1 style="font-weight: bold; padding-left: 1rem; padding-bottom: 1rem;" >ReXdesk Convert</h1>
+
+                              <div class="convert-inputs">   
+                                
+                                <div class="accordion" id="accordionExample">
+                                  <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingOne">
+                                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        Convert Multiple .rxd Files
+                                      </button>
+                                    </h2>
+                                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                      <div class="accordion-body">
+
+                                            <input 
+                                      class="text"
+                                      id="input"
+                                      type="text"
+                                      placeholder="Enter Input Folder"
+                                    />
+                                    <input
+                                      class="text"
+                                      id="output"
+                                      type="text"
+                                      placeholder="Enter Output Folder"
+                                    />             
+
+                                    <div class="form-check">
+                                      <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="flexRadioDefault1">
+                                      <label class="form-check-label" for="flexRadioDefault1">
+                                        Time as Date
+                                      </label>
+                                    </div>
+
+                                    <div class="form-check">
+                                      <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="flexRadioDefault2" >
+                                      <label class="form-check-label" for="flexRadioDefault2">
+                                        Time from Zero
+                                      </label>
+                                    </div>
+
+                                    <div class="form-check">
+                                      <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="flexRadioDefault2">
+                                      <label class="form-check-label" for="flexRadioDefault2">
+                                        Single Time Base
+                                      </label>
+                                    </div>
+
+                                    <!-- <button class="convert-data-btn-canvas" onclick="calculate()">Convert Files</button> -->
+
+                                    <button class="convert-data-btn-canvas" type="button" disabled="false">
+                                      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                      Converting...
+                                    </button>
+
+                                    <!-- <button class="refresh" onClick="window.location.reload();">
+                                      &#x21bb;
+                                    </button> -->
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div class="accordion accordion-flush" id="accordionFlushExample">    <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingTwo">
+                                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        Convert Single .rxd File
+                                      </button>
+                                    </h2>
+                                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                      <div class="accordion-body">
+                                        <p>helloworld</p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>                                                                      
+                                                
+                              </div>
+
+                            </div>
+                          </div>
+
+                        </p>
+                    </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    <!-- <img id="logos" src="/img/logos.png"> -->
+
+    <!-- Javascript to enable popovers -->
+
+    <script>
+      const popoverTriggerList = document.querySelectorAll(
+        '[data-bs-toggle="popover"]'
+      );
+      const popoverList = [...popoverTriggerList].map(
+        (popoverTriggerEl) => new bootstrap.Popover(popoverTriggerEl)
+      );
+    </script>
+
+    <!-- Connect eel to HTML -->
+    <script src="../eel.js"></script>
+
+    <!-- -->
+    <script>
+      login_email = document.getElementById("email");
+      login_pass = document.getElementById("pass");
+
+      function details() {
+        eel.login_details(login_email.value, login_pass.value)(login_check);
+      }
+
+      function login_check(stat) 
+      {
+        for (let i of stat) {
+          console.log(stat);
+        }
+      }
+    </script>
+  </body>
+</html>

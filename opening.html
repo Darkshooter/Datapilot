@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DataPilot pro</title>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+    <link href="opening_style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="container.fluid">
+      <div class="row">
+        <div class="col-md-12 col-lg-12">
+          <div class="buttons">           
+            <!-- Extract Data Button -->
+            <button type="button" class="btn btn-dark one" onclick="extractdata()">Extract Data</button>
+            <!-- Setup Logger Button -->
+            <button
+              class="btn btn-dark two"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasWithBothOptions-setuplogger"
+              aria-controls="offcanvasWithBothOptions"
+            >
+              Setup Logger
+            </button>
+            <!-- Setup Logger Canvas-->
+            <div
+              class="offcanvas offcanvas-start"
+              data-bs-scroll="true"
+              tabindex="-1"
+              aria-labelledby="offcanvasWithBothOptionsLabel"
+              id="offcanvasWithBothOptions-setuplogger"
+            >
+              <!-- Setup Logger heading section-->
+              <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">
+                  SETUP <span style="font-weight: 100">LOGGER</span>
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="offcanvas"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <!-- Setup Logger body section-->
+              <div class="offcanvas-body">
+                <p>
+                  <div class="dropdown-center"> 
+                  <a
+                    class="btn btn-primary active"
+                    id="conv-option-btn"
+                    data-bs-toggle="collapse"
+                    href="#collapseWidthExample"
+                    role="button"
+                    aria-expanded="false"
+                    aria-controls="collapseExample"
+                  >
+                    Setup Logger
+                  </a>
+                  <a class="btn btn-primary dropdown-toggle" id="conv-option-btn" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                    Additional Resources
+                  </a>
+                  <ul class="dropdown-menu additional-resources" aria-labelledby="conv-option-btn">
+                    <li><a class="dropdown-item"  href="https://docs.influxtechnology.com/influx-support-documentation/influx-support-documentation/support-and-guides" target="_blank">Documentation</a></li>
+                    <li><a class="dropdown-item"  href="/img/Product_catalog_final_updated2.pdf" download="ProductCatalog.pdf" target="_blank">Products</a></li>
+                    <li><a class="dropdown-item"  href="https://www.influxbigdata.in/blog" target="_blank">Blogs</a></li>
+                    <li><a class="dropdown-item"  href="https://www.youtube.com/@influxtechnology512/playlists" target="_blank">Tutorials</a></li>
+                  </ul>
+                  </div>
+                </p>
+                <div
+                  class="collapse collapse-horizontal show"
+                  id="collapseWidthExample"
+                >
+                  <div class="card card-body" style="width: 560px;" >
+                    <h1
+                      style="
+                        color: white;
+                        font-size: 35px;
+                        padding-left: 1rem;
+                        margin-top: 0.3rem;
+                      "
+                    >
+                      <i
+                        class="fas fa-exclamation-triangle fa-2x"
+                        style="color: #ffa500; font-size: 30px"
+                      ></i>
+                      WARNING
+                    </h1>
+                    <p
+                      style="
+                        color: rgb(206, 206, 206);
+                        font-size: 18px;
+                        padding-left: 1rem;
+                        font-weight: 400;
+                        padding-top: None;
+                      "
+                    >
+                      The
+                      <span style="color: #ffaf1c;">format</span> checkbox will
+                      <span style="color: #ffaf1c;">delete all the log files</span> in your Rexgen logger once executed.
+                    </p>
+
+                    <div class="checkboxes-setup" style="display: inline-block;">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="firmware_update">
+                        <label class="form-check-label" for="flexCheckDefault">
+                          Firmware Update
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="format">
+                        <label class="form-check-label" for="flexCheckChecked">
+                          Format Logger
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="send_config">
+                        <label class="form-check-label" for="flexCheckDefault">
+                          Send Config
+                        </label>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      id="setuplogger"
+                      style="background-color: #dd9000"
+                      class="btn btn-dark"
+                      onclick="setuplogger_fnc()"
+                    >
+                      Setup Logger
+                    </button>
+                    
+                    <p id="not-connected" style="color: azure; padding-top: 1rem; margin-left: 2rem;">
+                    </p>
+                    <p id="not-connected2" style="color: azure;  margin-left: 11.5rem;">
+                      
+                    </p>
+                    <!-- fas fa-solid fa-circle-xmark fa-2x -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Convert Data Button -->
+            <button
+              class="btn btn-dark three"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasWithBothOptions"
+              aria-controls="offcanvasWithBothOptions"
+            >
+              Convert data
+            </button>
+            <div
+              class="offcanvas offcanvas-start"
+              data-bs-scroll="true"
+              tabindex="-1"
+              id="offcanvasWithBothOptions"
+              aria-labelledby="offcanvasWithBothOptionsLabel"
+            >
+              <!-- Convert Data Canvas-heading section -->
+              <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">
+                  CONVERT <span style="font-weight: 200">LOGFILES</span>
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="offcanvas"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <!-- Convert Data Canvas-body section -->
+              <div class="offcanvas-body">
+
+                <p>       
+                  <div class="dropdown">    
+                  <a
+                    class="btn btn-primary active"
+                    id="conv-option-btn"
+                    data-bs-toggle="collapse"
+                    href="#collapseExample"
+                    role="button"
+                    aria-expanded="false"
+                    aria-controls="collapseExample"
+                  >
+                    Multiple RXD Files
+                  </a>
+                  <a
+                    class="btn btn-primary"
+                    id="conv-option-btn"
+                    data-bs-toggle="collapse"
+                    href="#collapseExample-two"
+                    role="button"
+                    aria-expanded="false"
+                    aria-controls="collapseExample"
+                  >
+                    Single RXD File
+                  </a>
+                  
+                  <a class="btn btn-primary dropdown-toggle" id="conv-option-btn" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                    Additional Resources
+                  </a>
+                  <ul class="dropdown-menu additional-resources" aria-labelledby="conv-option-btn">
+                    <li><a class="dropdown-item"  href="https://docs.influxtechnology.com/influx-support-documentation/influx-support-documentation/support-and-guides" target="_blank">Documentation</a></li>
+                    <li><a class="dropdown-item"  href="/img/Product_catalog_final_updated2.pdf" download="ProductCatalog.pdf" target="_blank">Products</a></li>
+                    <li><a class="dropdown-item"  href="https://www.influxbigdata.in/blog" target="_blank">Blogs</a></li>
+                    <li><a class="dropdown-item"  href="https://www.youtube.com/@influxtechnology512/playlists" target="_blank">Tutorials</a></li>
+                  </ul>
+                </div>
+
+                </p>
+                <div class="collapse collapse-horizontal show" id="collapseExample">
+                  <!-- Convert Data Multiple RXD files body -->
+                  <div class="card card-body" style="width: 560px">
+                    <h1
+                      style="
+                        color: white;
+                        font-size: 35px;
+                        padding-left: 1rem;
+                        margin-top: 0.3rem;
+                      "
+                    >
+                      Convert Multiple .RxD Files
+                    </h1>
+                    <p
+                      style="
+                        color: rgb(206, 206, 206);
+                        font-size: 18px;
+                        padding-left: 1rem;
+                        font-weight: 400;
+                      "
+                    >
+                      Convert all the .rxd files in a folder to .csv with
+                      resampling and interpolation done on them.
+                    </p>
+                    <!-- Multiple RXD inputs -->
+                    <!-- Input button -->
+                    <form>
+                      <input
+                        class="text is-valid"
+                        id="input-multiple"
+                        type="text"
+                        placeholder="Enter Input Folder"
+                        data-bs-custom-class="custom-tooltip"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="right"
+                        data-bs-title="Ex: D:\Path\to\your\Input\Folder"
+                        required
+                      />
+                      <!-- Output button -->
+                      <div style="display: inline-block">
+                        <input
+                          class="text"
+                          id="output-multiple"
+                          type="text"
+                          placeholder="Enter Output Folder"
+                          data-bs-custom-class="custom-tooltip"
+                          data-bs-toggle="tooltip"
+                          data-bs-placement="top"
+                          data-bs-title="Ex: D:\Path\to\your\Output\Folder"
+                          required
+                        />
+                        <!-- raster button -->
+                        <!-- <input
+                          class="text"
+                          id="raster-multiple"
+                          type="number"
+                          placeholder="Raster Rate"
+                          style="
+                            width: 150px;
+                            margin-left: 6rem;
+                            margin-left: 0;
+                          "
+                          required
+                        /> -->
+                      </div>
+                      <!-- Time as date checkbox -->
+                      <div class="checkboxes" style="display: inline-block">
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            name="flexRadioDefault"
+                            id="flexRadioDefault1"
+                            checked
+                          />
+                          <label
+                            class="form-check-label"
+                            for="flexRadioDefault1"
+                          >
+                            Time as Date
+                          </label>
+                        </div>
+                        <!-- Time from zero checkbox -->
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            name="flexRadioDefault"
+                            id="flexRadioDefault2"
+                          />
+                          <label
+                            class="form-check-label"
+                            for="flexRadioDefault2"
+                          >
+                            Time from Zero
+                          </label>
+                        </div>
+                        <!-- single timebase checkbox -->
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            name="flexRadioDefault"
+                            id="flexRadioDefault3"
+                            checked
+                          />
+                          <label
+                            class="form-check-label"
+                            for="flexRadioDefault3"
+                          >
+                            Single Time Base
+                          </label>
+                        </div>
+                      </div>
+                      <!-- convert button -->
+                      <button
+                        class="convert-data-btn-canvas"
+                        onclick="calculate_multiple_files()"
+                        id="btn-multiplefiles"
+                      >
+                        Convert Files
+                      </button>
+                    </form>
+                  </div>
+                </div>
+
+                <div
+                  class="collapse collapse-horizontal "
+                  id="collapseExample-two"
+                >
+                  <!-- Convert Data Single RXD file body -->
+                  <div class="card card-body-two" style="width: 560px">
+                    <h1
+                      style="
+                        color: white;
+                        font-size: 35px;
+                        padding-left: 1rem;
+                        margin-top: 1rem;
+                      "
+                    >
+                      Convert a Single .RxD File
+                    </h1>
+                    <p
+                      style="
+                        color: rgb(206, 206, 206);
+                        font-size: 18px;
+                        padding-left: 1rem;
+                        font-weight: 400;
+                      "
+                    >
+                      Convert a single .rxd file to .csv with re-sampling and
+                      interpolation done on it.
+                    </p>
+
+                    <div class="single-file-grp">
+
+                      <input
+                          class="text"
+                          id="output-single"
+                          type="text"
+                          placeholder="Enter Output Folder"
+                          data-bs-custom-class="custom-tooltip"
+                          data-bs-toggle="tooltip"
+                          data-bs-placement="right"
+                          data-bs-title="Ex: D:\Path\to\your\Output\Folder"
+                          style="margin-left: 1.2rem; border-width: 1px; height: 60px;"
+                          required
+                        />
+                      <!-- Time as date checkbox Singlefile-->
+                      <div class="checkboxes" style="display: inline-block">
+                        <div
+                          class="form-check"
+                          style="margin-top: 1.3rem; margin-left: 0.5rem"
+                        >
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            name="flexRadioDefault"
+                            id="flexRadioDefault1_s"
+                            checked
+                          />
+                          <label
+                            class="form-check-label"
+                            for="flexRadioDefault1"
+                          >
+                            Time as Date
+                          </label>
+                        </div>
+                        <!-- Time from zero checkbox Singlefile-->
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            name="flexRadioDefault"
+                            id="flexRadioDefault2_s"
+                          />
+                          <label
+                            class="form-check-label"
+                            for="flexRadioDefault2"
+                          >
+                            Time from Zero
+                          </label>
+                        </div>
+                        <!-- single timebase checkbox Singlefile-->
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            name="flexRadioDefault"
+                            id="flexRadioDefault3_s"
+                            checked
+                          />
+                          <label
+                            class="form-check-label"
+                            for="flexRadioDefault3"
+                          >
+                            Single Time Base
+                          </label>
+                        </div>
+                      </div>
+                      <!-- single  raster input-->
+                      <!-- <input
+                        class="text-single"
+                        style="
+                          height: 60px;
+                          margin-left: 1rem;
+                          border-width: 1px;
+                          font-size: 17px;
+                          height: 55px;
+                        "
+                        id="raster_single"
+                        type="number"
+                        placeholder="Enter Raster Rate"
+                      /> -->
+                      <!-- single convert button-->
+                      <button
+                        class="single-file-btn"
+                        id="convert-single"
+                        style="
+                          font-size: 20px;
+                          background-color: #26962f;
+                          width: 500px;
+                          height: 60px;
+                        "
+                        
+                        onclick="getPathToFile()"
+                      >
+                        Upload & Convert
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+ 
+
+    </script>
+    <!-- Enable tooltips -->
+    <script>
+      const tooltipTriggerList = document.querySelectorAll(
+        '[data-bs-toggle="tooltip"]'
+      );
+      const tooltipList = [...tooltipTriggerList].map(
+        (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
+      );
+    </script>
+    <!-- Connect JS to opening -->
+    <script src="opening_js.js"></script>
+    <script src="../eel.js"></script>
+  </body>
+</html>
