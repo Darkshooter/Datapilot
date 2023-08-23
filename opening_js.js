@@ -43,6 +43,10 @@ function result_multiple_files(result) {
 
   console.log(result);
   // message.innerHTML = result;
+
+  let messageElement = document.getElementById("message-multiple");
+  messageElement.innerHTML = result;
+
 }
 
 // ----------------------------- SINGLE FILE ----------------------------

@@ -198,112 +198,116 @@ def convert_multiple_files(input, output, time_ad, time_fz, single_tb):
 
         from glob import glob
         file_list = glob(os.path.join(output_folder, '*.mf4'))
+        
+        try:
+            # Extract File Name from MF4
+            for a in file_list:
+                newlist = []
+                newlist.append(a)
+                mdf = MDF.concatenate(newlist)
+                newlist = []
+                filename = os.path.splitext(os.path.basename(a))[0]
+                print(filename)
 
-        # Extract File Name from MF4
-        for a in file_list:
-            newlist = []
-            newlist.append(a)
-            mdf = MDF.concatenate(newlist)
-            newlist = []
-            filename = os.path.splitext(os.path.basename(a))[0]
-            print(filename)
-
-            # Scaled
-            # mdf_scaled = mdf.extract_bus_logging(
-            #     dbc_files, ignore_invalid_signals=True)
-            try:
-                available_signals = set(mdf.channels_db.keys())
-                signals = [
-                    'SG_EngineRPM11',
-                    'Accelerometer X',
-                    'Accelerometer Y',
-                    'Accelerometer Z',
-                    'Gyroscope X',
-                    'Gyroscope Y',
-                    'Gyroscope Z',
-                    'SG_Accelerationinx(longitudinal)1',
-                    'SG_Accelerationiny(lateral)1',
-                    'SG_Accelerationinz(normal)1',
-                    'SG_Indicatedairspeed1',
-                    'SG_Differentialpressure1',
-                    'SG_Flighttime(section2.2.3)1',
-                    'SG_Manifoldpressure11',
-                    'SG_Engineoilpressure11',
-                    'SG_Fuelsystempressure11',
-                    'SG_Voltage(DC)11',
-                    'SG_Engine_oil_temperature11',
-                    'SG_CHT+indexinregisterA1',
-                    'SG_EGT+indexinregisterA1',
-                    'SG_Fuellevel11',
-                    'LATITUDE',
-                    'LONGITUDE',
-                    'ALTITUDE',
-                    'SPEED_OVER_GROUND',
-                    'GROUND_DISTANCE',
-                    'COURSE_OVER_GROUND',
-                    'GEOID_SEPARATION',
-                    'NUMBER_SATELLITES',
-                    'QUALITY',
-                    'SG_Barocorrectedaltitude_81',
-                    'SG_Standard_altitude_81',
-                    'SG_Verticalspeed_81',
-                    'SG_Barometriccorrection(QNH)_81',
-                    'SG_Static_pressure_81',
-                    'SG_Enginetotaltime_81'
-                ]
-
-                filtered_signals = [
-                    signal for signal in signals if signal in available_signals]
-
-                mdf_scaled_signal_list = mdf.filter(filtered_signals)
-
-                mdf_scaled_signal_list.save(
-                    "{}".format(filename), overwrite=True)
-
-                mdf_scaled_signal_list.export("csv", filename=Path(path_out, "{}".format(
-                    filename)), time_as_date=time_ad, time_from_zero=time_fz, single_time_base=single_tb, raster=raster_rate)
-            except ValueError:
-                pass
-
-            import csv
-            myfilepath = r"{}\{}.csv".format(output_folder, filename)
-            # Read the CSV file and store the rows in a list
-            with open(myfilepath, 'r') as file:
-                reader = csv.reader(file)
-                rows = [row for row in reader]
-
-            # Modify the rows
-            from datetime import datetime, timedelta
-            is_first_row = True
-            for i, row in enumerate(rows):
-                if is_first_row:
-                    is_first_row = False
-                    continue  # Skip the first row
-                text = row[0]
-                pos = text.find('+')
-                new_str = text[0:pos]
-
+                # Scaled
+                # mdf_scaled = mdf.extract_bus_logging(
+                #     dbc_files, ignore_invalid_signals=True)
                 try:
-                    dt = datetime.strptime(
-                        new_str[:26], '%Y-%m-%d %H:%M:%S.%f')
-                    dt = dt - timedelta(hours=5, minutes=30)
+                    available_signals = set(mdf.channels_db.keys())
+                    signals = [
+                        'SG_EngineRPM11',
+                        'Accelerometer X',
+                        'Accelerometer Y',
+                        'Accelerometer Z',
+                        'Gyroscope X',
+                        'Gyroscope Y',
+                        'Gyroscope Z',
+                        'SG_Accelerationinx(longitudinal)1',
+                        'SG_Accelerationiny(lateral)1',
+                        'SG_Accelerationinz(normal)1',
+                        'SG_Indicatedairspeed1',
+                        'SG_Differentialpressure1',
+                        'SG_Flighttime(section2.2.3)1',
+                        'SG_Manifoldpressure11',
+                        'SG_Engineoilpressure11',
+                        'SG_Fuelsystempressure11',
+                        'SG_Voltage(DC)11',
+                        'SG_Engine_oil_temperature11',
+                        'SG_CHT+indexinregisterA1',
+                        'SG_EGT+indexinregisterA1',
+                        'SG_Fuellevel11',
+                        'LATITUDE',
+                        'LONGITUDE',
+                        'ALTITUDE',
+                        'SPEED_OVER_GROUND',
+                        'GROUND_DISTANCE',
+                        'COURSE_OVER_GROUND',
+                        'GEOID_SEPARATION',
+                        'NUMBER_SATELLITES',
+                        'QUALITY',
+                        'SG_Barocorrectedaltitude_81',
+                        'SG_Standard_altitude_81',
+                        'SG_Verticalspeed_81',
+                        'SG_Barometriccorrection(QNH)_81',
+                        'SG_Static_pressure_81',
+                        'SG_Enginetotaltime_81'
+                    ]
 
-                    edit_str = dt.strftime('%Y-%m-%d %H:%M:%S.%f')
-                    rows[i][0] = edit_str
+                    filtered_signals = [
+                        signal for signal in signals if signal in available_signals]
 
+                    mdf_scaled_signal_list = mdf.filter(filtered_signals)
+
+                    mdf_scaled_signal_list.save(
+                        "{}".format(filename), overwrite=True)
+
+                    mdf_scaled_signal_list.export("csv", filename=Path(path_out, "{}".format(
+                        filename)), time_as_date=time_ad, time_from_zero=time_fz, single_time_base=single_tb, raster=raster_rate)
                 except ValueError:
-                    dt = datetime.strptime(new_str, '%Y-%m-%d %H:%M:%S')
-                    dt = dt - timedelta(hours=5, minutes=30)
+                    pass
 
-                    edit_str = dt.strftime('%Y-%m-%d %H:%M:%S')
-                    rows[i][0] = edit_str
+                import csv
+                myfilepath = r"{}\{}.csv".format(output_folder, filename)
+                # Read the CSV file and store the rows in a list
+                with open(myfilepath, 'r') as file:
+                    reader = csv.reader(file)
+                    rows = [row for row in reader]
 
-            # Write the modified rows back to the CSV file
-            with open(myfilepath, 'w', newline='') as file:
-                writer = csv.writer(file)
-                writer.writerows(rows)
+                # Modify the rows
+                from datetime import datetime, timedelta
+                is_first_row = True
+                for i, row in enumerate(rows):
+                    if is_first_row:
+                        is_first_row = False
+                        continue  # Skip the first row
+                    text = row[0]
+                    pos = text.find('+')
+                    new_str = text[0:pos]
 
-            file.close()
+                    try:
+                        dt = datetime.strptime(
+                            new_str[:26], '%Y-%m-%d %H:%M:%S.%f')
+                        dt = dt - timedelta(hours=5, minutes=30)
+
+                        edit_str = dt.strftime('%Y-%m-%d %H:%M:%S.%f')
+                        rows[i][0] = edit_str
+
+                    except ValueError:
+                        dt = datetime.strptime(new_str, '%Y-%m-%d %H:%M:%S')
+                        dt = dt - timedelta(hours=5, minutes=30)
+
+                        edit_str = dt.strftime('%Y-%m-%d %H:%M:%S')
+                        rows[i][0] = edit_str
+
+                # Write the modified rows back to the CSV file
+                with open(myfilepath, 'w', newline='') as file:
+                    writer = csv.writer(file)
+                    writer.writerows(rows)
+
+                file.close()
+                
+        except Exception as e:
+            return f"An error occurred: {e}"
 
         file_list = glob(os.path.join(output_folder, '*.mf4'))
         for file in file_list:
@@ -312,8 +316,7 @@ def convert_multiple_files(input, output, time_ad, time_fz, single_tb):
         file_list = glob(os.path.join(path, '*.mf4'))
         for file in file_list:
             os.remove(file)
-
-          
+        
         zip_files = glob(os.path.join(input_folder, '*.zip'))
         if zip_files:
             file_list = glob(os.path.join(input_folder, '*.rxd'))
