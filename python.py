@@ -260,35 +260,31 @@ def convert_multiple_files(input, output, time_ad, time_fz, single_tb):
                     if is_first_row:
                         is_first_row = False
                         continue  # Skip the first row
-                    text = row[0]
-                    pos = text.find('+')
-                    new_str = text[0:pos]
+                    text = row[0].strip()
 
-                    # Parsing with the potential timezone information
-                    new_str = new_str.strip()
+                    if '+' in text:
+                        new_str, _, _ = text.partition('+')
+                    elif '-' in text:
+                        new_str, _, _ = text.partition('-')
+                    else:
+                        new_str = text
+
                     try:
-                        # Try to parse with microseconds and timezone
-                        dt = datetime.strptime(new_str, '%Y-%m-%d %H:%M:%S.%f%z')
+                        dt = datetime.strptime(new_str, '%Y-%m-%d %H:%M:%S.%f')
                     except ValueError:
                         try:
-                            # If the above fails, try without the microseconds but with timezone
-                            dt = datetime.strptime(new_str, '%Y-%m-%d %H:%M:%S%z')
+                            dt = datetime.strptime(new_str, '%Y-%m-%d %H:%M:%S')
                         except ValueError:
-                            try:
-                                # Try without timezone but with microseconds
-                                dt = datetime.strptime(new_str, '%Y-%m-%d %H:%M:%S.%f')
-                            except ValueError:
-                                try:
-                                    # If all above fail, try without microseconds and without timezone
-                                    dt = datetime.strptime(new_str, '%Y-%m-%d %H:%M:%S')
-                                except ValueError:
-                                    # If all fails, raise the original error to alert you
-                                    raise ValueError(f"Could not parse date: {new_str}")
+                            print(f"Failed to parse date: {new_str}")
+                            continue
 
-                    # Adjust the time
                     dt = dt - timedelta(hours=5, minutes=30)
-                    # Format the datetime object into a string
-                    edit_str = dt.strftime('%Y-%m-%d %H:%M:%S.%f') if dt.microsecond else dt.strftime('%Y-%m-%d %H:%M:%S')
+
+                    if '.' in new_str:
+                        edit_str = dt.strftime('%Y-%m-%d %H:%M:%S.%f')
+                    else:
+                        edit_str = dt.strftime('%Y-%m-%d %H:%M:%S')
+                        
                     rows[i][0] = edit_str
 
                 # Write the modified rows back to the CSV file
@@ -296,8 +292,6 @@ def convert_multiple_files(input, output, time_ad, time_fz, single_tb):
                     writer = csv.writer(file)
                     writer.writerows(rows)
 
-
-                file.close()
                 
         except Exception as e:
             return f"An error occurred: {e}"
