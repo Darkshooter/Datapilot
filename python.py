@@ -182,7 +182,7 @@ def convert_multiple_files(input, output, time_ad, time_fz, single_tb):
             hello = [os.path.splitext(os.path.basename(file))[0] for file in glob(os.path.join(output_folder, "*.mf4"))]
             # Identify the list of files that didn't get converted
             unconverted_files = [file for file in input_files if file not in hello]
-            print("Unconverted files: ", unconverted_files)
+            return("Unconverted files: ", unconverted_files)
             # If there are no unconverted files, break out of the loop
             if not unconverted_files:
                 break
