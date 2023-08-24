@@ -109,6 +109,14 @@ def convert_multiple_files(input, output, time_ad, time_fz, single_tb):
         rxd_files = [os.path.join(input_folder, file) for file in glob.glob(os.path.join(input_folder, "*.rxd"))]
 
         for rxd_file_path in rxd_files:
+            if process and process.poll() is None:
+                print(f"Waiting for process {process.pid} to finish ...")
+                try:
+                    process.wait(timeout=0.5)  
+                except subprocess.TimeoutExpired:
+                    print(f"Process {process.pid} did not finish in time, terminating.")
+                    terminate_process_and_children(process.pid)
+                    
             filename = os.path.basename(rxd_file_path)
             filename, extension = os.path.splitext(filename)
             print(filename)
@@ -124,7 +132,7 @@ def convert_multiple_files(input, output, time_ad, time_fz, single_tb):
             try:
                 # Set a timeout for the command to complete (e.g., 10 seconds).
                 # Adjust the timeout as needed.
-                completed_process = subprocess.run(rxd_mf4, shell=True, timeout=10)
+                completed_process = subprocess.run(rxd_mf4, shell=True)
 
             except subprocess.TimeoutExpired:
                 print(f"Conversion process for {filename} took too long. Terminating...")
