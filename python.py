@@ -292,7 +292,8 @@ def convert_multiple_files(input, output, time_ad, time_fz, single_tb):
                     writer = csv.writer(file)
                     writer.writerows(rows)
 
-                
+                file.close()
+
         except Exception as e:
             return f"An error occurred: {e}"
 
@@ -572,28 +573,38 @@ def pythonFunction(output, time_ad, time_fz, single_tb, wildcard="*"):
 
         # Modify the rows
         from datetime import datetime, timedelta
+
         is_first_row = True
         for i, row in enumerate(rows):
             if is_first_row:
                 is_first_row = False
                 continue  # Skip the first row
-            text = row[0]
-            pos = text.find('+')
-            new_str = text[0:pos]
+            text = row[0].strip()
+
+            if '+' in text:
+                new_str, _, _ = text.partition('+')
+            elif '-' in text:
+                new_str, _, _ = text.partition('-')
+            else:
+                new_str = text
 
             try:
-                dt = datetime.strptime(new_str[:26], '%Y-%m-%d %H:%M:%S.%f')
-                dt = dt - timedelta(hours=5, minutes=30)
-
-                edit_str = dt.strftime('%Y-%m-%d %H:%M:%S.%f')
-                rows[i][0] = edit_str
-
+                dt = datetime.strptime(new_str, '%Y-%m-%d %H:%M:%S.%f')
             except ValueError:
-                dt = datetime.strptime(new_str, '%Y-%m-%d %H:%M:%S')
-                dt = dt - timedelta(hours=5, minutes=30)
+                try:
+                    dt = datetime.strptime(new_str, '%Y-%m-%d %H:%M:%S')
+                except ValueError:
+                    print(f"Failed to parse date: {new_str}")
+                    continue
 
+            dt = dt - timedelta(hours=5, minutes=30)
+
+            if '.' in new_str:
+                edit_str = dt.strftime('%Y-%m-%d %H:%M:%S.%f')
+            else:
                 edit_str = dt.strftime('%Y-%m-%d %H:%M:%S')
-                rows[i][0] = edit_str
+                
+            rows[i][0] = edit_str
 
         # Write the modified rows back to the CSV file
         with open(myfilepath, 'w', newline='') as file:
