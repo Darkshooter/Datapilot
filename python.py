@@ -146,7 +146,7 @@ def convert_multiple_files(input, output, time_ad, time_fz, single_tb):
             except Exception as e:
                 return(f"An error occurred: {e}")
 
-        return("All conversions are done.")
+        
 
     
     # os.environ['PATH'] += os.pathsep + \
