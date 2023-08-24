@@ -47,6 +47,7 @@ def convert_multiple_files(input, output, time_ad, time_fz, single_tb):
         import sys
         import os
         from datetime import timedelta
+        
 
         in_folder = "{}".format(input)
         out_folder = "{}".format(output)
@@ -75,109 +76,98 @@ def convert_multiple_files(input, output, time_ad, time_fz, single_tb):
         import time
         dbc_file_path = r'C:\Program Files (x86)\IBDS\DataPilot\Microlite.dbc'
 
-        import subprocess
-        import psutil
+
+
         import os
-        import time
         import glob
+        import subprocess
+        import time
 
-        def terminate_process_and_children(pid):
-            try:
-                main_process = psutil.Process(pid)
-                for child_process in main_process.children(recursive=True):
-                    child_process.terminate()
-                main_process.terminate()
-            except psutil.NoSuchProcess:
-                pass
-
-        def monitor_file_size(file_path, interval=1):
-            initial_size = -1
-            try:
-                initial_size = os.path.getsize(file_path)
-            except FileNotFoundError:
-                initial_size = 0
-
-            time.sleep(interval)
-
-            try:
-                current_size = os.path.getsize(file_path)
-            except FileNotFoundError:
-                current_size = 0
-
-            return current_size == initial_size
+        dbc_file_path = r'C:\Program Files (x86)\IBDS\DataPilot\Microlite.dbc'
 
         rxd_files = [os.path.join(input_folder, file) for file in glob.glob(os.path.join(input_folder, "*.rxd"))]
 
         for rxd_file_path in rxd_files:
-            if process and process.poll() is None:
-                print(f"Waiting for process {process.pid} to finish ...")
-                try:
-                    process.wait(timeout=0.5)  
-                except subprocess.TimeoutExpired:
-                    print(f"Process {process.pid} did not finish in time, terminating.")
-                    terminate_process_and_children(process.pid)
-                    
             filename = os.path.basename(rxd_file_path)
             filename, extension = os.path.splitext(filename)
             print(filename)
 
             output_mf4_path = os.path.join(output_folder, f'{filename}.mf4')
 
-            rxd_mf4 = '&&'.join([
-                'CD "C:\\Program Files (x86)\\IBDS\\Davesman\\ReXdeskConvert"',
-                f'rexdeskconvert convert-file -i "{rxd_file_path}" -o "{output_mf4_path}" -s can0 "{dbc_file_path}"'
-            ])
+            rxd_mf4 = ['CD "C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"',
+                    'rexdeskconvert convert-file -i "{}" -o "{}" -s can0 "{}"'
+                    .format(rxd_file_path, output_mf4_path, dbc_file_path)]
+
             print(rxd_mf4)
+            os.environ['PATH'] += os.pathsep + r"C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"
+            
+            process = subprocess.Popen('&&'.join(rxd_mf4), shell=True)
+            process.communicate()
 
-            try:
-                # Set a timeout for the command to complete (e.g., 10 seconds).
-                # Adjust the timeout as needed.
-                completed_process = subprocess.run(rxd_mf4, shell=True)
+            # Check if the file conversion was successful based on file size
+            if os.path.exists(output_mf4_path):
+                initial_size = os.path.getsize(output_mf4_path)
+                time.sleep(0.5)
+                final_size = os.path.getsize(output_mf4_path)
 
-            except subprocess.TimeoutExpired:
-                print(f"Conversion process for {filename} took too long. Terminating...")
-                terminate_process_and_children(completed_process.pid)
-                continue
+                if initial_size == final_size:
+                    print(f"File {filename}.mf4 successfully converted.")
+                    # If there are any lingering processes, you might want to terminate them here.
+                    # But be cautious about killing processes as it might interfere with other system processes.
+                    # You'd ideally have a way to identify the exact process you want to terminate.
+                else:
+                    print(f"File {filename}.mf4 conversion might still be in progress or failed.")
+            else:
+                print(f"File {filename}.mf4 was not created.")
+       
 
-            if monitor_file_size(output_mf4_path):
-                print(f"File size didn't change for 1 second for {filename}. Moving to the next file.")
+        import os
+        import glob
+        import subprocess
+        import time
 
-        print("All conversions are done.")
+        def convert_rxd_to_mf4(input_folder, output_folder, dbc_file_path):
+            os.environ['PATH'] += os.pathsep + r"C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"
 
-        
+            while True:
+                # Get the list of base names (without extensions) for the files in both input and output folders.
+                input_files = [os.path.splitext(os.path.basename(file))[0] for file in glob.glob(os.path.join(input_folder, "*.rxd"))]
+                converted_files = [os.path.splitext(os.path.basename(file))[0] for file in glob.glob(os.path.join(output_folder, "*.mf4"))]
+                
+                # Find out which files have not been converted yet.
+                unconverted_files = [file for file in input_files if file not in converted_files]
+                print("Unconverted Files: ",unconverted_files)
+                if not unconverted_files:
+                    break
 
+                for file in unconverted_files:
+                    rxd_file_path = os.path.join(input_folder, f"{file}.rxd")
+                    output_mf4_path = os.path.join(output_folder, f"{file}.mf4")
 
-        from glob import glob
-         
-        while True:
-            input_files = [os.path.splitext(os.path.basename(file))[0] for file in glob(os.path.join(input_folder, "*.rxd"))]
-            hello = [os.path.splitext(os.path.basename(file))[0] for file in glob(os.path.join(output_folder, "*.mf4"))]
+                    rxd_mf4 = ['CD "C:\\Program Files (x86)\\IBDS\\DataPilot\\ReXdeskConvert"',
+                            f'rexdeskconvert convert-file -i "{rxd_file_path}" -o "{output_mf4_path}" -s can0 "{dbc_file_path}"']
 
-            unconverted_files = [file for file in input_files if file not in hello]
+                    process = subprocess.Popen('&&'.join(rxd_mf4), shell=True)
+                    process.communicate()
 
-            if not unconverted_files:
-                break
+                    # Check if the file conversion was successful based on file size.
+                    if os.path.exists(output_mf4_path):
+                        initial_size = os.path.getsize(output_mf4_path)
+                        time.sleep(0.5)
+                        final_size = os.path.getsize(output_mf4_path)
 
-            for file in unconverted_files:
-                rxd_file_path = os.path.join(input_folder, f"{file}.rxd")
-                output_mf4_path = os.path.join(output_folder, f"{file}.mf4")
+                        if initial_size == final_size:
+                            print(f"File {file}.mf4 successfully converted.")
+                        else:
+                            print(f"File {file}.mf4 conversion might still be in progress or failed.")
+                    else:
+                        print(f"File {file}.mf4 was not created.")
+                        
+            print("All conversions are done.")
 
-                rxd_mf4 = '&&'.join([
-                    'CD "C:\\Program Files (x86)\\IBDS\\DataPilot\\ReXdeskConvert"',
-                    f'rexdeskconvert convert-file -i "{rxd_file_path}" -o "{output_mf4_path}" -s can0 "{dbc_file_path}"'
-                ])
+        # Assuming you have the required functions and variables declared already.
+        convert_rxd_to_mf4(input_folder, output_folder, dbc_file_path)
 
-                try:
-                    completed_process = subprocess.run(rxd_mf4, shell=True, timeout=10, capture_output=True)
-                except subprocess.TimeoutExpired:
-                    print(f"Conversion process for {file} took too long. Terminating...")
-                    terminate_process_and_children(completed_process.pid)
-                    continue
-
-                if monitor_file_size(output_mf4_path):
-                    print(f"File size didn't change for 1 second for {file}. Moving to the next file.")
-
-        print("All conversions are done.")
             
         
         
