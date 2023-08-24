@@ -111,7 +111,7 @@ def convert_multiple_files(input, output, time_ad, time_fz, single_tb):
         try:
             for rxd_file_path in rxd_files:
                 # If a process is still running, try to terminate it
-                if 'process' in locals() and process.poll() is None:  # using 'process' in locals() to ensure the variable exists
+                if process and process.poll() is None:  # using 'process' in locals() to ensure the variable exists
                     print(f"Waiting for process {process.pid} to finish ...")
                     try:
                         process.wait(timeout=0.5)  
@@ -144,33 +144,8 @@ def convert_multiple_files(input, output, time_ad, time_fz, single_tb):
             # If you want to return the error:
             return f"An error occurred: {e}"
 
-        # os.environ['PATH'] += os.pathsep + \
-        #     r"C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"
-        # rxd_mf4 = [
-        #     'CD "C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"',
-        #     'rexdeskconvert convert-folder -F mf4 -i "{}" -o "{}" -s can0 "{}"'.format(
-        #         input_folder, output_folder, dbc_file_path
-        #     )
-        # ]
-        # subprocess.run('&&'.join(rxd_mf4), shell=True)
+        
 
-
-
-
-
-        # load MDF/DBC files from input folder
-        # contains output of the parent folder -- scratches
-        path = Path(__file__).parent.absolute()
-        path_in = Path(path, input_folder)  # input folder path
-        path_out = Path(path, output_folder)  # output folder path
-
-        # contains path of the DBC file (Customise)
-        dbc_path = Path(r"C:\Program Files (x86)\IBDS\DataPilot")
-        dbc_files = {"CAN": [(dbc, 0)
-                                for dbc in list(dbc_path.glob("*" + ".dbc"))]}
-        print('DBC FILESS---', dbc_files)
-        # contains path of the log files
-        logfiles = list(path_out.glob("*" + mdf_extension))
 
         from glob import glob
          
@@ -200,18 +175,40 @@ def convert_multiple_files(input, output, time_ad, time_fz, single_tb):
                 
                 file_paths_list.append((rxd_file_path, output_mf4_path))
 
-            
+                process = subprocess.Popen('&&'.join(rxd_mf4), shell=True)
 
-
-            #     process = subprocess.Popen('&&'.join(rxd_mf4), shell=True)
-
-            # if monitor_file_size(output_mf4_path, process.pid):
-            #     print(f"File size didn't change for 1 second for {filename}, terminating process and moving to next file.")
-            #     continue
+            if monitor_file_size(output_mf4_path, process.pid):
+                print(f"File size didn't change for 1 second for {filename}, terminating process and moving to next file.")
+                continue
 
             return file_paths_list
         
         return 'done'
+    
+    # os.environ['PATH'] += os.pathsep + \
+        #     r"C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"
+        # rxd_mf4 = [
+        #     'CD "C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"',
+        #     'rexdeskconvert convert-folder -F mf4 -i "{}" -o "{}" -s can0 "{}"'.format(
+        #         input_folder, output_folder, dbc_file_path
+        #     )
+        # ]
+        # subprocess.run('&&'.join(rxd_mf4), shell=True)
+    
+
+        # load MDF/DBC files from input folder
+        # contains output of the parent folder -- scratches
+        path = Path(__file__).parent.absolute()
+        path_in = Path(path, input_folder)  # input folder path
+        path_out = Path(path, output_folder)  # output folder path
+
+        # contains path of the DBC file (Customise)
+        dbc_path = Path(r"C:\Program Files (x86)\IBDS\DataPilot")
+        dbc_files = {"CAN": [(dbc, 0)
+                                for dbc in list(dbc_path.glob("*" + ".dbc"))]}
+        print('DBC FILESS---', dbc_files)
+        # contains path of the log files
+        logfiles = list(path_out.glob("*" + mdf_extension))
         
         from glob import glob
         file_list = glob(os.path.join(output_folder, '*.mf4'))
