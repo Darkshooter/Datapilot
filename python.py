@@ -182,12 +182,13 @@ def convert_multiple_files(input, output, time_ad, time_fz, single_tb):
             hello = [os.path.splitext(os.path.basename(file))[0] for file in glob(os.path.join(output_folder, "*.mf4"))]
             # Identify the list of files that didn't get converted
             unconverted_files = [file for file in input_files if file not in hello]
-            return("Unconverted files: ", unconverted_files)
+            
             # If there are no unconverted files, break out of the loop
             if not unconverted_files:
                 break
             
-            
+            file_paths_list = []
+
             # Reapply all your calculations to the identified `unconverted_files`
             for file in unconverted_files:
                 rxd_file_path = os.path.join(input_folder, f"{file}.rxd")
@@ -196,12 +197,20 @@ def convert_multiple_files(input, output, time_ad, time_fz, single_tb):
                     'CD "C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"',
                     'rexdeskconvert convert-file -i "{}" -o "{}" -s can0 "{}"'.format(rxd_file_path, output_mf4_path, dbc_file_path)
                 ]
-                process = subprocess.Popen('&&'.join(rxd_mf4), shell=True)
+                
+                file_paths_list.append((rxd_file_path, output_mf4_path))
 
-            if monitor_file_size(output_mf4_path, process.pid):
-                print(f"File size didn't change for 1 second for {filename}, terminating process and moving to next file.")
-                continue
-          
+            
+
+
+            #     process = subprocess.Popen('&&'.join(rxd_mf4), shell=True)
+
+            # if monitor_file_size(output_mf4_path, process.pid):
+            #     print(f"File size didn't change for 1 second for {filename}, terminating process and moving to next file.")
+            #     continue
+
+            return file_paths_list
+        
         return 'done'
         
         from glob import glob
