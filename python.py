@@ -82,91 +82,114 @@ def convert_multiple_files(input, output, time_ad, time_fz, single_tb):
         import glob
         import subprocess
         import time
+        import psutil
+
+        def terminate_process_and_children(pid):
+            try:
+                main_process = psutil.Process(pid)
+                for child_process in main_process.children(recursive=True):  # or parent.children() for recursive=False
+                    child_process.terminate()
+                main_process.terminate()
+            except psutil.NoSuchProcess:
+                pass
+
+        def monitor_file_size(file_path, pid, interval=1):
+            initial_size = -1
+
+            try:
+                initial_size = os.path.getsize(file_path)
+            except FileNotFoundError:
+                initial_size = 0
+
+            time.sleep(interval)
+
+            try:
+                current_size = os.path.getsize(file_path)
+            except FileNotFoundError:
+                current_size = 0
+
+            if current_size == initial_size:
+                terminate_process_and_children(pid)
+                return True
+            else:
+                return False
 
         dbc_file_path = r'C:\Program Files (x86)\IBDS\DataPilot\Microlite.dbc'
 
-        rxd_files = [os.path.join(input_folder, file) for file in glob.glob(os.path.join(input_folder, "*.rxd"))]
+        while True:
+            input_files = [os.path.splitext(os.path.basename(file))[0] for file in glob.glob(os.path.join(input_folder, "*.rxd"))]
+            hello = [os.path.splitext(os.path.basename(file))[0] for file in glob.glob(os.path.join(output_folder, "*.mf4"))]
 
-        for rxd_file_path in rxd_files:
-            filename = os.path.basename(rxd_file_path)
-            filename, extension = os.path.splitext(filename)
-            print(filename)
+            unconverted_files = [file for file in input_files if file not in hello]
 
-            output_mf4_path = os.path.join(output_folder, f'{filename}.mf4')
+            if not unconverted_files:
+                break
 
-            rxd_mf4 = ['CD "C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"',
-                    'rexdeskconvert convert-file -i "{}" -o "{}" -s can0 "{}"'
-                    .format(rxd_file_path, output_mf4_path, dbc_file_path)]
+            for file in unconverted_files:
+                rxd_file_path = os.path.join(input_folder, f"{file}.rxd")
+                output_mf4_path = os.path.join(output_folder, f"{file}.mf4")
 
-            print(rxd_mf4)
-            os.environ['PATH'] += os.pathsep + r"C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"
-            
-            process = subprocess.Popen('&&'.join(rxd_mf4), shell=True)
-            process.communicate()
+                rxd_mf4 = '&&'.join([
+                    'CD "C:\\Program Files (x86)\\IBDS\\DataPilot\\ReXdeskConvert"',
+                    f'rexdeskconvert convert-file -i "{rxd_file_path}" -o "{output_mf4_path}" -s can0 "{dbc_file_path}"'
+                ])
 
-            # Check if the file conversion was successful based on file size
-            if os.path.exists(output_mf4_path):
-                initial_size = os.path.getsize(output_mf4_path)
-                time.sleep(0.5)
-                final_size = os.path.getsize(output_mf4_path)
+                process = subprocess.Popen(rxd_mf4, shell=True)
 
-                if initial_size == final_size:
-                    print(f"File {filename}.mf4 successfully converted.")
-                    # If there are any lingering processes, you might want to terminate them here.
-                    # But be cautious about killing processes as it might interfere with other system processes.
-                    # You'd ideally have a way to identify the exact process you want to terminate.
-                else:
-                    print(f"File {filename}.mf4 conversion might still be in progress or failed.")
-            else:
-                print(f"File {filename}.mf4 was not created.")
+                if monitor_file_size(output_mf4_path, process.pid):
+                    print(f"File size didn't change for 1 second for {file}, terminating process and moving to next file.")
+                    continue
+
+        print("All conversions are done.")
+
        
 
-        import os
-        import glob
-        import subprocess
-        import time
+        # import os
+        # import glob
+        # import subprocess
+        # import time
 
-        def convert_rxd_to_mf4(input_folder, output_folder, dbc_file_path):
-            os.environ['PATH'] += os.pathsep + r"C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"
+        # def convert_rxd_to_mf4(input_folder, output_folder, dbc_file_path):
+        #     os.environ['PATH'] += os.pathsep + r"C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"
 
-            while True:
-                # Get the list of base names (without extensions) for the files in both input and output folders.
-                input_files = [os.path.splitext(os.path.basename(file))[0] for file in glob.glob(os.path.join(input_folder, "*.rxd"))]
-                converted_files = [os.path.splitext(os.path.basename(file))[0] for file in glob.glob(os.path.join(output_folder, "*.mf4"))]
+        #     while True:
+        #         # Get the list of base names (without extensions) for the files in both input and output folders.
+        #         input_files = [os.path.splitext(os.path.basename(file))[0] for file in glob.glob(os.path.join(input_folder, "*.rxd"))]
+        #         converted_files = [os.path.splitext(os.path.basename(file))[0] for file in glob.glob(os.path.join(output_folder, "*.mf4"))]
                 
-                # Find out which files have not been converted yet.
-                unconverted_files = [file for file in input_files if file not in converted_files]
-                print("Unconverted Files: ",unconverted_files)
-                if not unconverted_files:
-                    break
+        #         # Find out which files have not been converted yet.
+        #         unconverted_files = [file for file in input_files if file not in converted_files]
+        #         print("Unconverted Files: ",unconverted_files)
+        #         if not unconverted_files:
+        #             break
 
-                for file in unconverted_files:
-                    rxd_file_path = os.path.join(input_folder, f"{file}.rxd")
-                    output_mf4_path = os.path.join(output_folder, f"{file}.mf4")
+        #         for file in unconverted_files:
+        #             rxd_file_path = os.path.join(input_folder, f"{file}.rxd")
+        #             output_mf4_path = os.path.join(output_folder, f"{file}.mf4")
 
-                    rxd_mf4 = ['CD "C:\\Program Files (x86)\\IBDS\\DataPilot\\ReXdeskConvert"',
-                            f'rexdeskconvert convert-file -i "{rxd_file_path}" -o "{output_mf4_path}" -s can0 "{dbc_file_path}"']
+        #             rxd_mf4 = ['CD "C:\\Program Files (x86)\\IBDS\\DataPilot\\ReXdeskConvert"',
+        #                     f'rexdeskconvert convert-file -i "{rxd_file_path}" -o "{output_mf4_path}" -s can0 "{dbc_file_path}"']
 
-                    process = subprocess.Popen('&&'.join(rxd_mf4), shell=True)
-                    process.communicate()
+        #             process = subprocess.Popen('&&'.join(rxd_mf4), shell=True)
+        #             process.communicate()
 
-                    # Check if the file conversion was successful based on file size.
-                    if os.path.exists(output_mf4_path):
-                        initial_size = os.path.getsize(output_mf4_path)
-                        time.sleep(0.5)
-                        final_size = os.path.getsize(output_mf4_path)
+        #             # Check if the file conversion was successful based on file size.
+        #             if os.path.exists(output_mf4_path):
+        #                 initial_size = os.path.getsize(output_mf4_path)
+        #                 time.sleep(0.5)
+        #                 final_size = os.path.getsize(output_mf4_path)
 
-                        if initial_size == final_size:
-                            print(f"File {file}.mf4 successfully converted.")
-                        else:
-                            print(f"File {file}.mf4 conversion might still be in progress or failed.")
-                    else:
-                        print(f"File {file}.mf4 was not created.")
+        #                 if initial_size == final_size:
+        #                     print(f"File {file}.mf4 successfully converted.")
+        #                 else:
+        #                     print(f"File {file}.mf4 conversion might still be in progress or failed.")
+        #             else:
+        #                 print(f"File {file}.mf4 was not created.")
                         
-            print("All conversions are done.")
+        #     print("All conversions are done.")
 
-        # Assuming you have the required functions and variables declared already.
-        convert_rxd_to_mf4(input_folder, output_folder, dbc_file_path)
+        # # Assuming you have the required functions and variables declared already.
+        # convert_rxd_to_mf4(input_folder, output_folder, dbc_file_path)
 
             
         
