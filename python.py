@@ -117,83 +117,37 @@ def convert_multiple_files(input, output, time_ad, time_fz, single_tb):
         dbc_file_path = r'C:\Program Files (x86)\IBDS\DataPilot\Microlite.dbc'
 
         while True:
-            input_files = [os.path.splitext(os.path.basename(file))[0] for file in glob.glob(os.path.join(input_folder, "*.rxd"))]
-            hello = [os.path.splitext(os.path.basename(file))[0] for file in glob.glob(os.path.join(output_folder, "*.mf4"))]
+            try:  # Begin try block
+                input_files = [os.path.splitext(os.path.basename(file))[0] for file in glob.glob(os.path.join(input_folder, "*.rxd"))]
+                hello = [os.path.splitext(os.path.basename(file))[0] for file in glob.glob(os.path.join(output_folder, "*.mf4"))]
 
-            unconverted_files = [file for file in input_files if file not in hello]
+                unconverted_files = [file for file in input_files if file not in hello]
 
-            if not unconverted_files:
-                break
+                if not unconverted_files:
+                    break
 
-            for file in unconverted_files:
-                rxd_file_path = os.path.join(input_folder, f"{file}.rxd")
-                output_mf4_path = os.path.join(output_folder, f"{file}.mf4")
+                for file in unconverted_files:
+                    rxd_file_path = os.path.join(input_folder, f"{file}.rxd")
+                    output_mf4_path = os.path.join(output_folder, f"{file}.mf4")
 
-                rxd_mf4 = '&&'.join([
-                    'CD "C:\\Program Files (x86)\\IBDS\\DataPilot\\ReXdeskConvert"',
-                    f'rexdeskconvert convert-file -i "{rxd_file_path}" -o "{output_mf4_path}" -s can0 "{dbc_file_path}"'
-                ])
+                    rxd_mf4 = '&&'.join([
+                        'CD "C:\\Program Files (x86)\\IBDS\\DataPilot\\ReXdeskConvert"',
+                        f'rexdeskconvert convert-file -i "{rxd_file_path}" -o "{output_mf4_path}" -s can0 "{dbc_file_path}"'
+                    ])
 
-                process = subprocess.Popen(rxd_mf4, shell=True)
+                    process = subprocess.Popen(rxd_mf4, shell=True, stderr=subprocess.PIPE)  # Capture errors
 
-                if monitor_file_size(output_mf4_path, process.pid):
-                    print(f"File size didn't change for 1 second for {file}, terminating process and moving to next file.")
-                    continue
+                    if monitor_file_size(output_mf4_path, process.pid):
+                        print(f"File size didn't change for 2 seconds for {file}, terminating process and moving to next file.")
+                        error_output = process.stderr.read().decode()
+                        if error_output:
+                            print(f"Error from rexdeskconvert for {file}: {error_output}")
 
-        print("All conversions are done.")
+            except Exception as e:
+                return(f"An error occurred: {e}")
 
-       
+        return("All conversions are done.")
 
-        # import os
-        # import glob
-        # import subprocess
-        # import time
-
-        # def convert_rxd_to_mf4(input_folder, output_folder, dbc_file_path):
-        #     os.environ['PATH'] += os.pathsep + r"C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"
-
-        #     while True:
-        #         # Get the list of base names (without extensions) for the files in both input and output folders.
-        #         input_files = [os.path.splitext(os.path.basename(file))[0] for file in glob.glob(os.path.join(input_folder, "*.rxd"))]
-        #         converted_files = [os.path.splitext(os.path.basename(file))[0] for file in glob.glob(os.path.join(output_folder, "*.mf4"))]
-                
-        #         # Find out which files have not been converted yet.
-        #         unconverted_files = [file for file in input_files if file not in converted_files]
-        #         print("Unconverted Files: ",unconverted_files)
-        #         if not unconverted_files:
-        #             break
-
-        #         for file in unconverted_files:
-        #             rxd_file_path = os.path.join(input_folder, f"{file}.rxd")
-        #             output_mf4_path = os.path.join(output_folder, f"{file}.mf4")
-
-        #             rxd_mf4 = ['CD "C:\\Program Files (x86)\\IBDS\\DataPilot\\ReXdeskConvert"',
-        #                     f'rexdeskconvert convert-file -i "{rxd_file_path}" -o "{output_mf4_path}" -s can0 "{dbc_file_path}"']
-
-        #             process = subprocess.Popen('&&'.join(rxd_mf4), shell=True)
-        #             process.communicate()
-
-        #             # Check if the file conversion was successful based on file size.
-        #             if os.path.exists(output_mf4_path):
-        #                 initial_size = os.path.getsize(output_mf4_path)
-        #                 time.sleep(0.5)
-        #                 final_size = os.path.getsize(output_mf4_path)
-
-        #                 if initial_size == final_size:
-        #                     print(f"File {file}.mf4 successfully converted.")
-        #                 else:
-        #                     print(f"File {file}.mf4 conversion might still be in progress or failed.")
-        #             else:
-        #                 print(f"File {file}.mf4 was not created.")
-                        
-        #     print("All conversions are done.")
-
-        # # Assuming you have the required functions and variables declared already.
-        # convert_rxd_to_mf4(input_folder, output_folder, dbc_file_path)
-
-            
-        
-        
     
     # os.environ['PATH'] += os.pathsep + \
         #     r"C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"
@@ -208,6 +162,7 @@ def convert_multiple_files(input, output, time_ad, time_fz, single_tb):
 
         # load MDF/DBC files from input folder
         # contains output of the parent folder -- scratches
+        
         path = Path(__file__).parent.absolute()
         path_in = Path(path, input_folder)  # input folder path
         path_out = Path(path, output_folder)  # output folder path
