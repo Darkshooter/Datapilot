@@ -173,40 +173,37 @@ def convert_multiple_files(input, output, time_ad, time_fz, single_tb):
         logfiles = list(path_out.glob("*" + mdf_extension))
 
         from glob import glob
-        try: 
-            while True:
-                # Get the list of all `.rxd` and `.csv` files
-                input_files = [os.path.splitext(os.path.basename(file))[0] for file in glob(os.path.join(input_folder, "*.rxd"))]
+         
+        while True:
+            # Get the list of all `.rxd` and `.csv` files
+            input_files = [os.path.splitext(os.path.basename(file))[0] for file in glob(os.path.join(input_folder, "*.rxd"))]
 
-                # output_files = [os.path.splitext(os.path.basename(file))[0] for file in glob(os.path.join(output_folder, "*.csv"))]
-                hello = [os.path.splitext(os.path.basename(file))[0] for file in glob(os.path.join(output_folder, "*.mf4"))]
-                # Identify the list of files that didn't get converted
-                unconverted_files = [file for file in input_files if file not in hello]
-                
-                # If there are no unconverted files, break out of the loop
-                if not unconverted_files:
-                    break
-                
-                
-                # Reapply all your calculations to the identified `unconverted_files`
-                for file in unconverted_files:
-                    rxd_file_path = os.path.join(input_folder, f"{file}.rxd")
-                    output_mf4_path = os.path.join(output_folder, f"{file}.mf4")
-                    rxd_mf4 = [
-                        'CD "C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"',
-                        'rexdeskconvert convert-file -i "{}" -o "{}" -s can0 "{}"'.format(rxd_file_path, output_mf4_path, dbc_file_path)
-                    ]
-                    process = subprocess.Popen('&&'.join(rxd_mf4), shell=True)
+            # output_files = [os.path.splitext(os.path.basename(file))[0] for file in glob(os.path.join(output_folder, "*.csv"))]
+            hello = [os.path.splitext(os.path.basename(file))[0] for file in glob(os.path.join(output_folder, "*.mf4"))]
+            # Identify the list of files that didn't get converted
+            unconverted_files = [file for file in input_files if file not in hello]
+            print("Unconverted files: ", unconverted_files)
+            # If there are no unconverted files, break out of the loop
+            if not unconverted_files:
+                break
+            
+            
+            # Reapply all your calculations to the identified `unconverted_files`
+            for file in unconverted_files:
+                rxd_file_path = os.path.join(input_folder, f"{file}.rxd")
+                output_mf4_path = os.path.join(output_folder, f"{file}.mf4")
+                rxd_mf4 = [
+                    'CD "C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"',
+                    'rexdeskconvert convert-file -i "{}" -o "{}" -s can0 "{}"'.format(rxd_file_path, output_mf4_path, dbc_file_path)
+                ]
+                process = subprocess.Popen('&&'.join(rxd_mf4), shell=True)
 
-                if monitor_file_size(output_mf4_path, process.pid):
-                    print(f"File size didn't change for 1 second for {filename}, terminating process and moving to next file.")
-                    continue
-        except Exception as e:
-            # If you want to print the error to console:
-            print(f"An error occurred: {e}")
-
-            # If you want to return the error:
-            return f"An error occurred: {e}"   
+            if monitor_file_size(output_mf4_path, process.pid):
+                print(f"File size didn't change for 1 second for {filename}, terminating process and moving to next file.")
+                continue
+          
+        return 'done'
+        
         from glob import glob
         file_list = glob(os.path.join(output_folder, '*.mf4'))
         
