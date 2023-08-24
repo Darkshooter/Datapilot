@@ -422,86 +422,140 @@ def pythonFunction(output, time_ad, time_fz, single_tb, wildcard="*"):
     import time
     print("output_file: ",output_file)
     import shutil
+    # def terminate_process_and_children(pid):
+    #     try:
+    #         main_process = psutil.Process(pid)
+    #         for child_process in main_process.children(recursive=True):  # or parent.children() for recursive=False
+    #             child_process.terminate()
+    #         main_process.terminate()
+    #     except psutil.NoSuchProcess:
+    #         pass
+
+    # def monitor_file_size(file_path, pid, interval=1):
+    #     initial_size = -1
+
+    #     try:
+    #         initial_size = os.path.getsize(file_path)
+    #     except FileNotFoundError:
+    #         initial_size = 0
+
+    #     time.sleep(interval)
+
+    #     try:
+    #         current_size = os.path.getsize(file_path)
+    #     except FileNotFoundError:
+    #         current_size = 0
+
+    #     if current_size == initial_size:
+    #         terminate_process_and_children(pid)
+    #         return True
+    #     else:
+    #         return False
+
+    # dbc_file_path = r'C:\Program Files (x86)\IBDS\DataPilot\Microlite.dbc'
+
+    # import os
+    # import shutil
+
+    # # Define the input file and temp folder paths
+    # temp_folder = r'C:\Program Files (x86)\IBDS\DataPilot\temp'
+
+    # # Ensure the temp folder exists, if not, create it
+    # if not os.path.exists(temp_folder):
+    #     os.mkdir(temp_folder)
+
+    # # Copy the file to the temp folder
+    # destination_path = os.path.join(temp_folder, os.path.basename(input_file))
+    # shutil.copy(input_file, destination_path)
+    # output_folder = os.path.dirname(output_file)
+
+    # while True:
+    #     try:  # Begin try block
+    #         input_files = [os.path.splitext(os.path.basename(file))[0] for file in glob.glob(os.path.join(temp_folder, "*.rxd"))]
+    #         hello = [os.path.splitext(os.path.basename(file))[0] for file in glob.glob(os.path.join(output_folder, "*.mf4"))]
+
+    #         unconverted_files = [file for file in input_files if file not in hello]
+    #         print("unconverted_files; ", unconverted_files)
+
+    #         if not unconverted_files:
+    #             break
+
+    #         for file in unconverted_files:
+    #             rxd_file_path = os.path.join(temp_folder, f"{file}.rxd")
+    #             output_mf4_path = os.path.join(output_folder, f"{file}.mf4")
+
+    #         rxd_mf4 = '&&'.join([
+    #                     'CD "C:\\Program Files (x86)\\IBDS\\DataPilot\\ReXdeskConvert"',
+    #                     f'rexdeskconvert convert-file -i "{rxd_file_path}" -o "{output_mf4_path}" -s can0 "{dbc_file_path}"'
+    #                 ])
+    #         process = subprocess.Popen(rxd_mf4, shell=True, stderr=subprocess.PIPE)  # Capture errors
+
+    #         if monitor_file_size(output_mf4_path, process.pid):
+    #             print(f"File size didn't change for 2 seconds for {file}, terminating process and moving to next file.")
+    #             error_output = process.stderr.read().decode()
+    #             if error_output:
+    #                 print(f"Error from rexdeskconvert for {file}: {error_output}")
+
+    #     except Exception as e:
+    #             return(f"An error occurred: {e}")
+        
+    
+
+
+    import os
+    import subprocess
+    import time
+    import psutil
+
+    # Function to terminate a process and its children
     def terminate_process_and_children(pid):
         try:
             main_process = psutil.Process(pid)
-            for child_process in main_process.children(recursive=True):  # or parent.children() for recursive=False
+            for child_process in main_process.children(recursive=True):
                 child_process.terminate()
             main_process.terminate()
         except psutil.NoSuchProcess:
             pass
 
-    def monitor_file_size(file_path, pid, interval=1):
-        initial_size = -1
-
-        try:
-            initial_size = os.path.getsize(file_path)
-        except FileNotFoundError:
-            initial_size = 0
-
-        time.sleep(interval)
-
-        try:
-            current_size = os.path.getsize(file_path)
-        except FileNotFoundError:
-            current_size = 0
-
-        if current_size == initial_size:
-            terminate_process_and_children(pid)
-            return True
-        else:
-            return False
-
-    dbc_file_path = r'C:\Program Files (x86)\IBDS\DataPilot\Microlite.dbc'
-
-    import os
-    import shutil
-
-    # Define the input file and temp folder paths
-    temp_folder = r'C:\Program Files (x86)\IBDS\DataPilot\temp'
-
-    # Ensure the temp folder exists, if not, create it
-    if not os.path.exists(temp_folder):
-        os.mkdir(temp_folder)
-
-    # Copy the file to the temp folder
-    destination_path = os.path.join(temp_folder, os.path.basename(input_file))
-    shutil.copy(input_file, destination_path)
-    output_folder = os.path.dirname(output_file)
-
-    while True:
-        try:  # Begin try block
-            input_files = [os.path.splitext(os.path.basename(file))[0] for file in glob.glob(os.path.join(temp_folder, "*.rxd"))]
-            hello = [os.path.splitext(os.path.basename(file))[0] for file in glob.glob(os.path.join(output_folder, "*.mf4"))]
-
-            unconverted_files = [file for file in input_files if file not in hello]
-            print("unconverted_files; ", unconverted_files)
-
-            if not unconverted_files:
-                break
-
-            for file in unconverted_files:
-                rxd_file_path = os.path.join(temp_folder, f"{file}.rxd")
-                output_mf4_path = os.path.join(output_folder, f"{file}.mf4")
-
-            rxd_mf4 = '&&'.join([
-                        'CD "C:\\Program Files (x86)\\IBDS\\DataPilot\\ReXdeskConvert"',
-                        f'rexdeskconvert convert-file -i "{rxd_file_path}" -o "{output_mf4_path}" -s can0 "{dbc_file_path}"'
-                    ])
-            process = subprocess.Popen(rxd_mf4, shell=True, stderr=subprocess.PIPE)  # Capture errors
-
-            if monitor_file_size(output_mf4_path, process.pid):
-                print(f"File size didn't change for 2 seconds for {file}, terminating process and moving to next file.")
-                error_output = process.stderr.read().decode()
-                if error_output:
-                    print(f"Error from rexdeskconvert for {file}: {error_output}")
-
-        except Exception as e:
-                return(f"An error occurred: {e}")
+    # Function to monitor file size for changes
+    def monitor_file_size(file_path, process, interval=2, retries=3):
+        last_size = -1
+        retry_count = 0
         
+        while retry_count < retries:
+            time.sleep(interval)
+            
+            # Check if file exists and get its size
+            try:
+                current_size = os.path.getsize(file_path)
+            except FileNotFoundError:
+                current_size = 0
+            
+            # If size hasn't changed, increase retry_count
+            if current_size == last_size:
+                retry_count += 1
+            else:
+                retry_count = 0  # Reset retry count if size changed
+            
+            # Update the last known size
+            last_size = current_size
 
+        # If maximum retries reached without size change, terminate process
+        if retry_count == retries:
+            terminate_process_and_children(process.pid)
 
+    # Update the PATH environment variable
+    os.environ['PATH'] += os.pathsep + r"C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"
 
+    # Create the command dynamically
+    basename_without_extension = os.path.splitext(os.path.basename(input_file))[0]
+    output_file_path = os.path.join(output_folder, f"{basename_without_extension}.mf4")
+
+    command = f'"C:\\Program Files (x86)\\IBDS\\DataPilot\\ReXdeskConvert\\rexdeskconvert.exe" convert-file -F -I "{input_file}" -O "{output_file_path}" -s can0 "{dbc_file_path}"'
+    process = subprocess.Popen(command, shell=True)
+
+    # Monitor the output file for size changes
+    monitor_file_size(output_file_path, process)
 
     # os.environ['PATH'] += os.pathsep + \
     #     r"C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"
@@ -521,20 +575,15 @@ def pythonFunction(output, time_ad, time_fz, single_tb, wildcard="*"):
     print("OUTPUT FOLDER ----", path_out)
 
     # contains path of the DBC file (Customise)
-    dbc_path = Path(
-        r"C:\Program Files (x86)\IBDS\DataPilot\Microlite.dbc")
-    dbc_files = {"CAN": [(dbc, 0)
-                         for dbc in list(dbc_path.glob("*" + ".DBC"))]}
-    print("DBCFILEEEEE-----", dbc_files)
-    # contains path of the log files
-    logfiles = list(path_out.glob("*" + mdf_extension))
+    
 
 
     from glob import glob
     file_list = glob(os.path.join(output_folder, '*.mf4'))
-    print(file_list)
+    
+    
     # Extract File Name from MF4
-    for a in file_list:
+    for a in file_list:       
         newlist = []
         newlist.append(a)
         mdf = MDF.concatenate(newlist)
@@ -545,7 +594,6 @@ def pythonFunction(output, time_ad, time_fz, single_tb, wildcard="*"):
         # Scaled
         # mdf_scaled = mdf.extract_bus_logging(
         #     dbc_files, ignore_invalid_signals=True)
-        
         try:
             available_signals = set(mdf.channels_db.keys())
             signals = [
@@ -600,7 +648,6 @@ def pythonFunction(output, time_ad, time_fz, single_tb, wildcard="*"):
         except ValueError:
             pass
 
-        
         import csv
         myfilepath = r"{}\{}.csv".format(output_folder, filename)
         # Read the CSV file and store the rows in a list
@@ -650,6 +697,7 @@ def pythonFunction(output, time_ad, time_fz, single_tb, wildcard="*"):
 
         file.close()
 
+    
         file_list = glob(os.path.join(output_folder, '*.mf4'))
         for file in file_list:
             os.remove(file)
