@@ -44,8 +44,8 @@ function result_multiple_files(result) {
   console.log(result);
   // message.innerHTML = result;
 
-  let messageElement = document.getElementById("message-multiple");
-  messageElement.innerHTML = result;
+  // let messageElement = document.getElementById("message-multiple");
+  // messageElement.innerHTML = result;
 
 }
 
@@ -92,6 +92,16 @@ function result_single_file(result) {
 
 // ----------------------------- SETUP LOGGER ----------------------------
 
+function singleCheckboxLogic(checkboxClicked) {
+  var checkboxes = document.querySelectorAll('.checkboxes-setup .form-check-input');
+
+  checkboxes.forEach(checkbox => {
+      if (checkbox !== checkboxClicked) {
+          checkbox.checked = false;
+      }
+  });
+}
+
 function setuplogger_fnc() {
   document.getElementById("not-connected").innerHTML = "";
 
@@ -107,6 +117,7 @@ function setuplogger_fnc() {
 
   eel.setup_logger(firmware_update, format_logger, send_config)(setup_return);
 }
+
 
 document.getElementById("setuplogger").addEventListener("click", function () {
   this.innerHTML =

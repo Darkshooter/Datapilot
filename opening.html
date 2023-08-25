@@ -120,34 +120,29 @@
 
                     <div class="checkboxes-setup" style="display: inline-block;">
                       <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="firmware_update">
-                        <label class="form-check-label" for="flexCheckDefault">
-                          Firmware Update
-                        </label>
+                          <input class="form-check-input" type="checkbox" value="" id="firmware_update" onclick="singleCheckboxLogic(this)">
+                          <label class="form-check-label" for="firmware_update">
+                              Firmware Update
+                          </label>
                       </div>
                       <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="format">
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Format Logger
-                        </label>
+                          <input class="form-check-input" type="checkbox" value="" id="format" onclick="singleCheckboxLogic(this)">
+                          <label class="form-check-label" for="format">
+                              Format Logger
+                          </label>
                       </div>
                       <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="send_config">
-                        <label class="form-check-label" for="flexCheckDefault">
-                          Send Config
-                        </label>
+                          <input class="form-check-input" type="checkbox" value="" id="send_config" onclick="singleCheckboxLogic(this)">
+                          <label class="form-check-label" for="send_config">
+                              Send Config
+                          </label>
                       </div>
-                    </div>
-
-                    <button
-                      type="button"
-                      id="setuplogger"
-                      style="background-color: #dd9000"
-                      class="btn btn-dark"
-                      onclick="setuplogger_fnc()"
-                    >
+                  </div>
+                  
+                  <button type="button" id="setuplogger" style="background-color: #dd9000" class="btn btn-dark" onclick="setuplogger_fnc()">
                       Setup Logger
-                    </button>
+                  </button>
+                  
                     
                     <p id="not-connected" style="color: azure; padding-top: 1rem; margin-left: 2rem;">
                     </p>

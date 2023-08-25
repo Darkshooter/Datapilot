@@ -727,6 +727,7 @@ def pythonFunction(output, time_ad, time_fz, single_tb, wildcard="*"):
 
 @eel.expose
 def setup_logger(firmware_update, format_logger, send_config):
+    # print(firmware_update,format_logger,send_config)
     import subprocess
     import os
 
@@ -734,7 +735,7 @@ def setup_logger(firmware_update, format_logger, send_config):
 
     wmi = win32com.client.GetObject("winmgmts:")
     list = []
-
+    
     for usb in wmi.InstancesOf("Win32_USBHub"):
         if 'ReXgen' in usb.Name:
             list.append('1')
