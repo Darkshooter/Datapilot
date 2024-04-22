@@ -253,15 +253,16 @@ def convert_multiple_files(input, output, time_ad, time_fz, single_tb):
                     pass
 
                 import csv
+                from datetime import datetime, timedelta
+
                 myfilepath = r"{}\{}.csv".format(output_folder, filename)
+
                 # Read the CSV file and store the rows in a list
                 with open(myfilepath, 'r') as file:
                     reader = csv.reader(file)
                     rows = [row for row in reader]
 
                 # Modify the rows
-                from datetime import datetime, timedelta
-
                 is_first_row = True
                 for i, row in enumerate(rows):
                     if is_first_row:
@@ -276,6 +277,12 @@ def convert_multiple_files(input, output, time_ad, time_fz, single_tb):
                     else:
                         new_str = text
 
+                    # Truncate microseconds to six digits
+                    if '.' in new_str:
+                        base, micro = new_str.split('.')
+                        truncated_micro = micro[:6]  # Keep only the first six digits
+                        new_str = f"{base}.{truncated_micro}"
+
                     try:
                         dt = datetime.strptime(new_str, '%Y-%m-%d %H:%M:%S.%f')
                     except ValueError:
@@ -285,19 +292,21 @@ def convert_multiple_files(input, output, time_ad, time_fz, single_tb):
                             print(f"Failed to parse date: {new_str}")
                             continue
 
+                    # Adjust the datetime by subtracting hours and minutes
                     dt = dt - timedelta(hours=5, minutes=30)
 
                     if '.' in new_str:
                         edit_str = dt.strftime('%Y-%m-%d %H:%M:%S.%f')
                     else:
                         edit_str = dt.strftime('%Y-%m-%d %H:%M:%S')
-                        
+
                     rows[i][0] = edit_str
 
                 # Write the modified rows back to the CSV file
                 with open(myfilepath, 'w', newline='') as file:
                     writer = csv.writer(file)
                     writer.writerows(rows)
+
 
                 file.close()
 
@@ -317,6 +326,11 @@ def convert_multiple_files(input, output, time_ad, time_fz, single_tb):
             file_list = glob(os.path.join(input_folder, '*.rxd'))
             for file in file_list:
                 os.remove(file)
+
+        service_log = glob(os.path.join(input_folder, 'service.log'))
+        for file in service_log:
+            os.remove(file)
+            
 
         # dist folder Mf4 removal
         file_list = glob(os.path.join(
@@ -658,15 +672,16 @@ def pythonFunction(output, time_ad, time_fz, single_tb, wildcard="*"):
             pass
 
         import csv
+        from datetime import datetime, timedelta
+
         myfilepath = r"{}\{}.csv".format(output_folder, filename)
+
         # Read the CSV file and store the rows in a list
         with open(myfilepath, 'r') as file:
             reader = csv.reader(file)
             rows = [row for row in reader]
 
         # Modify the rows
-        from datetime import datetime, timedelta
-
         is_first_row = True
         for i, row in enumerate(rows):
             if is_first_row:
@@ -681,6 +696,12 @@ def pythonFunction(output, time_ad, time_fz, single_tb, wildcard="*"):
             else:
                 new_str = text
 
+            # Truncate microseconds to six digits
+            if '.' in new_str:
+                base, micro = new_str.split('.')
+                truncated_micro = micro[:6]  # Keep only the first six digits
+                new_str = f"{base}.{truncated_micro}"
+
             try:
                 dt = datetime.strptime(new_str, '%Y-%m-%d %H:%M:%S.%f')
             except ValueError:
@@ -690,19 +711,21 @@ def pythonFunction(output, time_ad, time_fz, single_tb, wildcard="*"):
                     print(f"Failed to parse date: {new_str}")
                     continue
 
+            # Adjust the datetime by subtracting hours and minutes
             dt = dt - timedelta(hours=5, minutes=30)
 
             if '.' in new_str:
                 edit_str = dt.strftime('%Y-%m-%d %H:%M:%S.%f')
             else:
                 edit_str = dt.strftime('%Y-%m-%d %H:%M:%S')
-                
+
             rows[i][0] = edit_str
 
         # Write the modified rows back to the CSV file
         with open(myfilepath, 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerows(rows)
+
 
         file.close()
 
