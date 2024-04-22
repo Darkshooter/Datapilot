@@ -1,9 +1,13 @@
+
 import io
 import sys
 
-# stream = io.StringIO()
-# sys.stdout = stream
-# sys.stderr = stream
+stream = io.StringIO()
+sys.stdout = stream
+sys.stderr = stream
+
+
+
 
 # Splash screen initiation
 if getattr(sys, 'frozen', False):
