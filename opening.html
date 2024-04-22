@@ -5,20 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DataPilot pro</title>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.min.js"></script>
+    <script src="jquery-1.11.1.min.js"></script>
+    <script src="jquery-ui.min.js"></script>
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      href="bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
       crossorigin="anonymous"
     />
     <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      src="bootstrap.bundle.min.js"
       integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
       crossorigin="anonymous"
     ></script>
-    <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+    <script src="all.js"></script>
 
     <link href="opening_style.css" rel="stylesheet" />
   </head>
@@ -74,7 +74,7 @@
                   >
                     Setup Logger
                   </a>
-                  <a class="btn btn-primary dropdown-toggle" id="conv-option-btn" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                  <!-- <a class="btn btn-primary dropdown-toggle" id="conv-option-btn" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
                     Additional Resources
                   </a>
                   <ul class="dropdown-menu additional-resources" aria-labelledby="conv-option-btn">
@@ -82,7 +82,7 @@
                     <li><a class="dropdown-item"  href="/img/Product_catalog_final_updated2.pdf" download="ProductCatalog.pdf" target="_blank">Products</a></li>
                     <li><a class="dropdown-item"  href="https://www.influxbigdata.in/blog" target="_blank">Blogs</a></li>
                     <li><a class="dropdown-item"  href="https://www.youtube.com/@influxtechnology512/playlists" target="_blank">Tutorials</a></li>
-                  </ul>
+                  </ul> -->
                   </div>
                 </p>
                 <div
@@ -118,31 +118,24 @@
                       <span style="color: #ffaf1c;">delete all the log files</span> in your Rexgen logger once executed.
                     </p>
 
-                    <div class="checkboxes-setup" style="display: inline-block;">
+                    <div class="checkboxes-setup" style="display: inline-block;">                     
                       <div class="form-check">
-                          <input class="form-check-input" type="checkbox" value="" id="firmware_update" onclick="singleCheckboxLogic(this)">
-                          <label class="form-check-label" for="firmware_update">
-                              Firmware Update
-                          </label>
-                      </div>
-                      <div class="form-check">
-                          <input class="form-check-input" type="checkbox" value="" id="format" onclick="singleCheckboxLogic(this)">
-                          <label class="form-check-label" for="format">
-                              Format Logger
-                          </label>
-                      </div>
-                      <div class="form-check">
-                          <input class="form-check-input" type="checkbox" value="" id="send_config" onclick="singleCheckboxLogic(this)">
-                          <label class="form-check-label" for="send_config">
-                              Send Config
-                          </label>
-                      </div>
-                  </div>
-                  
-                  <button type="button" id="setuplogger" style="background-color: #dd9000" class="btn btn-dark" onclick="setuplogger_fnc()">
-                      Setup Logger
-                  </button>
-                  
+                        <input checked class="form-check-input" type="checkbox" value="" id="format">
+                        <label class="form-check-label" for="flexCheckChecked">
+                          Format Logger
+                        </label>
+                      </div>                      
+                    </div>
+
+                    <button
+                      type="button"
+                      id="setuplogger"
+                      style="background-color: #dd9000"
+                      class="btn btn-dark"
+                      onclick="setuplogger_fnc()"
+                    >
+                      Format Logger
+                    </button>
                     
                     <p id="not-connected" style="color: azure; padding-top: 1rem; margin-left: 2rem;">
                     </p>
@@ -212,7 +205,7 @@
                     Single RXD File
                   </a>
                   
-                  <a class="btn btn-primary dropdown-toggle" id="conv-option-btn" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                  <!-- <a class="btn btn-primary dropdown-toggle" id="conv-option-btn" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
                     Additional Resources
                   </a>
                   <ul class="dropdown-menu additional-resources" aria-labelledby="conv-option-btn">
@@ -220,7 +213,7 @@
                     <li><a class="dropdown-item"  href="/img/Product_catalog_final_updated2.pdf" download="ProductCatalog.pdf" target="_blank">Products</a></li>
                     <li><a class="dropdown-item"  href="https://www.influxbigdata.in/blog" target="_blank">Blogs</a></li>
                     <li><a class="dropdown-item"  href="https://www.youtube.com/@influxtechnology512/playlists" target="_blank">Tutorials</a></li>
-                  </ul>
+                  </ul> -->
                 </div>
 
                 </p>
@@ -346,7 +339,6 @@
                       >
                         Convert Files
                       </button>
-                      <p id="message-multiple" style="color: azure; padding-top: 1rem; margin-left: 2rem;"></p>
                     </form>
                   </div>
                 </div>
@@ -497,6 +489,6 @@
     </script>
     <!-- Connect JS to opening -->
     <script src="opening_js.js"></script>
-    <script src="../eel.js"></script>
+    <script src="eel.js"></script>
   </body>
 </html>
