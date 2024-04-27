@@ -20,10 +20,13 @@ process = None
 
 
 @eel.expose
-def convert_multiple_files(input, output, time_ad, time_fz, single_tb):
+def convert_multiple_files(input, output):
 
     import psutil
     global process
+    time_ad = True
+    time_fz = False
+    single_tb = True
     if process is not None:  # if process is already running
         try:
             print('Process found, attempting to terminate...')
@@ -348,10 +351,13 @@ def convert_multiple_files(input, output, time_ad, time_fz, single_tb):
 
 
 @eel.expose
-def pythonFunction(output, time_ad, time_fz, single_tb, wildcard="*"):
+def pythonFunction(output, wildcard="*"):  
 
     import psutil
     global process
+    time_ad = True
+    time_fz = False
+    single_tb = True
     if process is not None:  # if process is already running
         try:
             print('Process found, attempting to terminate...')
