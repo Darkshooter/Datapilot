@@ -7,20 +7,20 @@ function calculate_multiple_files() {
   // raster_rate = document.getElementById("raster-multiple");
 
   // Check box status ---
-  // var checkbox1 = document.getElementById("flexRadioDefault1");
-  // var checkbox2 = document.getElementById("flexRadioDefault2");
-  // var checkbox3 = document.getElementById("flexRadioDefault3");
+  var checkbox1 = document.getElementById("flexRadioDefault1");
+  var checkbox2 = document.getElementById("flexRadioDefault2");
+  var checkbox3 = document.getElementById("flexRadioDefault3");
 
-  // var time_ad = checkbox1.checked;
-  // var time_fz = checkbox2.checked;
-  // var single_tb = checkbox3.checked;
+  var time_ad = checkbox1.checked;
+  var time_fz = checkbox2.checked;
+  var single_tb = checkbox3.checked;
 
   eel.convert_multiple_files(
     input.value,
     output.value,
-    // time_ad,
-    // time_fz,
-    // single_tb
+    time_ad,
+    time_fz,
+    single_tb
   )(result_multiple_files);
 }
 
@@ -51,19 +51,19 @@ function getPathToFile() {
   output = document.getElementById("output-single");
   // raster_rate = document.getElementById("raster_single");
 
-  // var checkbox1 = document.getElementById("flexRadioDefault1_s");
-  // var checkbox2 = document.getElementById("flexRadioDefault2_s");
-  // var checkbox3 = document.getElementById("flexRadioDefault3_s");
+  var checkbox1 = document.getElementById("flexRadioDefault1_s");
+  var checkbox2 = document.getElementById("flexRadioDefault2_s");
+  var checkbox3 = document.getElementById("flexRadioDefault3_s");
 
-  // var time_ad = checkbox1.checked;
-  // var time_fz = checkbox2.checked;
-  // var single_tb = checkbox3.checked;
+  var time_ad = checkbox1.checked;
+  var time_fz = checkbox2.checked;
+  var single_tb = checkbox3.checked;
 
   eel.pythonFunction(
     output.value,
-    // time_ad,
-    // time_fz,
-    // single_tb
+    time_ad,
+    time_fz,
+    single_tb
   )(result_single_file);
 }
 
