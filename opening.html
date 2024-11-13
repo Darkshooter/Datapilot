@@ -61,82 +61,50 @@
               </div>
               <!-- Setup Logger body section-->
               <div class="offcanvas-body">
-                <p>
-                  <div class="dropdown-center"> 
-                  <a
-                    class="btn btn-primary active"
-                    id="conv-option-btn"
-                    data-bs-toggle="collapse"
-                    href="#collapseWidthExample"
-                    role="button"
-                    aria-expanded="false"
-                    aria-controls="collapseExample"
-                  >
-                    Setup Logger
-                  </a>                 
-                  </div>
-                </p>
-                <div
-                  class="collapse collapse-horizontal show"
-                  id="collapseWidthExample"
-                >
-                  <div class="card card-body" style="width: 560px;" >
-                    <h1
-                      style="
-                        color: white;
-                        font-size: 35px;
-                        padding-left: 1rem;
-                        margin-top: 0.3rem;
-                      "
+                <div class="dropdown-center"> 
+                    <a
+                        class="btn btn-primary active"
+                        id="conv-option-btn"
+                        data-bs-toggle="collapse"
+                        href="#collapseWidthExample"
+                        role="button"
+                        aria-expanded="false"
+                        aria-controls="collapseExample"
                     >
-                      <i
-                        class="fas fa-exclamation-triangle fa-2x"
-                        style="color: #ffa500; font-size: 30px"
-                      ></i>
-                      WARNING
-                    </h1>
-                    <p
-                      style="
-                        color: rgb(206, 206, 206);
-                        font-size: 18px;
-                        padding-left: 1rem;
-                        font-weight: 400;
-                        padding-top: None;
-                      "
-                    >
-                      The
-                      <span style="color: #ffaf1c;">format</span> checkbox will
-                      <span style="color: #ffaf1c;">delete all the log files</span> in your Rexgen logger once executed.
-                    </p>
-
-                    <div class="checkboxes-setup" style="display: inline-block;">                    
-                      <div class="form-check">
-                        <input checked class="form-check-input" type="checkbox" value="" id="format">
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Format Logger
-                        </label>
-                      </div>                   
-                    </div>
-
-                    <button
-                      type="button"
-                      id="setuplogger"
-                      style="background-color: #dd9000"
-                      class="btn btn-dark"
-                      onclick="setuplogger_fnc()"
-                    >
-                      Format Logger
-                    </button>
-                    
-                    <p id="not-connected" style="color: azure; padding-top: 1rem; margin-left: 2rem;">
-                    </p>
-                    <p id="not-connected2" style="color: azure;  margin-left: 11.5rem;">
-                      
-                    </p>
-                    <!-- fas fa-solid fa-circle-xmark fa-2x -->
-                  </div>
+                        Setup Logger
+                    </a>                 
                 </div>
-              </div>
+                <div class="collapse collapse-horizontal show" id="collapseWidthExample">
+                    <div class="card card-body" style="width: 560px;">
+                        <h1 style="color: white; font-size: 35px; padding-left: 1rem; margin-top: 0.3rem;">
+                            <i class="fas fa-exclamation-triangle fa-2x" style="color: #ffa500; font-size: 30px"></i>
+                            WARNING
+                        </h1>
+                        <p style="color: rgb(206, 206, 206); font-size: 18px; padding-left: 1rem; font-weight: 400;">
+                            The <span style="color: #ffaf1c;">format</span> checkbox will 
+                            <span style="color: #ffaf1c;">delete all the log files</span> in your Rexgen logger once executed.
+                        </p>
+                        <div class="checkboxes-setup" style="display: inline-block;">                    
+                            <div class="form-check">
+                                <input checked class="form-check-input" type="checkbox" value="" id="format">
+                                <label class="form-check-label" for="format">Format Logger</label>
+                            </div>                   
+                        </div>
+                        <button
+                            type="button"
+                            id="setuplogger"
+                            style="background-color: #dd9000"
+                            class="btn btn-dark"
+                            onclick="setuplogger_fnc()"
+                        >
+                            Format Logger
+                        </button>
+                        <p id="not-connected" style="color: azure; padding-top: 1rem; margin-left: 2rem;"></p>
+                        <p id="not-connected2" style="color: azure; margin-left: 11.5rem;"></p>
+                    </div>
+                </div>
+            </div>
+            
             </div>
 
             <!-- Convert Data Button -->

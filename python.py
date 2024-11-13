@@ -8,7 +8,7 @@ sys.stderr = stream
 
 
 
-
+import sys
 # Splash screen initiation
 if getattr(sys, 'frozen', False):
     import pyi_splash
@@ -764,7 +764,7 @@ def pythonFunction(output, wildcard="*"):
 
 
 @eel.expose
-def setup_logger(firmware_update, format_logger, send_config):
+def setup_logger(format_logger):
     # print(firmware_update,format_logger,send_config)
     import subprocess
     import os
@@ -774,6 +774,7 @@ def setup_logger(firmware_update, format_logger, send_config):
     wmi = win32com.client.GetObject("winmgmts:")
     list = []
     
+    print("format logger: ", format_logger)
     for usb in wmi.InstancesOf("Win32_USBHub"):
         if 'ReXgen' in usb.Name:
             list.append('1')
@@ -781,28 +782,28 @@ def setup_logger(firmware_update, format_logger, send_config):
             list.append('0')
 
     if '1' in list:
-        if firmware_update == True:
-            # Reflash Rexgen Logger
-            # Add the path to the system PATH
-            os.environ['PATH'] += os.pathsep + \
-                r"C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"
+        # if firmware_update == True:
+        #     # Reflash Rexgen Logger
+        #     # Add the path to the system PATH
+        #     os.environ['PATH'] += os.pathsep + \
+        #         r"C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"
 
-            # Directory where the .bin files are located
-            dir_path = r"C:\Program Files (x86)\IBDS\DataPilot\firmware"
+        #     # Directory where the .bin files are located
+        #     dir_path = r"C:\Program Files (x86)\IBDS\DataPilot\firmware"
 
-            # Find the .bin files in the directory
-            bin_files = [f for f in os.listdir(dir_path) if f.endswith('.bin')]
+        #     # Find the .bin files in the directory
+        #     bin_files = [f for f in os.listdir(dir_path) if f.endswith('.bin')]
 
-            if bin_files:
-                # Construct the reflash command using the first .bin file found
-                reflash = r'''cd C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert && rexdeskconvert reflash -I "{}"'''.format(
-                    os.path.join(dir_path, bin_files[0]))
+        #     if bin_files:
+        #         # Construct the reflash command using the first .bin file found
+        #         reflash = r'''cd C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert && rexdeskconvert reflash -I "{}"'''.format(
+        #             os.path.join(dir_path, bin_files[0]))
 
-                # Execute the command
-                reflash_proc = subprocess.Popen(reflash, shell=True)
-                reflash_proc.wait()
-            else:
-                pass
+        #         # Execute the command
+        #         reflash_proc = subprocess.Popen(reflash, shell=True)
+        #         reflash_proc.wait()
+        #     else:
+        #         pass
 
         if format_logger == True:
             # Format Rexgen Logger
@@ -812,29 +813,29 @@ def setup_logger(firmware_update, format_logger, send_config):
             format_proc = subprocess.Popen(format, shell=True)
             format_proc.wait()
 
-        if send_config == True:
-            # Send Configuration to Rexgen Logger
-            # Add the path to the system PATH
-            os.environ['PATH'] += os.pathsep + \
-                r"C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"
+        # if send_config == True:
+        #     # Send Configuration to Rexgen Logger
+        #     # Add the path to the system PATH
+        #     os.environ['PATH'] += os.pathsep + \
+        #         r"C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"
 
-            # Directory where the .rxc files are located
-            dir_path = r"C:\Program Files (x86)\IBDS\DataPilot\configuration"
+        #     # Directory where the .rxc files are located
+        #     dir_path = r"C:\Program Files (x86)\IBDS\DataPilot\configuration"
 
-            # Find the .rxc files in the directory
-            rxc_files = [f for f in os.listdir(dir_path) if f.endswith('.rxc')]
+        #     # Find the .rxc files in the directory
+        #     rxc_files = [f for f in os.listdir(dir_path) if f.endswith('.rxc')]
 
-            if rxc_files:
-                # Construct the configure command using the first .rxc file found
-                config = r'''cd C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert && rexdeskconvert configure -I "{}"'''.format(
-                    os.path.join(dir_path, rxc_files[0]))
+        #     if rxc_files:
+        #         # Construct the configure command using the first .rxc file found
+        #         config = r'''cd C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert && rexdeskconvert configure -I "{}"'''.format(
+        #             os.path.join(dir_path, rxc_files[0]))
 
-                # Execute the command
-                config_proc = subprocess.Popen(config, shell=True)
-                config_proc.wait()
-                return "done"
-            else:
-                pass
+        #         # Execute the command
+        #         config_proc = subprocess.Popen(config, shell=True)
+        #         config_proc.wait()
+        #         return "done"
+        #     else:
+        #         pass
 
     else:
         return "not connected"

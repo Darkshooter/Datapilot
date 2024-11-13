@@ -6,13 +6,7 @@ function calculate_multiple_files() {
   output = document.getElementById("output-multiple");
   // raster_rate = document.getElementById("raster-multiple");
 
- 
-
-  eel.convert_multiple_files(
-    input.value,
-    output.value,
-    
-  )(result_multiple_files);
+  eel.convert_multiple_files(input.value, output.value)(result_multiple_files);
 }
 
 document
@@ -42,12 +36,7 @@ function getPathToFile() {
   output = document.getElementById("output-single");
   // raster_rate = document.getElementById("raster_single");
 
- 
-
-  eel.pythonFunction(
-    output.value,
-    
-  )(result_single_file);
+  eel.pythonFunction(output.value)(result_single_file);
 }
 
 document
@@ -74,17 +63,13 @@ function result_single_file(result) {
 function setuplogger_fnc() {
   document.getElementById("not-connected").innerHTML = "";
 
-  var checkbox_one = document.getElementById("firmware_update");
   var checkbox_two = document.getElementById("format");
-  var checkbox_three = document.getElementById("send_config");
 
-  var firmware_update = checkbox_one.checked;
   var format_logger = checkbox_two.checked;
-  var send_config = checkbox_three.checked;
 
-  console.log(firmware_update, format_logger, send_config);
+  console.log(format_logger);
 
-  eel.setup_logger(firmware_update, format_logger, send_config)(setup_return);
+  eel.setup_logger(format_logger)(setup_return);
 }
 
 document.getElementById("setuplogger").addEventListener("click", function () {
