@@ -1,4 +1,3 @@
-
 import io
 import sys
 
@@ -6,15 +5,101 @@ stream = io.StringIO()
 sys.stdout = stream
 sys.stderr = stream
 
-
-
 import sys
 # Splash screen initiation
 if getattr(sys, 'frozen', False):
     import pyi_splash
 
 import eel
-eel.init("C:\Program Files (x86)\IBDS\DataPilot")
+eel.init(r"C:\Program Files (x86)\IBDS\DataPilot")
+
+# DBC Signal to Unit Mapping from Microlite.dbc
+DBC_SIGNAL_UNITS = {
+    'Accelerometer X': 'g',
+    'Accelerometer Y': 'g', 
+    'Accelerometer Z': 'g',
+    'Gyroscope X': 'rad/s',
+    'Gyroscope Y': 'rad/s',
+    'Gyroscope Z': 'rad/s',
+    'LATITUDE': 'deg',
+    'LONGITUDE': 'deg',
+    'ALTITUDE': 'm',
+    'SPEED_OVER_GROUND': 'm/s',
+    'GROUND_DISTANCE': 'm',
+    'COURSE_OVER_GROUND': 'deg',
+    'GEOID_SEPARATION': 'm',
+    'NUMBER_SATELLITES': 'count',
+    'QUALITY': 'index',
+    'SG_Accelerationinx_longitudinal': 'm/s2',
+    'SG_Accelerationiny_lateral': 'm/s2',
+    'SG_Accelerationinz_normal': 'm/s2',
+    'SG_Indicatedairspeed': 'm/s',
+    'SG_Differentialpressure': 'hPa',
+    'SG_EngineRPM': 'RPM',
+    'SG_Enginefuelflowrate': 'l/h',
+    'SG_Manifoldpressure': 'bar',
+    'SG_Engineoilpressure': 'bar',
+    'SG_Engine_oil_temperature': 'C',
+    'SG_Fuellevel': 'liters',
+    'SG_Fuelsystempressure': 'bar',
+    'SG_Voltage_DC': 'V',
+    'SG_CHT_indexinregisterA1': '°C',
+    'SG_EGT_indexinregisterA1': '°C',
+    'SG_Flighttime_section': 's',
+    'SG_Verticalspeed': 'm/s',
+    'SG_Barometriccorrection_QNH': 'hPa',
+    'SG_Barocorrectedaltitude': 'm',
+    'SG_Standard_altitude': 'm',
+    'SG_Static_pressure': 'hPa',
+    'SG_Enginetotaltime': 'h'
+}
+
+def update_csv_units_from_dbc(csv_file_path):
+    """Update CSV file units based on DBC signal mapping"""
+    import csv
+    try:
+        # Read the CSV file
+        with open(csv_file_path, 'r') as file:
+            reader = csv.reader(file)
+            rows = list(reader)
+        
+        if len(rows) < 1:
+            return  # No headers available
+        
+        headers = rows[0]  # First row: signal names
+        
+        # Initialize units row with empty strings for all headers
+        units_row = [''] * len(headers)
+        
+        # If there's already a units row, preserve it as starting point
+        if len(rows) > 1:
+            existing_units = rows[1]
+            for i in range(min(len(existing_units), len(units_row))):
+                units_row[i] = existing_units[i]
+        
+        # Update units based on DBC mapping, but keep empty for unmapped signals
+        for i, header in enumerate(headers):
+            if header in DBC_SIGNAL_UNITS:
+                units_row[i] = DBC_SIGNAL_UNITS[header]
+            else:
+                # Keep as empty string if not in DBC mapping
+                units_row[i] = ''
+        
+        # Update or insert the units row
+        if len(rows) > 1:
+            rows[1] = units_row
+        else:
+            rows.insert(1, units_row)  # Insert units row if it doesn't exist
+        
+        # Write back to CSV
+        with open(csv_file_path, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerows(rows)
+            
+        print(f"Updated units in CSV: {csv_file_path}")
+        
+    except Exception as e:
+        print(f"Error updating CSV units: {e}")
 
 process = None
 
@@ -94,7 +179,7 @@ def convert_multiple_files(input, output):
         def terminate_process_and_children(pid):
             try:
                 main_process = psutil.Process(pid)
-                for child_process in main_process.children(recursive=True):  # or parent.children() for recursive=False
+                for child_process in main_process.children(recursive=True):
                     child_process.terminate()
                 main_process.terminate()
             except psutil.NoSuchProcess:
@@ -159,7 +244,7 @@ def convert_multiple_files(input, output):
         os.environ['PATH'] += os.pathsep + \
             r"C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"
         rxd_mf4 = [
-            'CD "C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"',
+            r'CD "C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"',
             'rexdeskconvert convert-folder -F mf4 -i "{}" -o "{}" -s can0 "{}"'.format(
                 input_folder, output_folder, dbc_file_path
             )
@@ -197,10 +282,16 @@ def convert_multiple_files(input, output):
                 print(filename)
 
                 # Scaled
-                # mdf_scaled = mdf.extract_bus_logging(
-                #     dbc_files, ignore_invalid_signals=True)
                 try:
                     available_signals = set(mdf.channels_db.keys())
+                    
+                    # Print available signals for debugging
+                    print(f"=== SIGNAL ANALYSIS FOR {filename} ===")
+                    print(f"Total available signals in MDF: {len(available_signals)}")
+                    print("Available signals:")
+                    for sig in sorted(available_signals):
+                        print(f"  - {sig}")
+                    
                     signals = [
                         'Accelerometer X',
                         'Accelerometer Y',
@@ -239,26 +330,60 @@ def convert_multiple_files(input, output):
                         'SG_Standard_altitude',
                         'SG_Static_pressure',
                         'SG_Enginetotaltime',
-            
                     ]
 
-                    filtered_signals = [
-                        signal for signal in signals if signal in available_signals]
+                    # Find exact matches
+                    filtered_signals = [signal for signal in signals if signal in available_signals]
+                    
+                    # Find missing signals
+                    missing_signals = [signal for signal in signals if signal not in available_signals]
+                    
+                    print(f"\nFOUND SIGNALS ({len(filtered_signals)}):")
+                    for sig in filtered_signals:
+                        print(f"  ✓ {sig}")
+                    
+                    print(f"\nMISSING SIGNALS ({len(missing_signals)}):")
+                    for sig in missing_signals:
+                        print(f"  ✗ {sig}")
+                    
+                    # Try to find similar signal names for missing ones
+                    print(f"\nLOOKING FOR SIMILAR SIGNALS:")
+                    for missing_sig in missing_signals:
+                        # Look for signals that contain parts of the missing signal name
+                        similar = [avail_sig for avail_sig in available_signals 
+                                 if any(part.lower() in avail_sig.lower() 
+                                       for part in missing_sig.replace('_', ' ').split() 
+                                       if len(part) > 2)]
+                        if similar:
+                            print(f"  {missing_sig} -> Possible matches: {similar}")
+                            # Add the first similar match to filtered signals
+                            filtered_signals.append(similar[0])
+                    
+                    print(f"\nFINAL FILTERED SIGNALS ({len(filtered_signals)}):")
+                    for sig in filtered_signals:
+                        print(f"  → {sig}")
+                    print("=" * 50)
 
-                    mdf_scaled_signal_list = mdf.filter(filtered_signals)
+                    if filtered_signals:
+                        mdf_scaled_signal_list = mdf.filter(filtered_signals)
 
-                    mdf_scaled_signal_list.save(
-                        "{}".format(filename), overwrite=True)
+                        mdf_scaled_signal_list.save(
+                            "{}".format(filename), overwrite=True)
 
-                    mdf_scaled_signal_list.export("csv", filename=Path(path_out, "{}".format(
-                        filename)), time_as_date=time_ad, time_from_zero=time_fz, single_time_base=single_tb, raster=raster_rate)
+                        mdf_scaled_signal_list.export("csv", filename=Path(path_out, "{}".format(
+                            filename)), time_as_date=time_ad, time_from_zero=time_fz, single_time_base=single_tb, raster=raster_rate, add_units=True)
+                    else:
+                        print(f"WARNING: No signals found for {filename}")
+                        
                 except ValueError:
                     pass
 
+                # Update CSV units based on DBC mapping
+                myfilepath = os.path.join(output_folder, f"{filename}.csv")
+                update_csv_units_from_dbc(myfilepath)
+
                 import csv
                 from datetime import datetime, timedelta
-
-                myfilepath = r"{}\{}.csv".format(output_folder, filename)
 
                 # Read the CSV file and store the rows in a list
                 with open(myfilepath, 'r') as file:
@@ -316,13 +441,13 @@ def convert_multiple_files(input, output):
         except Exception as e:
             return f"An error occurred: {e}"
 
-        file_list = glob(os.path.join(output_folder, '*.mf4'))
-        for file in file_list:
-            os.remove(file)
+        # file_list = glob(os.path.join(output_folder, '*.mf4'))
+        # for file in file_list:
+        #     os.remove(file)
 
-        file_list = glob(os.path.join(path, '*.mf4'))
-        for file in file_list:
-            os.remove(file)
+        # file_list = glob(os.path.join(path, '*.mf4'))
+        # for file in file_list:
+        #     os.remove(file)
         
         zip_files = glob(os.path.join(input_folder, '*.zip'))
         if zip_files:
@@ -337,13 +462,13 @@ def convert_multiple_files(input, output):
 
         # dist folder Mf4 removal
         file_list = glob(os.path.join(
-            "C:\Program Files (x86)\IBDS\DataPilot\dist", '*.mf4'))
+            r"C:\Program Files (x86)\IBDS\DataPilot\dist", '*.mf4'))
         for file in file_list:
             os.remove(file)
 
         # dist folder Mf4 removal -- root folder
         file_list = glob(os.path.join(
-            "C:\Program Files (x86)\IBDS", '*.mf4'))
+            r"C:\Program Files (x86)\IBDS", '*.mf4'))
         for file in file_list:
             os.remove(file)
 
@@ -430,7 +555,7 @@ def pythonFunction(output, wildcard="*"):
         # set variables
         mdf_extension = ".MF4"
         input_file = input
-        output_file = "{}\{}.mf4".format(output_folder, filename)
+        output_file = os.path.join(output_folder, f"{filename}.mf4")
 
     print("input: ", input_file)
     print("output: ", output_file)
@@ -444,95 +569,8 @@ def pythonFunction(output, wildcard="*"):
     import subprocess
     dbc_file_path = r'C:\Program Files (x86)\IBDS\DataPilot\Microlite.dbc'
 
-    # RXD to MF4 Conversion
-    import subprocess
-    import time
-    print("output_file: ",output_file)
-    import shutil
-    # def terminate_process_and_children(pid):
-    #     try:
-    #         main_process = psutil.Process(pid)
-    #         for child_process in main_process.children(recursive=True):  # or parent.children() for recursive=False
-    #             child_process.terminate()
-    #         main_process.terminate()
-    #     except psutil.NoSuchProcess:
-    #         pass
-
-    # def monitor_file_size(file_path, pid, interval=1):
-    #     initial_size = -1
-
-    #     try:
-    #         initial_size = os.path.getsize(file_path)
-    #     except FileNotFoundError:
-    #         initial_size = 0
-
-    #     time.sleep(interval)
-
-    #     try:
-    #         current_size = os.path.getsize(file_path)
-    #     except FileNotFoundError:
-    #         current_size = 0
-
-    #     if current_size == initial_size:
-    #         terminate_process_and_children(pid)
-    #         return True
-    #     else:
-    #         return False
-
-    # dbc_file_path = r'C:\Program Files (x86)\IBDS\DataPilot\Microlite.dbc'
-
-    # import os
-    # import shutil
-
-    # # Define the input file and temp folder paths
-    # temp_folder = r'C:\Program Files (x86)\IBDS\DataPilot\temp'
-
-    # # Ensure the temp folder exists, if not, create it
-    # if not os.path.exists(temp_folder):
-    #     os.mkdir(temp_folder)
-
-    # # Copy the file to the temp folder
-    # destination_path = os.path.join(temp_folder, os.path.basename(input_file))
-    # shutil.copy(input_file, destination_path)
-    # output_folder = os.path.dirname(output_file)
-
-    # while True:
-    #     try:  # Begin try block
-    #         input_files = [os.path.splitext(os.path.basename(file))[0] for file in glob.glob(os.path.join(temp_folder, "*.rxd"))]
-    #         hello = [os.path.splitext(os.path.basename(file))[0] for file in glob.glob(os.path.join(output_folder, "*.mf4"))]
-
-    #         unconverted_files = [file for file in input_files if file not in hello]
-    #         print("unconverted_files; ", unconverted_files)
-
-    #         if not unconverted_files:
-    #             break
-
-    #         for file in unconverted_files:
-    #             rxd_file_path = os.path.join(temp_folder, f"{file}.rxd")
-    #             output_mf4_path = os.path.join(output_folder, f"{file}.mf4")
-
-    #         rxd_mf4 = '&&'.join([
-    #                     'CD "C:\\Program Files (x86)\\IBDS\\DataPilot\\ReXdeskConvert"',
-    #                     f'rexdeskconvert convert-file -i "{rxd_file_path}" -o "{output_mf4_path}" -s can0 "{dbc_file_path}"'
-    #                 ])
-    #         process = subprocess.Popen(rxd_mf4, shell=True, stderr=subprocess.PIPE)  # Capture errors
-
-    #         if monitor_file_size(output_mf4_path, process.pid):
-    #             print(f"File size didn't change for 2 seconds for {file}, terminating process and moving to next file.")
-    #             error_output = process.stderr.read().decode()
-    #             if error_output:
-    #                 print(f"Error from rexdeskconvert for {file}: {error_output}")
-
-    #     except Exception as e:
-    #             return(f"An error occurred: {e}")
-        
-    
-
-
-    import os
-    import subprocess
-    import time
-    import psutil
+    # Update the PATH environment variable
+    os.environ['PATH'] += os.pathsep + r"C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"
 
     # Function to terminate a process and its children
     def terminate_process_and_children(pid):
@@ -571,26 +609,15 @@ def pythonFunction(output, wildcard="*"):
         if retry_count == retries:
             terminate_process_and_children(process.pid)
 
-    # Update the PATH environment variable
-    os.environ['PATH'] += os.pathsep + r"C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"
-
     # Create the command dynamically
     basename_without_extension = os.path.splitext(os.path.basename(input_file))[0]
     output_file_path = os.path.join(output_folder, f"{basename_without_extension}.mf4")
 
-    command = f'"C:\\Program Files (x86)\\IBDS\\DataPilot\\ReXdeskConvert\\rexdeskconvert.exe" convert-file -F -I "{input_file}" -O "{output_file_path}" -s can0 "{dbc_file_path}"'
+    command = f'"C:\\Program Files (x86)\\Influx Technology\\ReXdeskConvert\\rexdeskconvert.exe" convert-file -F -I "{input_file}" -O "{output_file_path}" -s can0 "{dbc_file_path}"'
     process = subprocess.Popen(command, shell=True)
 
     # Monitor the output file for size changes
     monitor_file_size(output_file_path, process)
-
-    # os.environ['PATH'] += os.pathsep + \
-    #     r"C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"
-    # import subprocess
-    # command = f'"C:\\Program Files (x86)\\IBDS\\DataPilot\\ReXdeskConvert\\rexdeskconvert.exe" convert-file -F -I "{input_file}" -O "{output_file}" -s can0 "{dbc_file_path}"'
-    # subprocess.run(command, shell=True)
-
-
 
     
     # load MDF/DBC files from input folder
@@ -623,6 +650,14 @@ def pythonFunction(output, wildcard="*"):
         #     dbc_files, ignore_invalid_signals=True)
         try:
             available_signals = set(mdf.channels_db.keys())
+            
+            # Print available signals for debugging
+            print(f"=== SIGNAL ANALYSIS FOR {filename} ===")
+            print(f"Total available signals in MDF: {len(available_signals)}")
+            print("Available signals:")
+            for sig in sorted(available_signals):
+                print(f"  - {sig}")
+            
             signals = [
                 'Accelerometer X',
                 'Accelerometer Y',
@@ -661,26 +696,60 @@ def pythonFunction(output, wildcard="*"):
                 'SG_Standard_altitude',
                 'SG_Static_pressure',
                 'SG_Enginetotaltime',
-            
             ]
 
-            filtered_signals = [
-                signal for signal in signals if signal in available_signals]
+            # Find exact matches
+            filtered_signals = [signal for signal in signals if signal in available_signals]
+            
+            # Find missing signals
+            missing_signals = [signal for signal in signals if signal not in available_signals]
+            
+            print(f"\nFOUND SIGNALS ({len(filtered_signals)}):")
+            for sig in filtered_signals:
+                print(f"  ✓ {sig}")
+            
+            print(f"\nMISSING SIGNALS ({len(missing_signals)}):")
+            for sig in missing_signals:
+                print(f"  ✗ {sig}")
+            
+            # Try to find similar signal names for missing ones
+            print(f"\nLOOKING FOR SIMILAR SIGNALS:")
+            for missing_sig in missing_signals:
+                # Look for signals that contain parts of the missing signal name
+                similar = [avail_sig for avail_sig in available_signals 
+                         if any(part.lower() in avail_sig.lower() 
+                               for part in missing_sig.replace('_', ' ').split() 
+                               if len(part) > 2)]
+                if similar:
+                    print(f"  {missing_sig} -> Possible matches: {similar}")
+                    # Add the first similar match to filtered signals
+                    filtered_signals.append(similar[0])
+            
+            print(f"\nFINAL FILTERED SIGNALS ({len(filtered_signals)}):")
+            for sig in filtered_signals:
+                print(f"  → {sig}")
+            print("=" * 50)
 
-            mdf_scaled_signal_list = mdf.filter(filtered_signals)
+            if filtered_signals:
+                mdf_scaled_signal_list = mdf.filter(filtered_signals)
 
-            mdf_scaled_signal_list.save(
-                "{}".format(filename), overwrite=True)
+                mdf_scaled_signal_list.save(
+                    "{}".format(filename), overwrite=True)
 
-            mdf_scaled_signal_list.export("csv", filename=Path(path_out, "{}".format(
-                filename)), time_as_date=time_ad, time_from_zero=time_fz, single_time_base=single_tb, raster=raster_rate)
+                mdf_scaled_signal_list.export("csv", filename=Path(path_out, "{}".format(
+                    filename)), time_as_date=time_ad, time_from_zero=time_fz, single_time_base=single_tb, raster=raster_rate, add_units=True)
+            else:
+                print(f"WARNING: No signals found for {filename}")
+                
         except ValueError:
             pass
 
+        # Update CSV units based on DBC mapping
+        myfilepath = os.path.join(output_folder, f"{filename}.csv")
+        update_csv_units_from_dbc(myfilepath)
+
         import csv
         from datetime import datetime, timedelta
-
-        myfilepath = r"{}\{}.csv".format(output_folder, filename)
 
         # Read the CSV file and store the rows in a list
         with open(myfilepath, 'r') as file:
@@ -736,13 +805,13 @@ def pythonFunction(output, wildcard="*"):
         file.close()
 
     
-        file_list = glob(os.path.join(output_folder, '*.mf4'))
-        for file in file_list:
-            os.remove(file)
+        # file_list = glob(os.path.join(output_folder, '*.mf4'))
+        # for file in file_list:
+        #     os.remove(file)
 
-        file_list = glob(os.path.join(path, '*.mf4'))
-        for file in file_list:
-            os.remove(file)
+        # file_list = glob(os.path.join(path, '*.mf4'))
+        # for file in file_list:
+        #     os.remove(file)
 
         file_list = glob(os.path.join(input_folder, '*.rxd'))
         for file in file_list:
@@ -750,13 +819,13 @@ def pythonFunction(output, wildcard="*"):
 
         # dist folder Mf4 removal
         file_list = glob(os.path.join(
-            "C:\Program Files (x86)\IBDS\DataPilot\dist", '*.mf4'))
+            r"C:\Program Files (x86)\IBDS\DataPilot\dist", '*.mf4'))
         for file in file_list:
             os.remove(file)
 
         # dist folder Mf4 removal -- root folder
         file_list = glob(os.path.join(
-            "C:\Program Files (x86)\IBDS", '*.mf4'))
+            r"C:\Program Files (x86)\IBDS", '*.mf4'))
         for file in file_list:
             os.remove(file)
 
@@ -809,7 +878,7 @@ def setup_logger(format_logger):
             # Format Rexgen Logger
             os.environ['PATH'] += os.pathsep + \
                 r"C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"
-            format = r'''cd C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert && rexdeskconvert format '''
+            format = r'''cd "C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert" && rexdeskconvert format '''
             format_proc = subprocess.Popen(format, shell=True)
             format_proc.wait()
 

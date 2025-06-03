@@ -21,7 +21,7 @@ BO_ 2168191744 Indicatedairspeed: 8 Vector__XXX
 BO_ 2168847104 Differentialpressure: 8 Vector__XXX
  SG_ SG_Differentialpressure : 32|32@1- (1,0) [0|255] "hPa" Vector__XXX
 
-BO_ 2180316672 EngineRPM1: 8 Vector__XXX
+BO_ 2180316672 EngineRPM: 8 Vector__XXX
  SG_ SG_EngineRPM : 32|32@1- (1,0) [0|255] " RPM" Vector__XXX
 
 BO_ 2181889536 Enginefuelflowrate: 8 Vector__XXX
@@ -45,10 +45,10 @@ BO_ 2192375296 Fuelsystempressure1: 8 Vector__XXX
 BO_ 2207841792 Voltage_DC_1: 8 Vector__XXX
  SG_ SG_Voltage_DC : 32|32@1- (1,0) [0|255] "V" Vector__XXX
 
-BO_ 2245852672 CHT_indexinregisterA1: 8 Vector__XXX
+BO_ 2245852672 CHT_indexinregisterA: 8 Vector__XXX
  SG_ SG_CHT_indexinregisterA1 : 32|32@1- (1,0) [0|255] "?C" Vector__XXX
 
-BO_ 2245918208 EGT_indexinregisterA1: 8 Vector__XXX
+BO_ 2245918208 EGT_indexinregisterA: 8 Vector__XXX
  SG_ SG_EGT_indexinregisterA1 : 32|32@1- (1,0) [0|255] "?C" Vector__XXX
 
 BO_ 2247293696 Flighttime_section_2_2_3: 8 Vector__XXX
@@ -96,7 +96,7 @@ SIG_VALTYPE_ 2181889536 SG_Enginefuelflowrate : 1;
 SIG_VALTYPE_ 2182151680 SG_Manifoldpressure : 1;
 SIG_VALTYPE_ 2182413824 SG_Engineoilpressure : 1;
 SIG_VALTYPE_ 2182675968 SG_Engine_oil_temperature : 1;
-SIG_VALTYPE_ 2191326720 SG_Fuelleve : 1;
+SIG_VALTYPE_ 2191326720 SG_Fuellevel : 1;
 SIG_VALTYPE_ 2192375296 SG_Fuelsystempressure : 1;
 SIG_VALTYPE_ 2207841792 SG_Voltage_DC : 1;
 SIG_VALTYPE_ 2245852672 SG_CHT_indexinregisterA1 : 1;

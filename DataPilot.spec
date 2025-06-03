@@ -7,7 +7,7 @@ block_cipher = None
 a = Analysis(
     ['python.py'],
     pathex=[],
-    binaries=[('C:/Users/user/AppData/Local/Programs/Python/Python38/tcl/tcl8.6', './tcl/tcl8.6'), ('C:/Users/user/AppData/Local/Programs/Python/Python38/tcl/tk8.6', './tcl/tk8.6')],
+    binaries=[],
     datas=[],
     hiddenimports=['numpy.core._dtype_ctypes', 'canmatrix.formats', 'canmatrix.formats.dbc', 'canmatrix.formats.arxml', 'asammdf.blocks.cutils', 'psutil'],
     hookspath=['hooks'],
@@ -20,6 +20,15 @@ a = Analysis(
     noarchive=False,
 )
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
+splash = Splash(
+    'C:\\Program Files (x86)\\IBDS\\DataPilot\\img\\splashscreen.png',
+    binaries=a.binaries,
+    datas=a.datas,
+    text_pos=None,
+    text_size=12,
+    minify_script=True,
+    always_on_top=True,
+)
 
 exe = EXE(
     pyz,
@@ -27,6 +36,8 @@ exe = EXE(
     a.binaries,
     a.zipfiles,
     a.datas,
+    splash,
+    splash.binaries,
     [],
     name='DataPilot',
     debug=False,
