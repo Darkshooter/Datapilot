@@ -458,6 +458,10 @@ def convert_multiple_files(input, output):
         service_log = glob(os.path.join(input_folder, 'service.log'))
         for file in service_log:
             os.remove(file)
+
+        file_list = glob(os.path.join(output_folder, '*.mf4'))
+        for file in file_list:
+            os.remove(file)
             
 
         # dist folder Mf4 removal
