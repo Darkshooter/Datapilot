@@ -33,23 +33,23 @@ DBC_SIGNAL_UNITS = {
     'SG_Accelerationinx_longitudinal': 'm/s2',
     'SG_Accelerationiny_lateral': 'm/s2',
     'SG_Accelerationinz_normal': 'm/s2',
-    'SG_Indicatedairspeed': 'm/s',
+    'SG_Indicatedairspeed': 'kts',
     'SG_Differentialpressure': 'hPa',
     'SG_EngineRPM': 'RPM',
     'SG_Enginefuelflowrate': 'l/h',
-    'SG_Manifoldpressure': 'bar',
-    'SG_Engineoilpressure': 'bar',
+    'SG_Manifoldpressure': 'inHg',
+    'SG_Engineoilpressure': 'psi',
     'SG_Engine_oil_temperature': 'C',
     'SG_Fuellevel': 'liters',
-    'SG_Fuelsystempressure': 'bar',
+    'SG_Fuelsystempressure': 'psi',
     'SG_Voltage_DC': 'V',
     'SG_CHT_indexinregisterA1': '°C',
     'SG_EGT_indexinregisterA1': '°C',
     'SG_Flighttime_section': 's',
     'SG_Verticalspeed': 'm/s',
     'SG_Barometriccorrection_QNH': 'hPa',
-    'SG_Barocorrectedaltitude': 'm',
-    'SG_Standard_altitude': 'm',
+    'SG_Barocorrectedaltitude': 'ft',
+    'SG_Standard_altitude': 'ft',
     'SG_Static_pressure': 'hPa',
     'SG_Enginetotaltime': 'h'
 }
@@ -101,6 +101,66 @@ def update_csv_units_from_dbc(csv_file_path):
     except Exception as e:
         print(f"Error updating CSV units: {e}")
 
+def convert_csv_values_from_dbc(csv_file_path):
+    """Convert CSV data values based on unit conversions"""
+    import csv
+    
+    # Define conversion factors from original units to new units
+    CONVERSION_FACTORS = {
+        'SG_Indicatedairspeed': 1.94384,  # m/s to knots
+        'SG_Manifoldpressure': 29.53,     # bar to inHg
+        'SG_Engineoilpressure': 14.5038,  # bar to psi
+        'SG_Fuelsystempressure': 14.5038, # bar to psi
+        'SG_Barocorrectedaltitude': 3.28084, # m to feet
+        'SG_Standard_altitude': 3.28084    # m to feet
+    }
+    
+    try:
+        # Read the CSV file
+        with open(csv_file_path, 'r') as file:
+            reader = csv.reader(file)
+            rows = list(reader)
+        
+        if len(rows) < 3:  # Need at least headers, units, and data
+            return
+        
+        headers = rows[0]  # First row: signal names
+        
+        # Find columns that need conversion
+        columns_to_convert = {}
+        for i, header in enumerate(headers):
+            if header in CONVERSION_FACTORS:
+                columns_to_convert[i] = CONVERSION_FACTORS[header]
+                print(f"Will convert column {i} ({header}) with factor {CONVERSION_FACTORS[header]}")
+        
+        if not columns_to_convert:
+            print("No columns found that need conversion")
+            return
+        
+        # Convert data rows (skip header and units rows)
+        for row_idx in range(2, len(rows)):
+            row = rows[row_idx]
+            for col_idx, conversion_factor in columns_to_convert.items():
+                if col_idx < len(row) and row[col_idx]:  # Check if column exists and has data
+                    try:
+                        # Convert string to float, apply conversion, then back to string
+                        original_value = float(row[col_idx])
+                        converted_value = original_value * conversion_factor
+                        rows[row_idx][col_idx] = str(converted_value)
+                    except (ValueError, TypeError):
+                        # Skip conversion if value can't be converted to float
+                        continue
+        
+        # Write back to CSV
+        with open(csv_file_path, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerows(rows)
+            
+        print(f"Converted data values in CSV: {csv_file_path}")
+        
+    except Exception as e:
+        print(f"Error converting CSV values: {e}")
+
 process = None
 
 
@@ -128,7 +188,7 @@ def convert_multiple_files(input, output):
     else:  # if process is not running
         print('No process found, proceeding...')
 
-    raster_rate = float('0.5')
+    raster_rate = float('0.25')
     if input == "" or output == "":
         return "empty"
     else:
@@ -382,6 +442,8 @@ def convert_multiple_files(input, output):
                 myfilepath = os.path.join(output_folder, f"{filename}.csv")
                 update_csv_units_from_dbc(myfilepath)
 
+                convert_csv_values_from_dbc(myfilepath)
+
                 import csv
                 from datetime import datetime, timedelta
 
@@ -462,8 +524,17 @@ def convert_multiple_files(input, output):
         file_list = glob(os.path.join(output_folder, '*.mf4'))
         for file in file_list:
             os.remove(file)
-            
 
+        file_list = glob(os.path.join(
+            r"C:\Program Files (x86)\IBDS\DataPilot", '*.mf4'))
+        for file in file_list:
+            os.remove(file)
+
+        file_list = glob(os.path.join(
+            r"C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert", '*.mf4'))
+        for file in file_list:
+            os.remove(file)
+            
         # dist folder Mf4 removal
         file_list = glob(os.path.join(
             r"C:\Program Files (x86)\IBDS\DataPilot\dist", '*.mf4'))
@@ -519,7 +590,7 @@ def pythonFunction(output, wildcard="*"):
     print("output:::: ", output)
     output_folder = output
 
-    raster_rate = float('0.5')
+    raster_rate = float('0.25')
     from glob import glob
     from pathlib import Path
     from asammdf import MDF
@@ -751,6 +822,8 @@ def pythonFunction(output, wildcard="*"):
         # Update CSV units based on DBC mapping
         myfilepath = os.path.join(output_folder, f"{filename}.csv")
         update_csv_units_from_dbc(myfilepath)
+
+        convert_csv_values_from_dbc(myfilepath)
 
         import csv
         from datetime import datetime, timedelta
