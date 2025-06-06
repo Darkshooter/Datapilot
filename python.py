@@ -910,6 +910,96 @@ def pythonFunction(output, wildcard="*"):
 
 
 @eel.expose
+def select_input_folder():
+    """Select input folder using file dialog"""
+    import wx
+    import os
+    try:
+        # Check if app already exists, if not create one
+        app = wx.GetApp()
+        if not app:
+            app = wx.App(None)
+        
+        # Set default path
+        default_path = r"C:\Program Files\Airforce_Application\Data"
+        
+        # Check if default path exists, if not use current directory
+        if not os.path.exists(default_path):
+            default_path = os.getcwd()
+        
+        dialog = wx.DirDialog(None, "Select RXD Files Folder", defaultPath=default_path, style=wx.DD_DEFAULT_STYLE)
+        if dialog.ShowModal() == wx.ID_OK:
+            selected_path = dialog.GetPath()
+        else:
+            selected_path = None
+        dialog.Destroy()
+        return selected_path
+    except Exception as e:
+        print(f"Error in select_input_folder: {e}")
+        return None
+
+@eel.expose
+def select_output_folder():
+    """Select output folder using file dialog"""
+    import wx
+    try:
+        # Check if app already exists, if not create one
+        app = wx.GetApp()
+        if not app:
+            app = wx.App(None)
+        
+        dialog = wx.DirDialog(None, "Select Save Destination", style=wx.DD_DEFAULT_STYLE)
+        if dialog.ShowModal() == wx.ID_OK:
+            selected_path = dialog.GetPath()
+        else:
+            selected_path = None
+        dialog.Destroy()
+        return selected_path
+    except Exception as e:
+        print(f"Error in select_output_folder: {e}")
+        return None
+
+@eel.expose
+def create_automatic_output_folder(input_folder_path):
+    """Create automatic output folder structure in Desktop/DataPilotFiles"""
+    import os
+    import winreg
+    try:
+        # Get desktop path from Windows registry (works across different PCs)
+        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders") as key:
+            desktop_path = winreg.QueryValueEx(key, "Desktop")[0]
+        
+        # Create DataPilotFiles folder on desktop
+        datapilot_folder = os.path.join(desktop_path, "DataPilotFiles")
+        os.makedirs(datapilot_folder, exist_ok=True)
+        
+        # Get input folder name
+        input_folder_name = os.path.basename(input_folder_path.rstrip(os.sep))
+        
+        # Create subfolder with same name as input folder
+        output_folder = os.path.join(datapilot_folder, input_folder_name)
+        os.makedirs(output_folder, exist_ok=True)
+        
+        return output_folder
+    except Exception as e:
+        print(f"Error creating automatic output folder: {e}")
+        # Fallback to user's home directory if desktop path fails
+        try:
+            home_path = os.path.expanduser("~")
+            datapilot_folder = os.path.join(home_path, "Desktop", "DataPilotFiles")
+            os.makedirs(datapilot_folder, exist_ok=True)
+            
+            input_folder_name = os.path.basename(input_folder_path.rstrip(os.sep))
+            output_folder = os.path.join(datapilot_folder, input_folder_name)
+            os.makedirs(output_folder, exist_ok=True)
+            
+            return output_folder
+        except Exception as e2:
+            print(f"Fallback also failed: {e2}")
+            return None
+
+
+@eel.expose
 def setup_logger(format_logger):
     # print(firmware_update,format_logger,send_config)
     import subprocess

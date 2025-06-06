@@ -1,12 +1,113 @@
 // ----------------------------- MULTIPLE FILES ---------------------------------
 
-function calculate_multiple_files() {
-  /* get inputs from widgets */
-  input = document.getElementById("input-multiple");
-  output = document.getElementById("output-multiple");
-  // raster_rate = document.getElementById("raster-multiple");
+// Global variables to store selected folder paths
+let selectedInputFolder = "";
 
-  eel.convert_multiple_files(input.value, output.value)(result_multiple_files);
+// ----------------------------- SUCCESS NOTIFICATION ---------------------------------
+
+function showSuccessNotification(message) {
+  const container = document.getElementById("toast-container");
+
+  // Create success notification
+  const notification = document.createElement("div");
+  notification.className = "success-toast";
+  notification.innerHTML = `
+    <button class="toast-close">&times;</button>
+    <span class="icon">✓</span>${message}
+  `;
+
+  // Make entire toast clickable to close
+  notification.addEventListener("click", function (e) {
+    console.log("Toast clicked!"); // Debug log
+    closeSuccessToast(notification);
+  });
+
+  // Add specific click event listener to close button (with event stopping)
+  const closeButton = notification.querySelector(".toast-close");
+  closeButton.addEventListener("click", function (e) {
+    console.log("Close button clicked!"); // Debug log
+    e.stopPropagation(); // Prevent event bubbling
+    closeSuccessToast(notification);
+  });
+
+  // Add to container
+  container.appendChild(notification);
+
+  // Show animation
+  setTimeout(() => {
+    notification.classList.add("show");
+  }, 100);
+}
+
+function closeSuccessToast(notification) {
+  console.log("Closing toast..."); // Debug log
+  notification.classList.remove("show");
+  setTimeout(() => {
+    if (notification.parentElement) {
+      notification.parentElement.removeChild(notification);
+      console.log("Toast removed!"); // Debug log
+    }
+  }, 300);
+}
+
+// Function to select input folder
+async function selectInputFolder() {
+  try {
+    const folderPath = await eel.select_input_folder()();
+    if (folderPath) {
+      selectedInputFolder = folderPath;
+      const displayElement = document.getElementById("input-folder-display");
+      displayElement.innerHTML = `${folderPath}`;
+      displayElement.style.color = "#c4c4c4";
+      displayElement.style.borderColor = "#1a2b353d";
+      displayElement.style.backgroundColor = "transparent";
+
+      // Enable the convert button when folder is selected
+      const convertButton = document.getElementById("btn-multiplefiles");
+      convertButton.removeAttribute("disabled");
+    }
+  } catch (error) {
+    console.error("Error selecting input folder:", error);
+    const displayElement = document.getElementById("input-folder-display");
+    displayElement.innerHTML = "❌ Error selecting RXD files folder";
+    displayElement.style.color = "#ff2600";
+    displayElement.style.borderColor = "#1a2b353d";
+    displayElement.style.backgroundColor = "transparent";
+
+    // Disable the convert button on error
+    const convertButton = document.getElementById("btn-multiplefiles");
+    convertButton.setAttribute("disabled", "true");
+  }
+}
+
+async function calculate_multiple_files() {
+  /* First check if input folder is selected */
+  if (!selectedInputFolder) {
+    alert("Please first select the folder containing your RXD files.");
+    return;
+  }
+
+  /* Create automatic output folder */
+  try {
+    const outputFolder = await eel.create_automatic_output_folder(
+      selectedInputFolder
+    )();
+    if (!outputFolder) {
+      alert(
+        "Error creating output folder on desktop. Please check permissions."
+      );
+      return;
+    }
+
+    // Start conversion with both folders
+    eel.convert_multiple_files(
+      selectedInputFolder,
+      outputFolder
+    )(result_multiple_files);
+  } catch (error) {
+    console.error("Error creating output folder:", error);
+    alert("Error creating output folder on desktop. Please try again.");
+  }
 }
 
 document
@@ -22,12 +123,24 @@ function result_multiple_files(result) {
   button.innerHTML = "Convert Files";
   button.removeAttribute("disabled");
 
-  document.getElementById("input-multiple").value = "";
-  document.getElementById("output-multiple").value = "";
-  // document.getElementById("raster-multiple").value="";
+  // Reset input folder selection
+  selectedInputFolder = "";
+  const displayElement = document.getElementById("input-folder-display");
+  displayElement.innerHTML = "No RXD files folder selected yet";
+  displayElement.style.color = "#c4c4c4";
+  displayElement.style.borderColor = "#1a2b353d";
+  displayElement.style.backgroundColor = "transparent";
 
-  console.log(result);
-  // message.innerHTML = result;
+  // Disable the convert button since no folder is selected
+  button.setAttribute("disabled", "true");
+
+  if (result && result !== "empty") {
+    showSuccessNotification(
+      "Process Successful! Log files saved to the desktop folder called DataPilotFiles"
+    );
+  } else if (result === "empty") {
+    alert("Please make sure the input folder is selected before converting.");
+  }
 }
 
 // ----------------------------- SINGLE FILE ----------------------------
