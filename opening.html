@@ -65,6 +65,13 @@
         font-weight: bold;
       }
       
+      .error-toast .icon {
+        color: #dc3545;
+        margin-right: 12px;
+        font-size: 20px;
+        font-weight: bold;
+      }
+      
       .toast-close {
         position: absolute;
         top: 8px;
@@ -165,12 +172,6 @@
                             The <span style="color: #ffaf1c;">format</span> checkbox will 
                             <span style="color: #ffaf1c;">delete all the log files</span> in your Rexgen logger once executed.
                         </p>
-                        <div class="checkboxes-setup" style="display: inline-block;">                    
-                            <div class="form-check">
-                                <input checked class="form-check-input" type="checkbox" value="" id="format">
-                                <label class="form-check-label" for="format">Format Logger</label>
-                            </div>                   
-                        </div>
                         <button
                             type="button"
                             id="setuplogger"
@@ -180,8 +181,6 @@
                         >
                             Format Logger
                         </button>
-                        <p id="not-connected" style="color: azure; padding-top: 1rem; margin-left: 2rem;"></p>
-                        <p id="not-connected2" style="color: azure; margin-left: 11.5rem;"></p>
                     </div>
                 </div>
             </div>

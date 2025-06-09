@@ -39,6 +39,40 @@ function showSuccessNotification(message) {
   }, 100);
 }
 
+function showErrorToast(message) {
+  const container = document.getElementById("toast-container");
+
+  // Create error notification
+  const notification = document.createElement("div");
+  notification.className = "success-toast error-toast";
+  notification.innerHTML = `
+    <button class="toast-close">&times;</button>
+    <span class="icon">❌</span>${message}
+  `;
+
+  // Make entire toast clickable to close
+  notification.addEventListener("click", function (e) {
+    console.log("Error toast clicked!"); // Debug log
+    closeSuccessToast(notification);
+  });
+
+  // Add specific click event listener to close button (with event stopping)
+  const closeButton = notification.querySelector(".toast-close");
+  closeButton.addEventListener("click", function (e) {
+    console.log("Close button clicked!"); // Debug log
+    e.stopPropagation(); // Prevent event bubbling
+    closeSuccessToast(notification);
+  });
+
+  // Add to container
+  container.appendChild(notification);
+
+  // Show animation
+  setTimeout(() => {
+    notification.classList.add("show");
+  }, 100);
+}
+
 function closeSuccessToast(notification) {
   console.log("Closing toast..."); // Debug log
   notification.classList.remove("show");
@@ -174,11 +208,8 @@ function result_single_file(result) {
 // ----------------------------- SETUP LOGGER ----------------------------
 
 function setuplogger_fnc() {
-  document.getElementById("not-connected").innerHTML = "";
-
-  var checkbox_two = document.getElementById("format");
-
-  var format_logger = checkbox_two.checked;
+  // Direct format logger without checkbox - always format
+  var format_logger = true;
 
   console.log(format_logger);
 
@@ -187,26 +218,22 @@ function setuplogger_fnc() {
 
 document.getElementById("setuplogger").addEventListener("click", function () {
   this.innerHTML =
-    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Setting Logger...';
+    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Formatting Logger...';
   this.setAttribute("disabled", "true");
 });
 
 function setup_return(msg) {
+  button = document.getElementById("setuplogger");
+  button.innerHTML = "Format Logger";
+  button.removeAttribute("disabled");
+
   if (msg === "not connected") {
-    button = document.getElementById("setuplogger");
-    button.innerHTML = "Setup Logger";
-    button.removeAttribute("disabled");
-
-    document.getElementById("not-connected").innerHTML =
-      '<i class = "fas fa-solid fa-circle-xmark fa-2x" id="icon-nc"></i> ReXgen Logger is not connected to your computer';
+    // Show error toast for connection issue
+    showErrorToast("❌ ReXgen Logger is not connected to your computer");
   } else {
-    button = document.getElementById("setuplogger");
-    button.innerHTML = "Setup Logger";
-    button.removeAttribute("disabled");
-    document.getElementById("not-connected2").innerHTML = "Process Successful!";
+    // Show success toast for successful formatting
+    showSuccessNotification("Format Logger process completed successfully!");
   }
-
-  // message.innerHTML = result;
 }
 
 // ----------------------------- EXTRACT DATA ----------------------------
