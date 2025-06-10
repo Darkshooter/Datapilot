@@ -1,9 +1,9 @@
 import io
 import sys
 
-# stream = io.StringIO()
-# sys.stdout = stream
-# sys.stderr = stream
+stream = io.StringIO()
+sys.stdout = stream
+sys.stderr = stream
 
 import sys
 # Splash screen initiation
