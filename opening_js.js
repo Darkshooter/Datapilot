@@ -229,7 +229,7 @@ function setup_return(msg) {
 
   if (msg === "not connected") {
     // Show error toast for connection issue
-    showErrorToast("❌ ReXgen Logger is not connected to your computer");
+    showErrorToast("Please connect your Logger to format");
   } else {
     // Show success toast for successful formatting
     showSuccessNotification("Format Logger process completed successfully!");
