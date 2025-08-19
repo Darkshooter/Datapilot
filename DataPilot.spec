@@ -8,7 +8,7 @@ a = Analysis(
     ['python.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[('set_device_time_32bit.py', '.'), ('set_pc_time.py', '.')],
     hiddenimports=['numpy.core._dtype_ctypes', 'canmatrix.formats', 'canmatrix.formats.dbc', 'canmatrix.formats.arxml', 'asammdf.blocks.cutils', 'psutil'],
     hookspath=['hooks'],
     hooksconfig={},

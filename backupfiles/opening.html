@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DataPilot pro</title>
+    <script src="jquery-1.11.1.min.js"></script>
+    <script src="jquery-ui.min.js"></script>
+    <link
+      href="bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+    <script
+      src="bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+    <script src="all.js"></script>
+
+    <link href="opening_style.css" rel="stylesheet" />
+    <style>
+      /* Glass Design Success Notification */
+      .toast-container {
+        position: fixed;
+        top: 30px;
+        right: 30px;
+        z-index: 9999;
+      }
+      
+      .success-toast {
+        background-color: #1a2b35ab;
+        color: rgb(238, 238, 238);
+        padding: 20px 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        border: 2px solid transparent;
+        font-family: 'Poppins', sans-serif;
+        font-size: 18px;
+        min-width: 350px;
+        max-width: 450px;
+        backdrop-filter: blur(10px);
+        transform: translateX(500px);
+        opacity: 0;
+        transition: all 0.3s ease;
+        position: relative;
+        cursor: pointer;
+      }
+      
+      .success-toast:hover {
+        background-color: #1a2b3550;
+      }
+      
+      .success-toast.show {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      
+      .success-toast .icon {
+        color: #28a745;
+        margin-right: 12px;
+        font-size: 20px;
+        font-weight: bold;
+      }
+      
+      .error-toast .icon {
+        color: #dc3545;
+        margin-right: 12px;
+        font-size: 20px;
+        font-weight: bold;
+      }
+      
+      .toast-close {
+        position: absolute;
+        top: 8px;
+        right: 12px;
+        background: none;
+        border: none;
+        color: rgb(238, 238, 238);
+        font-size: 20px;
+        cursor: pointer;
+        opacity: 0.7;
+        transition: opacity 0.2s ease;
+        width: 25px;
+        height: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        pointer-events: auto;
+      }
+      
+      .toast-close:hover {
+        opacity: 1;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+    <div class="container.fluid">
+      <div class="row">
+        <div class="col-md-12 col-lg-12">
+          <div class="buttons">           
+            <!-- Extract Data Button -->
+            <button type="button" class="btn btn-dark one" onclick="extractdata()">Extract Data</button>
+            <!-- Setup Logger Button -->
+            <button
+              class="btn btn-dark two"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasWithBothOptions-setuplogger"
+              aria-controls="offcanvasWithBothOptions"
+            >
+              Format Logger
+            </button>
+            <button
+              class="btn btn-dark three"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasWithBothOptions"
+              aria-controls="offcanvasWithBothOptions"
+            >
+              Convert data
+            </button>
+            <!-- Setup Logger Canvas-->
+            <div
+              class="offcanvas offcanvas-start"
+              data-bs-scroll="true"
+              tabindex="-1"
+              aria-labelledby="offcanvasWithBothOptionsLabel"
+              id="offcanvasWithBothOptions-setuplogger"
+            >
+              <!-- Setup Logger heading section-->
+              <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">
+                  SETUP <span style="font-weight: 100">LOGGER</span>
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="offcanvas"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <!-- Setup Logger body section-->
+              <div class="offcanvas-body">
+                <div class="dropdown-center"> 
+                    <a
+                        class="btn btn-primary active"
+                        id="conv-option-btn"
+                        data-bs-toggle="collapse"
+                        href="#collapseWidthExample"
+                        role="button"
+                        aria-expanded="false"
+                        aria-controls="collapseExample"
+                    >
+                        Setup Logger
+                    </a>                 
+                </div>
+                <div class="collapse collapse-horizontal show" id="collapseWidthExample">
+                    <div class="card card-body" style="width: 560px;">
+                        <h1 style="color: white; font-size: 35px; padding-left: 1rem; margin-top: 0.3rem;">
+                            <i class="fas fa-exclamation-triangle fa-2x" style="color: #ffa500; font-size: 30px"></i>
+                            WARNING
+                        </h1>
+                        <p style="color: rgb(206, 206, 206); font-size: 18px; padding-left: 1rem; font-weight: 400;">
+                            The <span style="color: #ffaf1c;">format</span> checkbox will 
+                            <span style="color: #ffaf1c;">delete all the log files</span> in your Rexgen logger once executed.
+                        </p>
+                        <button
+                            type="button"
+                            id="setuplogger"
+                            style="background-color: #dd9000"
+                            class="btn btn-dark"
+                            onclick="setuplogger_fnc()"
+                        >
+                            Format Logger
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            </div>
+
+            <!-- Convert Data Button -->
+            
+            <div
+              class="offcanvas offcanvas-start"
+              data-bs-scroll="true"
+              tabindex="-1"
+              id="offcanvasWithBothOptions"
+              aria-labelledby="offcanvasWithBothOptionsLabel"
+            >
+              <!-- Convert Data Canvas-heading section -->
+              <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">
+                  CONVERT <span style="font-weight: 200">LOGFILES</span>
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="offcanvas"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <!-- Convert Data Canvas-body section -->
+              <div class="offcanvas-body">
+
+                <p>       
+                  <div class="dropdown">    
+                  <a
+                    class="btn btn-primary active"
+                    id="conv-option-btn"
+                    data-bs-toggle="collapse"
+                    href="#collapseExample"
+                    role="button"
+                    aria-expanded="false"
+                    aria-controls="collapseExample"
+                  >
+                    Multiple RXD Files
+                  </a>
+                  <!-- <a
+                    class="btn btn-primary"
+                    id="conv-option-btn"
+                    data-bs-toggle="collapse"
+                    href="#collapseExample-two"
+                    role="button"
+                    aria-expanded="false"
+                    aria-controls="collapseExample"
+                  >
+                    Single RXD File
+                  </a> -->
+                  
+                  
+                </div>
+
+                </p>
+                <div class="collapse collapse-horizontal show" id="collapseExample">
+                  <!-- Convert Data Multiple RXD files body -->
+                  <div class="card card-body" style="width: 560px">
+                    <h1
+                      style="
+                        color: white;
+                        font-size: 35px;
+                        padding-left: 1rem;
+                        margin-top: 0.3rem;
+                      "
+                    >
+                      Process Extracted Files
+                    </h1>
+                    <p
+                      style="
+                        color: rgb(206, 206, 206);
+                        font-size: 18px;
+                        padding-left: 1rem;
+                        font-weight: 400;
+                      "
+                    >
+                      Process all the extracted files to .csv with
+                      resampling and interpolation.
+                    </p>
+                    <!-- Multiple RXD inputs -->
+                    <!-- Input button -->
+                    <form>
+                      <div class="folder-selection-group" style="margin-bottom: 20px;">
+                        
+                        <button
+                          type="button"
+                          
+                          class="folder-browse-btn"
+                          id="select-input-btn"
+                          onclick="selectInputFolder()"
+                          style="
+                            height: 40px;
+                            width: 480px;
+                            color: rgb(238, 238, 238);
+                            outline: none;
+                            background-color: #1a2b35ab;
+                            font-size: 18px;                         
+                            border: 2px solid transparent;
+                            font-family: 'Poppins';
+                            border-radius: 10px;
+                            margin: 10px;
+                            cursor: pointer;
+                            transition: background-color 0.3s ease;
+                          "
+                          onmouseover="this.style.backgroundColor='#1a2b3550'"
+                          onmouseout="this.style.backgroundColor='#1a2b35ab'"
+                        >
+                           Select Input Folder
+                        </button>
+                        <div 
+                          id="input-folder-display" 
+                          class="folder-status-display" 
+                          style="
+                            color: #c4c4c4;
+                           
+                            border-radius: 10px;
+                            padding: 5px 10px;
+                            
+                            font-size: 16px;
+                            font-family: 'Poppins', sans-serif;
+                            word-wrap: break-word;
+                            min-height: 50px;
+                            display: flex;
+                            align-items: center;
+                          "
+                        >
+                          No RXD files folder selected yet
+                        </div>
+                      </div>
+                        <!-- raster button -->
+                        <!-- <input
+                          class="text"
+                          id="raster-multiple"
+                          type="number"
+                          placeholder="Raster Rate"
+                          style="
+                            width: 150px;
+                            margin-left: 6rem;
+                            margin-left: 0;
+                          "
+                          required
+                        /> -->
+                      </div>
+                      
+                      
+                      <!-- convert button -->
+                      <button
+                        class="convert-data-btn-canvas"
+                        onclick="calculate_multiple_files()"
+                        id="btn-multiplefiles"
+                        disabled
+                      >
+                        Convert Files
+                      </button>
+                      
+                    </form>
+                  </div>
+                </div>
+
+                <div
+                  class="collapse collapse-horizontal "
+                  id="collapseExample-two"
+                >
+                  <!-- Convert Data Single RXD file body -->
+                  <div class="card card-body-two" style="width: 560px">
+                    <h1
+                      style="
+                        color: white;
+                        font-size: 35px;
+                        padding-left: 1rem;
+                        margin-top: 1rem;
+                      "
+                    >
+                      Convert a Single .RxD File
+                    </h1>
+                    <p
+                      style="
+                        color: rgb(206, 206, 206);
+                        font-size: 18px;
+                        padding-left: 1rem;
+                        font-weight: 400;
+                      "
+                    >
+                      Convert a single .rxd file to .csv with re-sampling and
+                      interpolation done on it.
+                    </p>
+
+                    <div class="single-file-grp">
+
+                      <button
+                        type="button"
+                        class="btn btn-outline-success folder-btn"
+                        id="select-output-single-btn"
+                        onclick="selectOutputFolderSingle()"
+                        style="margin-left: 1.2rem; width: 500px; height: 60px; margin-bottom: 10px;"
+                      >
+                        📁 Select Output Folder
+                      </button>
+                      <div id="output-single-folder-display" class="folder-display" style="color: #28a745; margin-left: 1.2rem; margin-bottom: 15px; word-wrap: break-word; font-size: 14px;">
+                        No folder selected
+                      </div>
+                      
+                      
+                      <!-- single  raster input-->
+                      <!-- <input
+                        class="text-single"
+                        style="
+                          height: 60px;
+                          margin-left: 1rem;
+                          border-width: 1px;
+                          font-size: 17px;
+                          height: 55px;
+                        "
+                        id="raster_single"
+                        type="number"
+                        placeholder="Enter Raster Rate"
+                      /> -->
+                      <!-- single convert button-->
+                      <button
+                        class="single-file-btn"
+                        id="convert-single"
+                        style="
+                          font-size: 20px;
+                          background-color: #26962f;
+                          width: 500px;
+                          height: 60px;
+                        "
+                        
+                        onclick="getPathToFile()"
+                      >
+                        Upload & Convert
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+ 
+
+    </script>
+    <!-- Enable tooltips -->
+    <script>
+      const tooltipTriggerList = document.querySelectorAll(
+        '[data-bs-toggle="tooltip"]'
+      );
+      const tooltipList = [...tooltipTriggerList].map(
+        (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
+      );
+    </script>
+    <!-- Connect JS to opening -->
+    <script src="opening_js.js"></script>
+    <script src="eel.js"></script>
+  </body>
+</html>

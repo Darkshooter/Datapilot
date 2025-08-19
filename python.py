@@ -1029,6 +1029,86 @@ def extract_data():
         print(f'Error while starting process: {e}')
 
 
+@eel.expose
+def test_debug():
+    """Simple test function to verify eel communication"""
+    print("TEST FUNCTION CALLED - EEL IS WORKING!")
+    return "Test function executed successfully"
+
+@eel.expose
+def set_date_time():
+    """Function called when Set Date Time button is clicked"""
+    
+    # Return debug info immediately without any complex logic
+    import sys
+    import os
+    
+    debug_info = []
+    debug_info.append("FUNCTION ENTRY: set_date_time called")
+    
+    try:
+        debug_info.append(f"Python version: {sys.version}")
+        debug_info.append(f"Frozen: {getattr(sys, 'frozen', False)}")
+        debug_info.append(f"Current working directory: {os.getcwd()}")
+        
+        # Check for the script file existence immediately
+        script_paths = [
+            r"C:\Program Files (x86)\IBDS\DataPilot\set_device_time_32bit.py",
+            os.path.join(os.getcwd(), "set_device_time_32bit.py"),
+            os.path.join(os.path.dirname(os.path.abspath(__file__)), "set_device_time_32bit.py"),
+        ]
+        
+        if getattr(sys, 'frozen', False):
+            script_paths.insert(0, os.path.join(sys._MEIPASS, "set_device_time_32bit.py"))
+        
+        debug_info.append(f"Checking {len(script_paths)} script paths:")
+        for i, path in enumerate(script_paths, 1):
+            exists = os.path.exists(path)
+            debug_info.append(f"  {i}. {'EXISTS' if exists else 'MISSING'}: {path}")
+        
+        # Find working script
+        script_path = None
+        for path in script_paths:
+            if os.path.exists(path):
+                script_path = path
+                break
+        
+        if script_path:
+            debug_info.append(f"FOUND SCRIPT: {script_path}")
+        else:
+            debug_info.append("NO SCRIPT FOUND!")
+            return " | ".join(debug_info)
+        
+        # Check USB devices
+        try:
+            import win32com.client
+            wmi = win32com.client.GetObject("winmgmts:")
+            rexgen_found = False
+            
+            for usb in wmi.InstancesOf("Win32_USBHub"):
+                if 'ReXgen' in usb.Name:
+                    rexgen_found = True
+                    break
+            
+            debug_info.append(f"ReXgen device found: {rexgen_found}")
+            
+            if not rexgen_found:
+                debug_info.append("RETURNING: not connected")
+                return "not connected"
+                
+        except Exception as usb_error:
+            debug_info.append(f"USB check error: {str(usb_error)}")
+            return " | ".join(debug_info)
+        
+        # Try to run the subprocess
+        debug_info.append("ATTEMPTING SUBPROCESS...")
+        return " | ".join(debug_info) + " | SHOULD NOT REACH HERE YET"
+        
+    except Exception as e:
+        debug_info.append(f"EXCEPTION: {str(e)}")
+        return " | ".join(debug_info)
+
+
 # splash screen close
 if getattr(sys, 'frozen', False):
     pyi_splash.close()

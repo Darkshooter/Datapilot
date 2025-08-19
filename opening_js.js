@@ -241,3 +241,147 @@ function setup_return(msg) {
 function extractdata() {
   eel.extract_data()(extract_return);
 }
+
+// ----------------------------- SET DATE TIME ----------------------------
+
+function setDateTime() {
+  console.log("Set Date Time button clicked!");
+
+  // First test eel communication
+  console.log("Testing eel communication...");
+  eel.test_debug()((result) => {
+    console.log("Test function result:", result);
+  });
+
+  // Then call the actual function
+  eel.set_date_time()(setDateTimeResult);
+}
+
+function formatTimeForUser(timeString) {
+  // Convert "2024-01-15 14:30:25" to "Jan 15, 2024 at 2:30 PM"
+  try {
+    const date = new Date(timeString);
+    return date.toLocaleString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  } catch (e) {
+    return timeString; // Fallback to original format
+  }
+}
+
+function getCurrentPCTime() {
+  // Get current PC time in the same format
+  const now = new Date();
+  return now.toLocaleString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+}
+
+function setDateTimeResult(result) {
+  console.log("Backend response:", result);
+  console.log("Return message:", result);
+
+  // Check for detailed debug information in error messages
+  if (result && result.includes("Debug information:")) {
+    console.log("=== DETAILED DEBUG INFORMATION ===");
+
+    // Split the debug message by the delimiter used in Python
+    const debugParts = result.split(" | ");
+    debugParts.forEach((part, index) => {
+      console.log(`${index + 1}. ${part.trim()}`);
+    });
+
+    console.log("===================================");
+
+    // Also log raw message for complete context
+    console.log("Raw debug message:", result);
+  }
+
+  if (result === "not connected") {
+    showErrorToast("ReXgen device not connected");
+  } else if (result === "Date time set successfully") {
+    const pcTime = getCurrentPCTime();
+    showSuccessNotification(`Device time set to ${pcTime}`);
+  } else if (result === "Date time set successfully (CLI method)") {
+    const pcTime = getCurrentPCTime();
+    showSuccessNotification(`Device time set to ${pcTime}`);
+  } else if (result.startsWith("Device time set and verified:")) {
+    const pcTime = getCurrentPCTime();
+    showSuccessNotification(`Device time set to ${pcTime}`);
+  } else if (result.startsWith("Time set but verification uncertain:")) {
+    const pcTime = getCurrentPCTime();
+    showSuccessNotification(`Device time set to ${pcTime}`);
+  } else if (result === "Time set but could not verify") {
+    const pcTime = getCurrentPCTime();
+    showSuccessNotification(`Device time set to ${pcTime}`);
+  } else if (result === "Device not ready") {
+    showErrorToast("ReXgen device not ready for time setting");
+  } else if (result === "Failed to set device time") {
+    showErrorToast("Failed to set device time");
+  } else if (result === "CLI method failed") {
+    showErrorToast("Command line method failed to set time");
+  } else if (
+    result === "DLL file not found" ||
+    (result && result.includes("DLL file not found"))
+  ) {
+    console.log(
+      "DLL ERROR DETECTED - Check console for detailed debug information above"
+    );
+    showErrorToast(
+      "RgUSBdrv.dll not found - Check browser console (F12) for detailed debug info"
+    );
+  } else if (result && result.includes("Device DLL not found")) {
+    console.log(
+      "DEVICE DLL ERROR DETECTED - Check console for detailed debug information above"
+    );
+    showErrorToast(
+      "Device DLL not found - Check browser console (F12) for detailed debug info"
+    );
+  } else if (result === "32-bit helper script not found") {
+    console.log("32-BIT SCRIPT ERROR DETECTED");
+    showErrorToast(
+      "32-bit helper script missing - check set_device_time_32bit.py"
+    );
+  } else if (result.includes("Architecture mismatch")) {
+    console.log("ARCHITECTURE MISMATCH ERROR:", result);
+    showErrorToast("Python/DLL architecture mismatch - need 32-bit Python");
+  } else if (result.startsWith("DLL loading failed")) {
+    console.log("DLL LOADING ERROR:", result);
+    showErrorToast(result);
+  } else if (result.startsWith("Could not run 32-bit Python script")) {
+    console.log("32-BIT PYTHON ERROR:", result);
+    showErrorToast("Install 32-bit Python: py -32 or python32 command needed");
+  } else if (result.startsWith("Python execution error (103)")) {
+    console.log("PYTHON EXECUTION ERROR 103:", result);
+    showErrorToast(
+      "Python execution failed - check 32-bit Python installation"
+    );
+  } else if (result.startsWith("Script failed (exit")) {
+    console.log("SCRIPT EXIT ERROR:", result);
+    showErrorToast(`Script execution error: ${result}`);
+  } else if (result.startsWith("Error:")) {
+    console.log("GENERAL ERROR:", result);
+    showErrorToast(result);
+  } else {
+    const pcTime = getCurrentPCTime();
+    showSuccessNotification(`Device time set to ${pcTime}`);
+  }
+}
+
+// Add event listener for Set Date Time button
+document
+  .getElementById("set-date-time-btn")
+  .addEventListener("click", function () {
+    console.log("Set Date Time button clicked!");
+    setDateTime();
+  });
