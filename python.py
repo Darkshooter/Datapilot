@@ -15,12 +15,12 @@ eel.init(r"C:\Program Files (x86)\IBDS\DataPilot")
 
 # DBC Signal to Unit Mapping from Microlite.dbc
 DBC_SIGNAL_UNITS = {
-    'Accelerometer X': 'g',
-    'Accelerometer Y': 'g', 
-    'Accelerometer Z': 'g',
-    'Gyroscope X': 'deg/s',
-    'Gyroscope Y': 'deg/s',
-    'Gyroscope Z': 'deg/s',
+    'Accelerometer_X': 'g',
+    'Accelerometer_Y': 'g', 
+    'Accelerometer_Z': 'g',
+    'Gyroscope_X': 'deg/s',
+    'Gyroscope_Y': 'deg/s',
+    'Gyroscope_Z': 'deg/s',
     'LATITUDE': 'deg',
     'LONGITUDE': 'deg',
     'ALTITUDE': 'm',
@@ -30,29 +30,71 @@ DBC_SIGNAL_UNITS = {
     'GEOID_SEPARATION': 'm',
     'NUMBER_SATELLITES': 'count',
     'QUALITY': 'index',
-    'SG_Accelerationinx_longitudinal': 'm/s2',
-    'SG_Accelerationiny_lateral': 'm/s2',
-    'SG_Accelerationinz_normal': 'm/s2',
-    'SG_Indicatedairspeed': 'm/s',
-    'SG_Differentialpressure': 'hPa',
-    'SG_EngineRPM': 'RPM',
-    'SG_Enginefuelflowrate': 'l/h',
-    'SG_Manifoldpressure': 'bar',
-    'SG_Engineoilpressure': 'bar',
-    'SG_Engine_oil_temperature': 'degC',
-    'SG_Fuellevel': 'liters',
-    'SG_Fuelsystempressure': 'bar',
-    'SG_Voltage_DC': 'V',
-    'SG_CHT_indexinregisterA1': 'degC',
-    'SG_EGT_indexinregisterA1': 'degC',
-    'SG_Flighttime_section': '',
-    'SG_Verticalspeed': 'm/s',
-    'SG_Barometriccorrection_QNH': 'hPa',
-    'SG_Barocorrectedaltitude': 'm',
-    'SG_Standard_altitude': 'm',
-    'SG_Static_pressure': 'hPa',
-    'SG_Enginetotaltime': 'h'
+    'GPS_Date_time': 'Epoch',
+    'Acceleration_x_longitudinal': 'm/s2',
+    'Acceleration_y_lateral': 'm/s2',
+    'Acceleration_z_normal': 'm/s2',
+    'Vertical_speed': 'm/s',
+    'Indicated_airspeed': 'm/s',
+    'Barometric_correction_QNH': 'hPa',
+    'Baro_corrected_altitude': 'm',
+    'Standard_altitude': 'm',
+    'Differentialpressure': 'hPa',
+    'Static_pressure': 'hPa',
+    'Engine_Speed': 'RPM',
+    'Engine_fuel_flowrate': 'l/h',
+    'Manifold_pressure': 'bar',
+    'Engine_oil_pressure': 'bar',
+    'Engine_oil_temperature': '°C',
+    'Fuel_level': 'liters',
+    'Fuel_pressure': 'bar',
+    'Bat_Voltage_DC': 'V',
+    'CT_1': '°C',
+    'CT_2': '°C',
+    'EGT_1': '°C',
+    'EGT_2': '°C',
+    'Engine_totaltime': 'h',
+    'Flight_time': 's'
 }
+
+# Unit conversions - signals that need additional converted columns
+DBC_SIGNAL_UNITS_CONVERTED = {
+    'Vertical_speed': 'knot',
+    'Indicated_airspeed': 'knot',
+    'Baro_corrected_altitude': 'ft',
+    'Standard_altitude': 'ft',
+    'Manifold_pressure': 'Inhg',
+    'Engine_oil_pressure': 'PSI',
+    'Fuel_level': '%',
+    'Fuel_pressure': 'PSI'
+}
+
+def convert_unit_value(value, signal_name):
+    """Convert a single value based on signal name"""
+    try:
+        val = float(value)
+        
+        if signal_name == 'Vertical_speed' or signal_name == 'Indicated_airspeed':
+            # m/s to knots: 1 m/s = 1.943844 knots
+            return val * 1.943844
+        elif signal_name == 'Baro_corrected_altitude' or signal_name == 'Standard_altitude':
+            # meters to feet: 1 m = 3.28084 ft
+            return val * 3.28084
+        elif signal_name == 'Manifold_pressure':
+            # bar to InHg: 1 bar = 29.5300 InHg
+            return val * 29.5300
+        elif signal_name == 'Engine_oil_pressure' or signal_name == 'Fuel_pressure':
+            # bar to PSI: 1 bar = 14.5038 PSI
+            return val * 14.5038
+        elif signal_name == 'Fuel_level':
+            # Convert liters to percentage (assuming full tank is 100 liters)
+            # This might need adjustment based on actual tank capacity
+            return (val / 100.0) * 100.0  # Adjust denominator as needed
+        
+        return val
+    except (ValueError, TypeError):
+        return value
+
 
 def update_csv_units_from_dbc(csv_file_path):
     """Update CSV file units based on DBC signal mapping"""
@@ -100,6 +142,66 @@ def update_csv_units_from_dbc(csv_file_path):
         
     except Exception as e:
         print(f"Error updating CSV units: {e}")
+
+
+def add_converted_unit_columns(csv_file_path):
+    """Add additional columns with converted units for specified signals"""
+    import csv
+    try:
+        # Read the CSV file
+        with open(csv_file_path, 'r') as file:
+            reader = csv.reader(file)
+            rows = list(reader)
+        
+        if len(rows) < 2:
+            return  # Need at least headers and units row
+        
+        headers = rows[0]  # First row: signal names
+        units_row = rows[1]  # Second row: units
+        
+        # Find columns that need conversion
+        conversion_columns = []
+        for i, header in enumerate(headers):
+            if header in DBC_SIGNAL_UNITS_CONVERTED:
+                conversion_columns.append((i, header))
+        
+        if not conversion_columns:
+            return  # No columns to convert
+        
+        # Add new headers for converted columns
+        new_headers = []
+        new_units = []
+        for original_idx, signal_name in conversion_columns:
+            converted_unit = DBC_SIGNAL_UNITS_CONVERTED[signal_name]
+            new_header = f"{signal_name}_{converted_unit}"
+            new_headers.append(new_header)
+            new_units.append(converted_unit)
+        
+        # Update headers and units rows
+        rows[0].extend(new_headers)
+        rows[1].extend(new_units)
+        
+        # Add converted data for each data row
+        for row_idx in range(2, len(rows)):
+            new_values = []
+            for original_idx, signal_name in conversion_columns:
+                if original_idx < len(rows[row_idx]):
+                    original_value = rows[row_idx][original_idx]
+                    converted_value = convert_unit_value(original_value, signal_name)
+                    new_values.append(f"{converted_value:.2f}" if isinstance(converted_value, float) else str(converted_value))
+                else:
+                    new_values.append('')
+            rows[row_idx].extend(new_values)
+        
+        # Write back to CSV
+        with open(csv_file_path, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerows(rows)
+            
+        print(f"Added converted unit columns to CSV: {csv_file_path}")
+        
+    except Exception as e:
+        print(f"Error adding converted unit columns: {e}")
 
 
 
@@ -295,12 +397,12 @@ def convert_multiple_files(input, output):
                         print(f"  - {sig}")
                     
                     signals = [
-                        'Accelerometer X',
-                        'Accelerometer Y',
-                        'Accelerometer Z',
-                        'Gyroscope X',
-                        'Gyroscope Y',
-                        'Gyroscope Z',
+                        'Accelerometer_X',
+                        'Accelerometer_Y', 
+                        'Accelerometer_Z',
+                        'Gyroscope_X',
+                        'Gyroscope_Y',
+                        'Gyroscope_Z',
                         'LATITUDE',
                         'LONGITUDE',
                         'ALTITUDE',
@@ -310,28 +412,31 @@ def convert_multiple_files(input, output):
                         'GEOID_SEPARATION',
                         'NUMBER_SATELLITES',
                         'QUALITY',
-                        'SG_Accelerationinx_longitudinal',
-                        'SG_Accelerationiny_lateral',
-                        'SG_Accelerationinz_normal',
-                        'SG_Indicatedairspeed',
-                        'SG_Differentialpressure',
-                        'SG_EngineRPM',
-                        'SG_Enginefuelflowrate',
-                        'SG_Manifoldpressure',
-                        'SG_Engineoilpressure',
-                        'SG_Engine_oil_temperature',
-                        'SG_Fuellevel',
-                        'SG_Fuelsystempressure',
-                        'SG_Voltage_DC',
-                        'SG_CHT_indexinregisterA1',
-                        'SG_EGT_indexinregisterA1',
-                        'SG_Flighttime_section',
-                        'SG_Verticalspeed',
-                        'SG_Barometriccorrection_QNH',
-                        'SG_Barocorrectedaltitude',
-                        'SG_Standard_altitude',
-                        'SG_Static_pressure',
-                        'SG_Enginetotaltime',
+                        'GPS_Date_time',
+                        'Acceleration_x_longitudinal',
+                        'Acceleration_y_lateral',
+                        'Acceleration_z_normal',
+                        'Vertical_speed',
+                        'Indicated_airspeed',
+                        'Barometric_correction_QNH',
+                        'Baro_corrected_altitude',
+                        'Standard_altitude',
+                        'Differentialpressure',
+                        'Static_pressure',
+                        'Engine_Speed',
+                        'Engine_fuel_flowrate',
+                        'Manifold_pressure',
+                        'Engine_oil_pressure',
+                        'Engine_oil_temperature',
+                        'Fuel_level',
+                        'Fuel_pressure',
+                        'Bat_Voltage_DC',
+                        'CT_1',
+                        'CT_2',
+                        'EGT_1',
+                        'EGT_2',
+                        'Engine_totaltime',
+                        'Flight_time'
                     ]
 
                     # Find exact matches
@@ -383,6 +488,9 @@ def convert_multiple_files(input, output):
                 # Update CSV units based on DBC mapping
                 myfilepath = os.path.join(output_folder, f"{filename}.csv")
                 update_csv_units_from_dbc(myfilepath)
+                
+                # Add converted unit columns
+                add_converted_unit_columns(myfilepath)
 
                 import csv
                 from datetime import datetime, timedelta
@@ -393,11 +501,12 @@ def convert_multiple_files(input, output):
                     rows = [row for row in reader]
 
                 # Modify the rows
-                is_first_row = True
                 for i, row in enumerate(rows):
-                    if is_first_row:
-                        is_first_row = False
-                        continue  # Skip the first row
+                    # Skip the first two rows (headers and units)
+                    if i < 2:
+                        continue
+                        
+                    # Process timestamp column (first column)
                     text = row[0].strip()
 
                     if '+' in text:
@@ -431,6 +540,16 @@ def convert_multiple_files(input, output):
                         edit_str = dt.strftime('%Y-%m-%d %H:%M:%S')
 
                     rows[i][0] = edit_str
+                    
+                    # Format numeric columns to 2 decimal places
+                    for j in range(1, len(row)):
+                        try:
+                            # Try to convert to float and format to 2 decimal places
+                            value = float(row[j])
+                            rows[i][j] = f"{value:.2f}"
+                        except (ValueError, TypeError):
+                            # Keep original value if it's not a number
+                            pass
 
                 # Write the modified rows back to the CSV file
                 with open(myfilepath, 'w', newline='') as file:
@@ -762,6 +881,9 @@ def pythonFunction(output, wildcard="*"):
         # Update CSV units based on DBC mapping
         myfilepath = os.path.join(output_folder, f"{filename}.csv")
         update_csv_units_from_dbc(myfilepath)
+        
+        # Add converted unit columns
+        add_converted_unit_columns(myfilepath)
 
         import csv
         from datetime import datetime, timedelta
@@ -772,11 +894,12 @@ def pythonFunction(output, wildcard="*"):
             rows = [row for row in reader]
 
         # Modify the rows
-        is_first_row = True
         for i, row in enumerate(rows):
-            if is_first_row:
-                is_first_row = False
-                continue  # Skip the first row
+            # Skip the first two rows (headers and units)
+            if i < 2:
+                continue
+                
+            # Process timestamp column (first column)
             text = row[0].strip()
 
             if '+' in text:
@@ -810,6 +933,16 @@ def pythonFunction(output, wildcard="*"):
                 edit_str = dt.strftime('%Y-%m-%d %H:%M:%S')
 
             rows[i][0] = edit_str
+            
+            # Format numeric columns to 2 decimal places
+            for j in range(1, len(row)):
+                try:
+                    # Try to convert to float and format to 2 decimal places
+                    value = float(row[j])
+                    rows[i][j] = f"{value:.2f}"
+                except (ValueError, TypeError):
+                    # Keep original value if it's not a number
+                    pass
 
         # Write the modified rows back to the CSV file
         with open(myfilepath, 'w', newline='') as file:
