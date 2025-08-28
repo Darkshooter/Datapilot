@@ -53,6 +53,8 @@ DBC_SIGNAL_UNITS = {
     'CT_2': '°C',
     'EGT_1': '°C',
     'EGT_2': '°C',
+    'EGT1': '°C',
+    'EGT2': '°C',
     'Engine_totaltime': 'h',
     'Flight_time': 's'
 }
