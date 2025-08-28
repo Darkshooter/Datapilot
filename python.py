@@ -91,7 +91,7 @@ def convert_unit_value(value, signal_name):
         elif signal_name == 'Fuel_level':
             # Convert liters to percentage (assuming full tank is 100 liters)
             # This might need adjustment based on actual tank capacity
-            return (val / 100.0) * 100.0  # Adjust denominator as needed
+            return (val / 52) * 100.0  # Adjust denominator as needed
         
         return val
     except (ValueError, TypeError):
