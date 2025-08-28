@@ -89,9 +89,14 @@ def convert_unit_value(value, signal_name):
             # bar to PSI: 1 bar = 14.5038 PSI
             return val * 14.5038
         elif signal_name == 'Fuel_level':
-            # Convert liters to percentage (assuming full tank is 100 liters)
-            # This might need adjustment based on actual tank capacity
-            return (val / 52) * 100.0  # Adjust denominator as needed
+            # Convert liters to percentage (max tank capacity is 52 liters)
+            # Ensure the percentage doesn't exceed 100% and handle edge cases
+            if val < 0:
+                return 0.0  # Negative fuel levels should be 0%
+            elif val > 52.0:
+                return 100.0  # Cap at 100% for values above tank capacity
+            else:
+                return (val / 52.0) * 100.0
         
         return val
     except (ValueError, TypeError):
