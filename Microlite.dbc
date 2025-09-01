@@ -1,10 +1,40 @@
-VERSION "HIPBNYYYYYYYYYYYYYYYYYYYYYYYYYYYNNNNNNNNNN/4/%%%/4/'%**4NNN///"
+VERSION ""
+
 
 NS_ : 
+	NS_DESC_
+	CM_
+	BA_DEF_
+	BA_
+	VAL_
+	CAT_DEF_
+	CAT_
+	FILTER
+	BA_DEF_DEF_
+	EV_DATA_
+	ENVVAR_DATA_
+	SGTYPE_
+	SGTYPE_VAL_
+	BA_DEF_SGTYPE_
+	BA_SGTYPE_
+	SIG_TYPE_REF_
+	VAL_TABLE_
+	SIG_GROUP_
+	SIG_VALTYPE_
+	SIGTYPE_VALTYPE_
+	BO_TX_BU_
+	BA_DEF_REL_
+	BA_REL_
+	BA_DEF_DEF_REL_
+	BU_SG_REL_
+	BU_EV_REL_
+	BU_BO_REL_
+	SG_MUL_VAL_
 
-BS_: 
+BS_:
 
-BU_: Vector__XXX
+BU_:
+
 
 BO_ 2167208448 Acceleration_x_longitudinal: 8 Vector__XXX
  SG_ Acceleration_x_longitudinal : 32|32@1- (1,0) [0|255] "m/s2" Vector__XXX
@@ -56,7 +86,7 @@ BO_ 2245918208 EGT: 8 Vector__XXX
  SG_ EGT_2 m1 : 32|32@1- (1,0) [-20|1500] "degC" Vector__XXX
 
 BO_ 2247294464 Flighttime: 8 Vector__XXX
- SG_ Flight_time : 0|32@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ Flight_time : 32|32@1+ (1,0) [0|255] "s" Vector__XXX
 
 BO_ 2168126720 Verticalspeed: 8 Vector__XXX
  SG_ Vertical_speed : 32|32@1- (1,0) [0|255] "m/s" Vector__XXX
@@ -76,13 +106,15 @@ BO_ 2168913152 Static_pressure: 8 Vector__XXX
 BO_ 2246507776 Enginetotaltime: 8 Vector__XXX
  SG_ Engine_totaltime : 32|32@1- (1,0) [0|255] "h" Vector__XXX
 
+
+
 BA_DEF_ SG_  "GenSigSendType" ENUM  "Cyclic","OnWrite","OnWriteWithRepetition","OnChange","OnChangeWithRepetition","IfActive","IfActiveWithRepetition","NoSigSendType";
-BA_DEF_ SG_  "GenSigInactiveValue" INT  0 0;
-BA_DEF_ BO_  "GenMsgCycleTime" INT  0 0;
+BA_DEF_ SG_  "GenSigInactiveValue" INT 0 0;
+BA_DEF_ BO_  "GenMsgCycleTime" INT 0 0;
 BA_DEF_ BO_  "GenMsgSendType" ENUM  "Cyclic","not_used","not_used","not_used","not_used","Cyclic","not_used","IfActive","NoMsgSendType";
-BA_DEF_ BU_  "NmStationAddress" HEX  0 0;
-BA_DEF_  "BusType" STRING  ;
-BA_DEF_  "ProtocolType" STRING  ;
+BA_DEF_ BU_  "NmStationAddress" HEX 0 0;
+BA_DEF_  "BusType" STRING ;
+BA_DEF_  "ProtocolType" STRING ;
 BA_DEF_DEF_  "GenSigSendType" "Cyclic";
 BA_DEF_DEF_  "GenSigInactiveValue" 0;
 BA_DEF_DEF_  "GenMsgCycleTime" 0;
@@ -113,3 +145,4 @@ SIG_VALTYPE_ 2168519936 Baro_corrected_altitude : 1;
 SIG_VALTYPE_ 2168651008 Standard_altitude : 1;
 SIG_VALTYPE_ 2168913152 Static_pressure : 1;
 SIG_VALTYPE_ 2246507776 Engine_totaltime : 1;
+

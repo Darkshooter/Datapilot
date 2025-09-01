@@ -25,7 +25,7 @@ DBC_SIGNAL_UNITS = {
     'LONGITUDE': 'deg',
     'ALTITUDE': 'm',
     'SPEED_OVER_GROUND': 'km/h',
-    'GROUND_DISTANCE': 'm',
+    'GROUND_DISTANCE': 'nm',
     'COURSE_OVER_GROUND': 'deg',
     'GEOID_SEPARATION': 'm',
     'NUMBER_SATELLITES': 'count',
@@ -34,20 +34,20 @@ DBC_SIGNAL_UNITS = {
     'Acceleration_x_longitudinal': 'm/s2',
     'Acceleration_y_lateral': 'm/s2',
     'Acceleration_z_normal': 'm/s2',
-    'Vertical_speed': 'm/s',
-    'Indicated_airspeed': 'm/s',
+    'Vertical_speed': 'fpm',
+    'Indicated_airspeed': 'knot',
     'Barometric_correction_QNH': 'hPa',
-    'Baro_corrected_altitude': 'm',
-    'Standard_altitude': 'm',
+    'Baro_corrected_altitude': 'ft',
+    'Standard_altitude': 'ft',
     'Differentialpressure': 'hPa',
     'Static_pressure': 'hPa',
     'Engine_Speed': 'RPM',
     'Engine_fuel_flowrate': 'l/h',
-    'Manifold_pressure': 'bar',
-    'Engine_oil_pressure': 'bar',
+    'Manifold_pressure': 'Inhg',
+    'Engine_oil_pressure': 'PSI',
     'Engine_oil_temperature': '°C',
     'Fuel_level': 'liters',
-    'Fuel_pressure': 'bar',
+    'Fuel_pressure': 'PSI',
     'Bat_Voltage_DC': 'V',
     'CT_1': '°C',
     'CT_2': '°C',
@@ -61,14 +61,15 @@ DBC_SIGNAL_UNITS = {
 
 # Unit conversions - signals that need additional converted columns
 DBC_SIGNAL_UNITS_CONVERTED = {
-    'Vertical_speed': 'knot',
+    'Vertical_speed': 'fpm',
     'Indicated_airspeed': 'knot',
     'Baro_corrected_altitude': 'ft',
     'Standard_altitude': 'ft',
     'Manifold_pressure': 'Inhg',
     'Engine_oil_pressure': 'PSI',
     'Fuel_level': '%',
-    'Fuel_pressure': 'PSI'
+    'Fuel_pressure': 'PSI',
+    'GROUND_DISTANCE': 'nm'
 }
 
 def convert_unit_value(value, signal_name):
@@ -76,7 +77,10 @@ def convert_unit_value(value, signal_name):
     try:
         val = float(value)
         
-        if signal_name == 'Vertical_speed' or signal_name == 'Indicated_airspeed':
+        if signal_name == 'Vertical_speed':
+            # m/s to feet per minute: 1 m/s = 196.85 fpm
+            return val * 196.85
+        elif signal_name == 'Indicated_airspeed':
             # m/s to knots: 1 m/s = 1.943844 knots
             return val * 1.943844
         elif signal_name == 'Baro_corrected_altitude' or signal_name == 'Standard_altitude':
@@ -97,6 +101,9 @@ def convert_unit_value(value, signal_name):
                 return 100.0  # Cap at 100% for values above tank capacity
             else:
                 return (val / 52.0) * 100.0
+        elif signal_name == 'GROUND_DISTANCE':
+            # meters to nautical miles: 1 m = 0.000539957 nautical miles
+            return val * 0.000539957
         
         return val
     except (ValueError, TypeError):
@@ -152,7 +159,7 @@ def update_csv_units_from_dbc(csv_file_path):
 
 
 def add_converted_unit_columns(csv_file_path):
-    """Add additional columns with converted units for specified signals"""
+    """Convert units for specified signals - replace original columns except for Fuel_level which gets additional column"""
     import csv
     try:
         # Read the CSV file
@@ -168,47 +175,56 @@ def add_converted_unit_columns(csv_file_path):
         
         # Find columns that need conversion
         conversion_columns = []
+        fuel_level_columns = []  # Special handling for Fuel_level
+        
         for i, header in enumerate(headers):
             if header in DBC_SIGNAL_UNITS_CONVERTED:
-                conversion_columns.append((i, header))
+                if header == 'Fuel_level':
+                    fuel_level_columns.append((i, header))
+                else:
+                    conversion_columns.append((i, header))
         
-        if not conversion_columns:
-            return  # No columns to convert
-        
-        # Add new headers for converted columns
-        new_headers = []
-        new_units = []
+        # Handle regular conversions (replace original columns)
         for original_idx, signal_name in conversion_columns:
             converted_unit = DBC_SIGNAL_UNITS_CONVERTED[signal_name]
-            new_header = f"{signal_name}_{converted_unit}"
-            new_headers.append(new_header)
-            new_units.append(converted_unit)
-        
-        # Update headers and units rows
-        rows[0].extend(new_headers)
-        rows[1].extend(new_units)
-        
-        # Add converted data for each data row
-        for row_idx in range(2, len(rows)):
-            new_values = []
-            for original_idx, signal_name in conversion_columns:
+            # Update the units row to reflect the new unit
+            units_row[original_idx] = converted_unit
+            
+            # Convert all data values in this column
+            for row_idx in range(2, len(rows)):
                 if original_idx < len(rows[row_idx]):
                     original_value = rows[row_idx][original_idx]
                     converted_value = convert_unit_value(original_value, signal_name)
-                    new_values.append(f"{converted_value:.2f}" if isinstance(converted_value, float) else str(converted_value))
-                else:
-                    new_values.append('')
-            rows[row_idx].extend(new_values)
+                    rows[row_idx][original_idx] = f"{converted_value:.2f}" if isinstance(converted_value, float) else str(converted_value)
+        
+        # Handle Fuel_level special case (add new column, keep original)
+        if fuel_level_columns:
+            for original_idx, signal_name in fuel_level_columns:
+                converted_unit = DBC_SIGNAL_UNITS_CONVERTED[signal_name]
+                new_header = f"{signal_name}_{converted_unit}"
+                
+                # Add new header and unit
+                rows[0].append(new_header)
+                rows[1].append(converted_unit)
+                
+                # Add converted data for each data row
+                for row_idx in range(2, len(rows)):
+                    if original_idx < len(rows[row_idx]):
+                        original_value = rows[row_idx][original_idx]
+                        converted_value = convert_unit_value(original_value, signal_name)
+                        rows[row_idx].append(f"{converted_value:.2f}" if isinstance(converted_value, float) else str(converted_value))
+                    else:
+                        rows[row_idx].append('')
         
         # Write back to CSV
         with open(csv_file_path, 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerows(rows)
             
-        print(f"Added converted unit columns to CSV: {csv_file_path}")
+        print(f"Updated unit conversions in CSV: {csv_file_path}")
         
     except Exception as e:
-        print(f"Error adding converted unit columns: {e}")
+        print(f"Error converting units: {e}")
 
 
 
