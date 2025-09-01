@@ -28,6 +28,7 @@ DBC_SIGNAL_UNITS = {
     'Gyroscope Y': 'deg/s',
     'Gyroscope Z': 'deg/s',
     'LATITUDE': 'deg',
+    'DATETIME': 'Epoch',
     'LONGITUDE': 'deg',
     'ALTITUDE': 'm',
     'SPEED_OVER_GROUND': 'km/h',
@@ -231,6 +232,8 @@ def add_converted_unit_columns(csv_file_path):
         
     except Exception as e:
         print(f"Error converting units: {e}")
+
+
 
 
 
@@ -438,6 +441,7 @@ def convert_multiple_files(input, output):
                         'Gyroscope X',
                         'Gyroscope Y',
                         'Gyroscope Z',
+                        'DATETIME',
                         'LATITUDE',
                         'LONGITUDE',
                         'ALTITUDE',
@@ -534,6 +538,14 @@ def convert_multiple_files(input, output):
                 with open(myfilepath, 'r') as file:
                     reader = csv.reader(file)
                     rows = [row for row in reader]
+
+                # Rename DATETIME column to GPS_DATE_TIME in the header row (if it exists)
+                if rows and len(rows[0]) > 0:
+                    for i, header in enumerate(rows[0]):
+                        if header == 'DATETIME':
+                            rows[0][i] = 'GPS_DATE_TIME'
+                            print(f"Renamed column 'DATETIME' to 'GPS_DATE_TIME' at index {i}")
+                            break
 
                 # Modify the rows
                 for i, row in enumerate(rows):
@@ -933,6 +945,14 @@ def pythonFunction(output, wildcard="*"):
         with open(myfilepath, 'r') as file:
             reader = csv.reader(file)
             rows = [row for row in reader]
+
+        # Rename DATETIME column to GPS_DATE_TIME in the header row (if it exists)
+        if rows and len(rows[0]) > 0:
+            for i, header in enumerate(rows[0]):
+                if header == 'DATETIME':
+                    rows[0][i] = 'GPS_DATE_TIME'
+                    print(f"Renamed column 'DATETIME' to 'GPS_DATE_TIME' at index {i}")
+                    break
 
         # Modify the rows
         for i, row in enumerate(rows):
