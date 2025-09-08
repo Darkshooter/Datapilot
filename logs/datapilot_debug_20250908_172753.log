@@ -1,0 +1,287 @@
+2025-09-08 17:27:53,946 - INFO - setup_logging:47 - === DataPilot Application Started ===
+2025-09-08 17:27:53,947 - INFO - setup_logging:48 - Log directory: C:\Program Files (x86)\IBDS\Datapilot\logs
+2025-09-08 17:27:53,947 - INFO - setup_logging:49 - Log file: C:\Program Files (x86)\IBDS\Datapilot\logs\datapilot_debug_20250908_172753.log
+2025-09-08 17:27:53,947 - INFO - setup_logging:50 - Python version: 3.10.9 (tags/v3.10.9:1dd9be6, Dec  6 2022, 20:01:21) [MSC v.1934 64 bit (AMD64)]
+2025-09-08 17:27:53,947 - INFO - setup_logging:51 - Working directory: C:\Program Files (x86)\IBDS\Datapilot\dist
+2025-09-08 17:27:53,947 - INFO - setup_logging:52 - Frozen (PyInstaller): True
+2025-09-08 17:27:53,947 - INFO - setup_logging:54 - Executable path: C:\Program Files (x86)\IBDS\Datapilot\dist\DataPilot.exe
+2025-09-08 17:27:53,947 - INFO - setup_logging:56 - PyInstaller temp dir: C:\Users\user\AppData\Local\Temp\_MEI254242
+2025-09-08 17:27:53,952 - INFO - _log:64 - A connection to the splash screen was successfully established.
+2025-09-08 17:27:59,831 - INFO - <module>:1493 - Starting EEL web interface
+2025-09-08 17:28:00,721 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,721 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,722 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /opening.html HTTP/1.1" 200 19444 0.001000
+2025-09-08 17:28:00,733 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,734 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,735 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /jquery-1.11.1.min.js HTTP/1.1" 200 95996 0.002000
+2025-09-08 17:28:00,735 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,735 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,737 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /jquery-ui.min.js HTTP/1.1" 200 239775 0.002002
+2025-09-08 17:28:00,737 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,737 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,738 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /bootstrap.min.css HTTP/1.1" 200 220992 0.000997
+2025-09-08 17:28:00,738 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,739 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,739 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /opening_style.css HTTP/1.1" 200 6719 0.001000
+2025-09-08 17:28:00,741 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,741 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,741 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /bootstrap.bundle.min.js HTTP/1.1" 200 80809 0.001000
+2025-09-08 17:28:00,742 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,742 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,743 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /opening_js.js HTTP/1.1" 200 15459 0.001001
+2025-09-08 17:28:00,744 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,744 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,745 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /all.js HTTP/1.1" 200 680707 0.000999
+2025-09-08 17:28:00,746 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,746 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,746 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /eel.js HTTP/1.1" 200 6201 0.000000
+2025-09-08 17:28:00,797 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,797 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,798 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /fonts/poppins-local.css HTTP/1.1" 200 3039 0.001002
+2025-09-08 17:28:00,802 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,802 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,806 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /img/background2.png HTTP/1.1" 200 2638497 0.004001
+2025-09-08 17:28:00,838 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,838 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,839 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /fonts/Poppins/Poppins-Medium.ttf HTTP/1.1" 200 156733 0.001000
+2025-09-08 17:28:00,840 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,840 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,841 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /fonts/Poppins/Poppins-Thin.ttf HTTP/1.1" 200 161865 0.001001
+2025-09-08 17:28:00,842 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,842 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,843 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /fonts/Poppins/Poppins-ExtraLight.ttf HTTP/1.1" 200 161669 0.000999
+2025-09-08 17:28:00,844 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,844 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,845 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /fonts/Poppins/Poppins-Regular.ttf HTTP/1.1" 200 158453 0.001001
+2025-09-08 17:28:00,846 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,846 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,847 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /fonts/Poppins/Poppins-MediumItalic.ttf HTTP/1.1" 200 180657 0.001001
+2025-09-08 17:28:00,942 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,942 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,944 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /favicon.ico HTTP/1.1" 404 876 0.001999
+2025-09-08 17:28:01,156 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:01,156 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:01,156 - DEBUG - upgrade_connection:151 - Attempting to upgrade connection
+2025-09-08 17:28:01,156 - DEBUG - upgrade_connection:230 - WebSocket request accepted, switching protocols
+2025-09-08 17:28:15,455 - INFO - convert_multiple_files:308 - === CONVERT MULTIPLE FILES STARTED ===
+2025-09-08 17:28:15,455 - INFO - convert_multiple_files:309 - Input folder: C:\Program Files\Airforce_Application\Data\nithin
+2025-09-08 17:28:15,455 - INFO - convert_multiple_files:310 - Output folder: C:\Users\user\Desktop\DataPilotFiles\New folder
+2025-09-08 17:28:15,464 - INFO - convert_multiple_files:334 - Starting file conversion process
+2025-09-08 17:28:15,543 - INFO - _init_num_threads:160 - NumExpr defaulting to 6 threads.
+2025-09-08 17:28:15,561 - WARNING - <module>:28 - csv is not supported
+2025-09-08 17:28:15,561 - WARNING - <module>:28 - dbf is not supported
+2025-09-08 17:28:15,561 - WARNING - <module>:28 - json is not supported
+2025-09-08 17:28:15,562 - WARNING - <module>:28 - ldf is not supported
+2025-09-08 17:28:15,562 - WARNING - <module>:28 - kcd is not supported
+2025-09-08 17:28:15,562 - WARNING - <module>:28 - fibex is not supported
+2025-09-08 17:28:15,562 - WARNING - <module>:28 - sym is not supported
+2025-09-08 17:28:15,562 - WARNING - <module>:28 - xls is not supported
+2025-09-08 17:28:15,562 - WARNING - <module>:28 - xlsx is not supported
+2025-09-08 17:28:15,562 - WARNING - <module>:28 - yaml is not supported
+2025-09-08 17:28:15,562 - WARNING - <module>:28 - scapy is not supported
+2025-09-08 17:28:15,562 - WARNING - <module>:28 - wireshark is not supported
+2025-09-08 17:28:15,563 - WARNING - <module>:28 - odx is not supported
+2025-09-08 17:28:15,875 - INFO - convert_multiple_files:359 - Found ZIP file: C:\Program Files\Airforce_Application\Data\nithin\ReXgen0002906.zip, extracting...
+2025-09-08 17:28:28,179 - INFO - convert_multiple_files:363 - ZIP file extracted successfully
+2025-09-08 17:28:28,179 - INFO - convert_multiple_files:454 - Starting RXD to MF4 conversion
+2025-09-08 17:28:28,179 - DEBUG - convert_multiple_files:455 - Conversion command: CD "C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert" && rexdeskconvert convert-folder -F mf4 -i "C:\Program Files\Airforce_Application\Data\nithin" -o "C:\Users\user\Desktop\DataPilotFiles\New folder" -s can0 "C:\Program Files (x86)\IBDS\DataPilot\Microlite.dbc"
+2025-09-08 17:29:10,637 - INFO - convert_multiple_files:457 - RXD to MF4 conversion completed
+2025-09-08 17:29:10,638 - INFO - convert_multiple_files:472 - DBC files loaded: {'CAN': [(WindowsPath('C:/Program Files (x86)/IBDS/DataPilot/Microlite.dbc'), 0)]}
+2025-09-08 17:29:10,639 - INFO - convert_multiple_files:478 - Found 9 MF4 files to process: ['C:\\Users\\user\\Desktop\\DataPilotFiles\\New folder\\New Project_ReXgen0002906_20250901_162328.mf4', 'C:\\Users\\user\\Desktop\\DataPilotFiles\\New folder\\test_ReXgen0002906_20250901_171711.mf4', 'C:\\Users\\user\\Desktop\\DataPilotFiles\\New folder\\test_ReXgen0002906_20250901_181712.mf4', 'C:\\Users\\user\\Desktop\\DataPilotFiles\\New folder\\test_ReXgen0002906_20250901_191713.mf4', 'C:\\Users\\user\\Desktop\\DataPilotFiles\\New folder\\test_ReXgen0002906_20250903_095929.mf4', 'C:\\Users\\user\\Desktop\\DataPilotFiles\\New folder\\test_ReXgen0002906_20250903_105930.mf4', 'C:\\Users\\user\\Desktop\\DataPilotFiles\\New folder\\test_ReXgen0002906_20250903_115931.mf4', 'C:\\Users\\user\\Desktop\\DataPilotFiles\\New folder\\test_ReXgen0002906_20250903_125932.mf4', 'C:\\Users\\user\\Desktop\\DataPilotFiles\\New folder\\test_ReXgen0002906_20250908_121406.mf4']
+2025-09-08 17:29:10,639 - INFO - convert_multiple_files:484 - Processing MF4 file: New Project_ReXgen0002906_20250901_162328
+2025-09-08 17:29:11,022 - DEBUG - convert_multiple_files:494 - Available signals in New Project_ReXgen0002906_20250901_162328: 78 total
+2025-09-08 17:29:11,023 - DEBUG - convert_multiple_files:495 - First 10 available signals: ['ALTITUDE', 'Acceleration_x_longitudinal', 'Acceleration_y_lateral', 'Acceleration_z_normal', 'Accelerometer X', 'Accelerometer Y', 'Accelerometer Z', 'Baro_corrected_altitude', 'Barometric_correction_QNH', 'Bat_Voltage_DC']
+2025-09-08 17:29:11,023 - INFO - convert_multiple_files:553 - Found 40 exact signal matches
+2025-09-08 17:29:11,023 - INFO - convert_multiple_files:554 - Missing 7 signals, searching for similar ones...
+2025-09-08 17:29:11,023 - DEBUG - convert_multiple_files:566 - Found similar signal for Accelerometer_X: Accelerometer Z
+2025-09-08 17:29:11,023 - DEBUG - convert_multiple_files:566 - Found similar signal for Accelerometer_Y: Accelerometer Z
+2025-09-08 17:29:11,023 - DEBUG - convert_multiple_files:566 - Found similar signal for Accelerometer_Z: Accelerometer Z
+2025-09-08 17:29:11,023 - DEBUG - convert_multiple_files:566 - Found similar signal for Gyroscope_X: Gyroscope X
+2025-09-08 17:29:11,023 - DEBUG - convert_multiple_files:566 - Found similar signal for Gyroscope_Y: Gyroscope X
+2025-09-08 17:29:11,023 - DEBUG - convert_multiple_files:566 - Found similar signal for Gyroscope_Z: Gyroscope X
+2025-09-08 17:29:11,024 - DEBUG - convert_multiple_files:566 - Found similar signal for GPS_Date_time: DATETIME
+2025-09-08 17:29:11,024 - INFO - convert_multiple_files:583 - Final signal count for New Project_ReXgen0002906_20250901_162328: 47
+2025-09-08 17:29:11,024 - INFO - convert_multiple_files:586 - Filtering and exporting signals for New Project_ReXgen0002906_20250901_162328
+2025-09-08 17:29:11,784 - INFO - convert_multiple_files:595 - Successfully exported CSV for New Project_ReXgen0002906_20250901_162328
+2025-09-08 17:29:11,785 - INFO - convert_multiple_files:615 - Updating CSV units for New Project_ReXgen0002906_20250901_162328
+2025-09-08 17:29:12,191 - DEBUG - update_csv_units_from_dbc:225 - Successfully updated units in CSV: C:\Users\user\Desktop\DataPilotFiles\New folder\New Project_ReXgen0002906_20250901_162328.csv
+2025-09-08 17:29:12,208 - INFO - convert_multiple_files:619 - Adding converted unit columns for New Project_ReXgen0002906_20250901_162328
+2025-09-08 17:29:12,713 - DEBUG - add_converted_unit_columns:294 - Successfully updated unit conversions in CSV: C:\Users\user\Desktop\DataPilotFiles\New folder\New Project_ReXgen0002906_20250901_162328.csv
+2025-09-08 17:29:12,723 - INFO - convert_multiple_files:626 - Processing CSV timestamps and formatting for New Project_ReXgen0002906_20250901_162328
+2025-09-08 17:29:12,846 - DEBUG - convert_multiple_files:631 - CSV has 12894 rows
+2025-09-08 17:29:12,846 - INFO - convert_multiple_files:638 - Renamed DATETIME column to GPS_DATE_TIME at index 7
+2025-09-08 17:29:13,600 - INFO - convert_multiple_files:484 - Processing MF4 file: test_ReXgen0002906_20250901_171711
+2025-09-08 17:29:13,735 - DEBUG - convert_multiple_files:494 - Available signals in test_ReXgen0002906_20250901_171711: 78 total
+2025-09-08 17:29:13,735 - DEBUG - convert_multiple_files:495 - First 10 available signals: ['ALTITUDE', 'Acceleration_x_longitudinal', 'Acceleration_y_lateral', 'Acceleration_z_normal', 'Accelerometer X', 'Accelerometer Y', 'Accelerometer Z', 'Baro_corrected_altitude', 'Barometric_correction_QNH', 'Bat_Voltage_DC']
+2025-09-08 17:29:13,735 - INFO - convert_multiple_files:553 - Found 40 exact signal matches
+2025-09-08 17:29:13,735 - INFO - convert_multiple_files:554 - Missing 7 signals, searching for similar ones...
+2025-09-08 17:29:13,735 - DEBUG - convert_multiple_files:566 - Found similar signal for Accelerometer_X: Accelerometer Z
+2025-09-08 17:29:13,735 - DEBUG - convert_multiple_files:566 - Found similar signal for Accelerometer_Y: Accelerometer Z
+2025-09-08 17:29:13,735 - DEBUG - convert_multiple_files:566 - Found similar signal for Accelerometer_Z: Accelerometer Z
+2025-09-08 17:29:13,735 - DEBUG - convert_multiple_files:566 - Found similar signal for Gyroscope_X: Gyroscope X
+2025-09-08 17:29:13,736 - DEBUG - convert_multiple_files:566 - Found similar signal for Gyroscope_Y: Gyroscope X
+2025-09-08 17:29:13,736 - DEBUG - convert_multiple_files:566 - Found similar signal for Gyroscope_Z: Gyroscope X
+2025-09-08 17:29:13,736 - DEBUG - convert_multiple_files:566 - Found similar signal for GPS_Date_time: DATETIME
+2025-09-08 17:29:13,736 - INFO - convert_multiple_files:583 - Final signal count for test_ReXgen0002906_20250901_171711: 47
+2025-09-08 17:29:13,736 - INFO - convert_multiple_files:586 - Filtering and exporting signals for test_ReXgen0002906_20250901_171711
+2025-09-08 17:29:14,197 - INFO - convert_multiple_files:595 - Successfully exported CSV for test_ReXgen0002906_20250901_171711
+2025-09-08 17:29:14,197 - INFO - convert_multiple_files:615 - Updating CSV units for test_ReXgen0002906_20250901_171711
+2025-09-08 17:29:14,397 - DEBUG - update_csv_units_from_dbc:225 - Successfully updated units in CSV: C:\Users\user\Desktop\DataPilotFiles\New folder\test_ReXgen0002906_20250901_171711.csv
+2025-09-08 17:29:14,401 - INFO - convert_multiple_files:619 - Adding converted unit columns for test_ReXgen0002906_20250901_171711
+2025-09-08 17:29:14,617 - DEBUG - add_converted_unit_columns:294 - Successfully updated unit conversions in CSV: C:\Users\user\Desktop\DataPilotFiles\New folder\test_ReXgen0002906_20250901_171711.csv
+2025-09-08 17:29:14,621 - INFO - convert_multiple_files:626 - Processing CSV timestamps and formatting for test_ReXgen0002906_20250901_171711
+2025-09-08 17:29:14,739 - DEBUG - convert_multiple_files:631 - CSV has 14408 rows
+2025-09-08 17:29:14,739 - INFO - convert_multiple_files:638 - Renamed DATETIME column to GPS_DATE_TIME at index 7
+2025-09-08 17:29:15,308 - INFO - convert_multiple_files:484 - Processing MF4 file: test_ReXgen0002906_20250901_181712
+2025-09-08 17:29:15,456 - DEBUG - convert_multiple_files:494 - Available signals in test_ReXgen0002906_20250901_181712: 78 total
+2025-09-08 17:29:15,456 - DEBUG - convert_multiple_files:495 - First 10 available signals: ['ALTITUDE', 'Acceleration_x_longitudinal', 'Acceleration_y_lateral', 'Acceleration_z_normal', 'Accelerometer X', 'Accelerometer Y', 'Accelerometer Z', 'Baro_corrected_altitude', 'Barometric_correction_QNH', 'Bat_Voltage_DC']
+2025-09-08 17:29:15,456 - INFO - convert_multiple_files:553 - Found 40 exact signal matches
+2025-09-08 17:29:15,456 - INFO - convert_multiple_files:554 - Missing 7 signals, searching for similar ones...
+2025-09-08 17:29:15,456 - DEBUG - convert_multiple_files:566 - Found similar signal for Accelerometer_X: Accelerometer Z
+2025-09-08 17:29:15,456 - DEBUG - convert_multiple_files:566 - Found similar signal for Accelerometer_Y: Accelerometer Z
+2025-09-08 17:29:15,456 - DEBUG - convert_multiple_files:566 - Found similar signal for Accelerometer_Z: Accelerometer Z
+2025-09-08 17:29:15,456 - DEBUG - convert_multiple_files:566 - Found similar signal for Gyroscope_X: Gyroscope X
+2025-09-08 17:29:15,457 - DEBUG - convert_multiple_files:566 - Found similar signal for Gyroscope_Y: Gyroscope X
+2025-09-08 17:29:15,457 - DEBUG - convert_multiple_files:566 - Found similar signal for Gyroscope_Z: Gyroscope X
+2025-09-08 17:29:15,457 - DEBUG - convert_multiple_files:566 - Found similar signal for GPS_Date_time: DATETIME
+2025-09-08 17:29:15,457 - INFO - convert_multiple_files:583 - Final signal count for test_ReXgen0002906_20250901_181712: 47
+2025-09-08 17:29:15,457 - INFO - convert_multiple_files:586 - Filtering and exporting signals for test_ReXgen0002906_20250901_181712
+2025-09-08 17:29:15,917 - INFO - convert_multiple_files:595 - Successfully exported CSV for test_ReXgen0002906_20250901_181712
+2025-09-08 17:29:15,917 - INFO - convert_multiple_files:615 - Updating CSV units for test_ReXgen0002906_20250901_181712
+2025-09-08 17:29:16,118 - DEBUG - update_csv_units_from_dbc:225 - Successfully updated units in CSV: C:\Users\user\Desktop\DataPilotFiles\New folder\test_ReXgen0002906_20250901_181712.csv
+2025-09-08 17:29:16,123 - INFO - convert_multiple_files:619 - Adding converted unit columns for test_ReXgen0002906_20250901_181712
+2025-09-08 17:29:16,335 - DEBUG - add_converted_unit_columns:294 - Successfully updated unit conversions in CSV: C:\Users\user\Desktop\DataPilotFiles\New folder\test_ReXgen0002906_20250901_181712.csv
+2025-09-08 17:29:16,339 - INFO - convert_multiple_files:626 - Processing CSV timestamps and formatting for test_ReXgen0002906_20250901_181712
+2025-09-08 17:29:16,412 - DEBUG - convert_multiple_files:631 - CSV has 14410 rows
+2025-09-08 17:29:16,412 - INFO - convert_multiple_files:638 - Renamed DATETIME column to GPS_DATE_TIME at index 7
+2025-09-08 17:29:16,985 - INFO - convert_multiple_files:484 - Processing MF4 file: test_ReXgen0002906_20250901_191713
+2025-09-08 17:29:17,029 - DEBUG - convert_multiple_files:494 - Available signals in test_ReXgen0002906_20250901_191713: 78 total
+2025-09-08 17:29:17,030 - DEBUG - convert_multiple_files:495 - First 10 available signals: ['ALTITUDE', 'Acceleration_x_longitudinal', 'Acceleration_y_lateral', 'Acceleration_z_normal', 'Accelerometer X', 'Accelerometer Y', 'Accelerometer Z', 'Baro_corrected_altitude', 'Barometric_correction_QNH', 'Bat_Voltage_DC']
+2025-09-08 17:29:17,030 - INFO - convert_multiple_files:553 - Found 40 exact signal matches
+2025-09-08 17:29:17,030 - INFO - convert_multiple_files:554 - Missing 7 signals, searching for similar ones...
+2025-09-08 17:29:17,030 - DEBUG - convert_multiple_files:566 - Found similar signal for Accelerometer_X: Accelerometer Z
+2025-09-08 17:29:17,030 - DEBUG - convert_multiple_files:566 - Found similar signal for Accelerometer_Y: Accelerometer Z
+2025-09-08 17:29:17,030 - DEBUG - convert_multiple_files:566 - Found similar signal for Accelerometer_Z: Accelerometer Z
+2025-09-08 17:29:17,030 - DEBUG - convert_multiple_files:566 - Found similar signal for Gyroscope_X: Gyroscope X
+2025-09-08 17:29:17,030 - DEBUG - convert_multiple_files:566 - Found similar signal for Gyroscope_Y: Gyroscope X
+2025-09-08 17:29:17,030 - DEBUG - convert_multiple_files:566 - Found similar signal for Gyroscope_Z: Gyroscope X
+2025-09-08 17:29:17,031 - DEBUG - convert_multiple_files:566 - Found similar signal for GPS_Date_time: DATETIME
+2025-09-08 17:29:17,031 - INFO - convert_multiple_files:583 - Final signal count for test_ReXgen0002906_20250901_191713: 47
+2025-09-08 17:29:17,031 - INFO - convert_multiple_files:586 - Filtering and exporting signals for test_ReXgen0002906_20250901_191713
+2025-09-08 17:29:17,163 - INFO - convert_multiple_files:595 - Successfully exported CSV for test_ReXgen0002906_20250901_191713
+2025-09-08 17:29:17,163 - INFO - convert_multiple_files:615 - Updating CSV units for test_ReXgen0002906_20250901_191713
+2025-09-08 17:29:17,224 - DEBUG - update_csv_units_from_dbc:225 - Successfully updated units in CSV: C:\Users\user\Desktop\DataPilotFiles\New folder\test_ReXgen0002906_20250901_191713.csv
+2025-09-08 17:29:17,226 - INFO - convert_multiple_files:619 - Adding converted unit columns for test_ReXgen0002906_20250901_191713
+2025-09-08 17:29:17,288 - DEBUG - add_converted_unit_columns:294 - Successfully updated unit conversions in CSV: C:\Users\user\Desktop\DataPilotFiles\New folder\test_ReXgen0002906_20250901_191713.csv
+2025-09-08 17:29:17,289 - INFO - convert_multiple_files:626 - Processing CSV timestamps and formatting for test_ReXgen0002906_20250901_191713
+2025-09-08 17:29:17,318 - DEBUG - convert_multiple_files:631 - CSV has 3877 rows
+2025-09-08 17:29:17,318 - INFO - convert_multiple_files:638 - Renamed DATETIME column to GPS_DATE_TIME at index 7
+2025-09-08 17:29:17,473 - INFO - convert_multiple_files:484 - Processing MF4 file: test_ReXgen0002906_20250903_095929
+2025-09-08 17:29:17,536 - DEBUG - convert_multiple_files:494 - Available signals in test_ReXgen0002906_20250903_095929: 78 total
+2025-09-08 17:29:17,536 - DEBUG - convert_multiple_files:495 - First 10 available signals: ['ALTITUDE', 'Acceleration_x_longitudinal', 'Acceleration_y_lateral', 'Acceleration_z_normal', 'Accelerometer X', 'Accelerometer Y', 'Accelerometer Z', 'Baro_corrected_altitude', 'Barometric_correction_QNH', 'Bat_Voltage_DC']
+2025-09-08 17:29:17,536 - INFO - convert_multiple_files:553 - Found 40 exact signal matches
+2025-09-08 17:29:17,536 - INFO - convert_multiple_files:554 - Missing 7 signals, searching for similar ones...
+2025-09-08 17:29:17,536 - DEBUG - convert_multiple_files:566 - Found similar signal for Accelerometer_X: Accelerometer Z
+2025-09-08 17:29:17,536 - DEBUG - convert_multiple_files:566 - Found similar signal for Accelerometer_Y: Accelerometer Z
+2025-09-08 17:29:17,537 - DEBUG - convert_multiple_files:566 - Found similar signal for Accelerometer_Z: Accelerometer Z
+2025-09-08 17:29:17,537 - DEBUG - convert_multiple_files:566 - Found similar signal for Gyroscope_X: Gyroscope X
+2025-09-08 17:29:17,537 - DEBUG - convert_multiple_files:566 - Found similar signal for Gyroscope_Y: Gyroscope X
+2025-09-08 17:29:17,537 - DEBUG - convert_multiple_files:566 - Found similar signal for Gyroscope_Z: Gyroscope X
+2025-09-08 17:29:17,537 - DEBUG - convert_multiple_files:566 - Found similar signal for GPS_Date_time: DATETIME
+2025-09-08 17:29:17,537 - INFO - convert_multiple_files:583 - Final signal count for test_ReXgen0002906_20250903_095929: 47
+2025-09-08 17:29:17,537 - INFO - convert_multiple_files:586 - Filtering and exporting signals for test_ReXgen0002906_20250903_095929
+2025-09-08 17:29:17,846 - INFO - convert_multiple_files:595 - Successfully exported CSV for test_ReXgen0002906_20250903_095929
+2025-09-08 17:29:17,846 - INFO - convert_multiple_files:615 - Updating CSV units for test_ReXgen0002906_20250903_095929
+2025-09-08 17:29:17,959 - DEBUG - update_csv_units_from_dbc:225 - Successfully updated units in CSV: C:\Users\user\Desktop\DataPilotFiles\New folder\test_ReXgen0002906_20250903_095929.csv
+2025-09-08 17:29:17,960 - INFO - convert_multiple_files:619 - Adding converted unit columns for test_ReXgen0002906_20250903_095929
+2025-09-08 17:29:18,097 - DEBUG - add_converted_unit_columns:294 - Successfully updated unit conversions in CSV: C:\Users\user\Desktop\DataPilotFiles\New folder\test_ReXgen0002906_20250903_095929.csv
+2025-09-08 17:29:18,099 - INFO - convert_multiple_files:626 - Processing CSV timestamps and formatting for test_ReXgen0002906_20250903_095929
+2025-09-08 17:29:18,140 - DEBUG - convert_multiple_files:631 - CSV has 14400 rows
+2025-09-08 17:29:18,579 - INFO - convert_multiple_files:484 - Processing MF4 file: test_ReXgen0002906_20250903_105930
+2025-09-08 17:29:18,641 - DEBUG - convert_multiple_files:494 - Available signals in test_ReXgen0002906_20250903_105930: 78 total
+2025-09-08 17:29:18,641 - DEBUG - convert_multiple_files:495 - First 10 available signals: ['ALTITUDE', 'Acceleration_x_longitudinal', 'Acceleration_y_lateral', 'Acceleration_z_normal', 'Accelerometer X', 'Accelerometer Y', 'Accelerometer Z', 'Baro_corrected_altitude', 'Barometric_correction_QNH', 'Bat_Voltage_DC']
+2025-09-08 17:29:18,641 - INFO - convert_multiple_files:553 - Found 40 exact signal matches
+2025-09-08 17:29:18,641 - INFO - convert_multiple_files:554 - Missing 7 signals, searching for similar ones...
+2025-09-08 17:29:18,642 - DEBUG - convert_multiple_files:566 - Found similar signal for Accelerometer_X: Accelerometer Z
+2025-09-08 17:29:18,642 - DEBUG - convert_multiple_files:566 - Found similar signal for Accelerometer_Y: Accelerometer Z
+2025-09-08 17:29:18,642 - DEBUG - convert_multiple_files:566 - Found similar signal for Accelerometer_Z: Accelerometer Z
+2025-09-08 17:29:18,642 - DEBUG - convert_multiple_files:566 - Found similar signal for Gyroscope_X: Gyroscope X
+2025-09-08 17:29:18,642 - DEBUG - convert_multiple_files:566 - Found similar signal for Gyroscope_Y: Gyroscope X
+2025-09-08 17:29:18,642 - DEBUG - convert_multiple_files:566 - Found similar signal for Gyroscope_Z: Gyroscope X
+2025-09-08 17:29:18,642 - DEBUG - convert_multiple_files:566 - Found similar signal for GPS_Date_time: DATETIME
+2025-09-08 17:29:18,642 - INFO - convert_multiple_files:583 - Final signal count for test_ReXgen0002906_20250903_105930: 47
+2025-09-08 17:29:18,642 - INFO - convert_multiple_files:586 - Filtering and exporting signals for test_ReXgen0002906_20250903_105930
+2025-09-08 17:29:18,950 - INFO - convert_multiple_files:595 - Successfully exported CSV for test_ReXgen0002906_20250903_105930
+2025-09-08 17:29:18,950 - INFO - convert_multiple_files:615 - Updating CSV units for test_ReXgen0002906_20250903_105930
+2025-09-08 17:29:19,066 - DEBUG - update_csv_units_from_dbc:225 - Successfully updated units in CSV: C:\Users\user\Desktop\DataPilotFiles\New folder\test_ReXgen0002906_20250903_105930.csv
+2025-09-08 17:29:19,068 - INFO - convert_multiple_files:619 - Adding converted unit columns for test_ReXgen0002906_20250903_105930
+2025-09-08 17:29:19,180 - DEBUG - add_converted_unit_columns:294 - Successfully updated unit conversions in CSV: C:\Users\user\Desktop\DataPilotFiles\New folder\test_ReXgen0002906_20250903_105930.csv
+2025-09-08 17:29:19,181 - INFO - convert_multiple_files:626 - Processing CSV timestamps and formatting for test_ReXgen0002906_20250903_105930
+2025-09-08 17:29:19,224 - DEBUG - convert_multiple_files:631 - CSV has 14404 rows
+2025-09-08 17:29:19,658 - INFO - convert_multiple_files:484 - Processing MF4 file: test_ReXgen0002906_20250903_115931
+2025-09-08 17:29:19,719 - DEBUG - convert_multiple_files:494 - Available signals in test_ReXgen0002906_20250903_115931: 78 total
+2025-09-08 17:29:19,719 - DEBUG - convert_multiple_files:495 - First 10 available signals: ['ALTITUDE', 'Acceleration_x_longitudinal', 'Acceleration_y_lateral', 'Acceleration_z_normal', 'Accelerometer X', 'Accelerometer Y', 'Accelerometer Z', 'Baro_corrected_altitude', 'Barometric_correction_QNH', 'Bat_Voltage_DC']
+2025-09-08 17:29:19,719 - INFO - convert_multiple_files:553 - Found 40 exact signal matches
+2025-09-08 17:29:19,719 - INFO - convert_multiple_files:554 - Missing 7 signals, searching for similar ones...
+2025-09-08 17:29:19,719 - DEBUG - convert_multiple_files:566 - Found similar signal for Accelerometer_X: Accelerometer Z
+2025-09-08 17:29:19,719 - DEBUG - convert_multiple_files:566 - Found similar signal for Accelerometer_Y: Accelerometer Z
+2025-09-08 17:29:19,719 - DEBUG - convert_multiple_files:566 - Found similar signal for Accelerometer_Z: Accelerometer Z
+2025-09-08 17:29:19,719 - DEBUG - convert_multiple_files:566 - Found similar signal for Gyroscope_X: Gyroscope X
+2025-09-08 17:29:19,719 - DEBUG - convert_multiple_files:566 - Found similar signal for Gyroscope_Y: Gyroscope X
+2025-09-08 17:29:19,719 - DEBUG - convert_multiple_files:566 - Found similar signal for Gyroscope_Z: Gyroscope X
+2025-09-08 17:29:19,719 - DEBUG - convert_multiple_files:566 - Found similar signal for GPS_Date_time: DATETIME
+2025-09-08 17:29:19,719 - INFO - convert_multiple_files:583 - Final signal count for test_ReXgen0002906_20250903_115931: 47
+2025-09-08 17:29:19,719 - INFO - convert_multiple_files:586 - Filtering and exporting signals for test_ReXgen0002906_20250903_115931
+2025-09-08 17:29:20,029 - INFO - convert_multiple_files:595 - Successfully exported CSV for test_ReXgen0002906_20250903_115931
+2025-09-08 17:29:20,030 - INFO - convert_multiple_files:615 - Updating CSV units for test_ReXgen0002906_20250903_115931
+2025-09-08 17:29:20,144 - DEBUG - update_csv_units_from_dbc:225 - Successfully updated units in CSV: C:\Users\user\Desktop\DataPilotFiles\New folder\test_ReXgen0002906_20250903_115931.csv
+2025-09-08 17:29:20,145 - INFO - convert_multiple_files:619 - Adding converted unit columns for test_ReXgen0002906_20250903_115931
+2025-09-08 17:29:20,285 - DEBUG - add_converted_unit_columns:294 - Successfully updated unit conversions in CSV: C:\Users\user\Desktop\DataPilotFiles\New folder\test_ReXgen0002906_20250903_115931.csv
+2025-09-08 17:29:20,286 - INFO - convert_multiple_files:626 - Processing CSV timestamps and formatting for test_ReXgen0002906_20250903_115931
+2025-09-08 17:29:20,330 - DEBUG - convert_multiple_files:631 - CSV has 14407 rows
+2025-09-08 17:29:20,786 - INFO - convert_multiple_files:484 - Processing MF4 file: test_ReXgen0002906_20250903_125932
+2025-09-08 17:29:20,837 - DEBUG - convert_multiple_files:494 - Available signals in test_ReXgen0002906_20250903_125932: 78 total
+2025-09-08 17:29:20,837 - DEBUG - convert_multiple_files:495 - First 10 available signals: ['ALTITUDE', 'Acceleration_x_longitudinal', 'Acceleration_y_lateral', 'Acceleration_z_normal', 'Accelerometer X', 'Accelerometer Y', 'Accelerometer Z', 'Baro_corrected_altitude', 'Barometric_correction_QNH', 'Bat_Voltage_DC']
+2025-09-08 17:29:20,837 - INFO - convert_multiple_files:553 - Found 40 exact signal matches
+2025-09-08 17:29:20,837 - INFO - convert_multiple_files:554 - Missing 7 signals, searching for similar ones...
+2025-09-08 17:29:20,837 - DEBUG - convert_multiple_files:566 - Found similar signal for Accelerometer_X: Accelerometer Z
+2025-09-08 17:29:20,837 - DEBUG - convert_multiple_files:566 - Found similar signal for Accelerometer_Y: Accelerometer Z
+2025-09-08 17:29:20,837 - DEBUG - convert_multiple_files:566 - Found similar signal for Accelerometer_Z: Accelerometer Z
+2025-09-08 17:29:20,837 - DEBUG - convert_multiple_files:566 - Found similar signal for Gyroscope_X: Gyroscope X
+2025-09-08 17:29:20,837 - DEBUG - convert_multiple_files:566 - Found similar signal for Gyroscope_Y: Gyroscope X
+2025-09-08 17:29:20,837 - DEBUG - convert_multiple_files:566 - Found similar signal for Gyroscope_Z: Gyroscope X
+2025-09-08 17:29:20,838 - DEBUG - convert_multiple_files:566 - Found similar signal for GPS_Date_time: DATETIME
+2025-09-08 17:29:20,838 - INFO - convert_multiple_files:583 - Final signal count for test_ReXgen0002906_20250903_125932: 47
+2025-09-08 17:29:20,838 - INFO - convert_multiple_files:586 - Filtering and exporting signals for test_ReXgen0002906_20250903_125932
+2025-09-08 17:29:21,170 - INFO - convert_multiple_files:595 - Successfully exported CSV for test_ReXgen0002906_20250903_125932
+2025-09-08 17:29:21,170 - INFO - convert_multiple_files:615 - Updating CSV units for test_ReXgen0002906_20250903_125932
+2025-09-08 17:29:21,275 - DEBUG - update_csv_units_from_dbc:225 - Successfully updated units in CSV: C:\Users\user\Desktop\DataPilotFiles\New folder\test_ReXgen0002906_20250903_125932.csv
+2025-09-08 17:29:21,276 - INFO - convert_multiple_files:619 - Adding converted unit columns for test_ReXgen0002906_20250903_125932
+2025-09-08 17:29:21,377 - DEBUG - add_converted_unit_columns:294 - Successfully updated unit conversions in CSV: C:\Users\user\Desktop\DataPilotFiles\New folder\test_ReXgen0002906_20250903_125932.csv
+2025-09-08 17:29:21,379 - INFO - convert_multiple_files:626 - Processing CSV timestamps and formatting for test_ReXgen0002906_20250903_125932
+2025-09-08 17:29:21,418 - DEBUG - convert_multiple_files:631 - CSV has 12484 rows
+2025-09-08 17:29:21,816 - INFO - convert_multiple_files:484 - Processing MF4 file: test_ReXgen0002906_20250908_121406
+2025-09-08 17:29:21,830 - DEBUG - convert_multiple_files:494 - Available signals in test_ReXgen0002906_20250908_121406: 78 total
+2025-09-08 17:29:21,830 - DEBUG - convert_multiple_files:495 - First 10 available signals: ['ALTITUDE', 'Acceleration_x_longitudinal', 'Acceleration_y_lateral', 'Acceleration_z_normal', 'Accelerometer X', 'Accelerometer Y', 'Accelerometer Z', 'Baro_corrected_altitude', 'Barometric_correction_QNH', 'Bat_Voltage_DC']
+2025-09-08 17:29:21,830 - INFO - convert_multiple_files:553 - Found 40 exact signal matches
+2025-09-08 17:29:21,830 - INFO - convert_multiple_files:554 - Missing 7 signals, searching for similar ones...
+2025-09-08 17:29:21,830 - DEBUG - convert_multiple_files:566 - Found similar signal for Accelerometer_X: Accelerometer Z
+2025-09-08 17:29:21,831 - DEBUG - convert_multiple_files:566 - Found similar signal for Accelerometer_Y: Accelerometer Z
+2025-09-08 17:29:21,831 - DEBUG - convert_multiple_files:566 - Found similar signal for Accelerometer_Z: Accelerometer Z
+2025-09-08 17:29:21,831 - DEBUG - convert_multiple_files:566 - Found similar signal for Gyroscope_X: Gyroscope X
+2025-09-08 17:29:21,831 - DEBUG - convert_multiple_files:566 - Found similar signal for Gyroscope_Y: Gyroscope X
+2025-09-08 17:29:21,831 - DEBUG - convert_multiple_files:566 - Found similar signal for Gyroscope_Z: Gyroscope X
+2025-09-08 17:29:21,831 - DEBUG - convert_multiple_files:566 - Found similar signal for GPS_Date_time: DATETIME
+2025-09-08 17:29:21,831 - INFO - convert_multiple_files:583 - Final signal count for test_ReXgen0002906_20250908_121406: 47
+2025-09-08 17:29:21,831 - INFO - convert_multiple_files:586 - Filtering and exporting signals for test_ReXgen0002906_20250908_121406
+2025-09-08 17:29:21,846 - INFO - convert_multiple_files:595 - Successfully exported CSV for test_ReXgen0002906_20250908_121406
+2025-09-08 17:29:21,846 - INFO - convert_multiple_files:615 - Updating CSV units for test_ReXgen0002906_20250908_121406
+2025-09-08 17:29:21,858 - DEBUG - update_csv_units_from_dbc:225 - Successfully updated units in CSV: C:\Users\user\Desktop\DataPilotFiles\New folder\test_ReXgen0002906_20250908_121406.csv
+2025-09-08 17:29:21,858 - INFO - convert_multiple_files:619 - Adding converted unit columns for test_ReXgen0002906_20250908_121406
+2025-09-08 17:29:21,870 - DEBUG - add_converted_unit_columns:294 - Successfully updated unit conversions in CSV: C:\Users\user\Desktop\DataPilotFiles\New folder\test_ReXgen0002906_20250908_121406.csv
+2025-09-08 17:29:21,870 - INFO - convert_multiple_files:626 - Processing CSV timestamps and formatting for test_ReXgen0002906_20250908_121406
+2025-09-08 17:29:21,883 - DEBUG - convert_multiple_files:631 - CSV has 159 rows
+2025-09-08 17:29:21,902 - INFO - convert_multiple_files:748 - === CONVERT MULTIPLE FILES COMPLETED SUCCESSFULLY ===
+2025-09-08 17:29:22,229 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:29:22,229 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:29:22,230 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:29:22] "GET /fonts/Poppins/Poppins-Bold.ttf HTTP/1.1" 200 154157 0.000999

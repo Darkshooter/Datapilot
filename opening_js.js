@@ -2,6 +2,7 @@
 
 // Global variables to store selected folder paths
 let selectedInputFolder = "";
+let selectedOutputFolder = "";
 
 // ----------------------------- SUCCESS NOTIFICATION ---------------------------------
 
@@ -96,9 +97,8 @@ async function selectInputFolder() {
       displayElement.style.borderColor = "#1a2b353d";
       displayElement.style.backgroundColor = "transparent";
 
-      // Enable the convert button when folder is selected
-      const convertButton = document.getElementById("btn-multiplefiles");
-      convertButton.removeAttribute("disabled");
+      // Check if both input and output folders are ready before enabling convert button
+      checkAndEnableConvertButton();
     }
   } catch (error) {
     console.error("Error selecting input folder:", error);
@@ -114,33 +114,77 @@ async function selectInputFolder() {
   }
 }
 
+// Function to validate output path and check if folders are ready
+function validateOutputPath() {
+  const outputInput = document.getElementById("output-folder-input");
+  const statusDisplay = document.getElementById("output-folder-status");
+  const outputPath = outputInput.value.trim();
+
+  if (outputPath === "") {
+    selectedOutputFolder = "";
+    statusDisplay.innerHTML =
+      "Enter the full path where you want to save the converted CSV files";
+    statusDisplay.style.color = "#c4c4c4";
+  } else if (isValidWindowsPath(outputPath)) {
+    selectedOutputFolder = outputPath;
+    statusDisplay.innerHTML = `✓ Output will be saved to: ${outputPath}`;
+    statusDisplay.style.color = "#28a745";
+  } else {
+    selectedOutputFolder = "";
+    statusDisplay.innerHTML =
+      "❌ Please enter a valid Windows path (e.g., C:\\Users\\YourName\\Documents\\ConvertedFiles)";
+    statusDisplay.style.color = "#ff2600";
+  }
+
+  // Check if both folders are ready
+  checkAndEnableConvertButton();
+}
+
+// Function to validate Windows file path
+function isValidWindowsPath(path) {
+  // Basic Windows path validation
+  const windowsPathRegex =
+    /^[A-Za-z]:\\(?:[^<>:"/\\|?*\n\r]+\\)*[^<>:"/\\|?*\n\r]*$/;
+  return windowsPathRegex.test(path) && path.length > 3;
+}
+
+// Function to check if both folders are selected and enable/disable convert button
+function checkAndEnableConvertButton() {
+  const convertButton = document.getElementById("btn-multiplefiles");
+
+  if (selectedInputFolder && selectedOutputFolder) {
+    convertButton.removeAttribute("disabled");
+  } else {
+    convertButton.setAttribute("disabled", "true");
+  }
+}
+
 async function calculate_multiple_files() {
-  /* First check if input folder is selected */
+  /* Check if both input and output folders are selected */
   if (!selectedInputFolder) {
     alert("Please first select the folder containing your RXD files.");
     return;
   }
 
-  /* Create automatic output folder */
+  if (!selectedOutputFolder) {
+    alert("Please enter a valid output folder path.");
+    return;
+  }
+
+  /* Start conversion with both folders */
   try {
-    const outputFolder = await eel.create_automatic_output_folder(
-      selectedInputFolder
-    )();
-    if (!outputFolder) {
-      alert(
-        "Error creating output folder on desktop. Please check permissions."
-      );
-      return;
-    }
+    console.log("Starting conversion with:");
+    console.log("Input folder:", selectedInputFolder);
+    console.log("Output folder:", selectedOutputFolder);
 
     // Start conversion with both folders
     eel.convert_multiple_files(
       selectedInputFolder,
-      outputFolder
+      selectedOutputFolder
     )(result_multiple_files);
   } catch (error) {
-    console.error("Error creating output folder:", error);
-    alert("Error creating output folder on desktop. Please try again.");
+    console.error("Error starting conversion:", error);
+    alert("Error starting conversion process. Please try again.");
   }
 }
 
@@ -157,6 +201,9 @@ function result_multiple_files(result) {
   button.innerHTML = "Convert Files";
   button.removeAttribute("disabled");
 
+  // Store output folder for success message before resetting
+  const completedOutputFolder = selectedOutputFolder;
+
   // Reset input folder selection
   selectedInputFolder = "";
   const displayElement = document.getElementById("input-folder-display");
@@ -165,15 +212,26 @@ function result_multiple_files(result) {
   displayElement.style.borderColor = "#1a2b353d";
   displayElement.style.backgroundColor = "transparent";
 
-  // Disable the convert button since no folder is selected
+  // Reset output folder selection
+  selectedOutputFolder = "";
+  const outputInput = document.getElementById("output-folder-input");
+  const outputStatus = document.getElementById("output-folder-status");
+  outputInput.value = "";
+  outputStatus.innerHTML =
+    "Enter the full path where you want to save the converted CSV files";
+  outputStatus.style.color = "#c4c4c4";
+
+  // Disable the convert button since no folders are selected
   button.setAttribute("disabled", "true");
 
   if (result && result !== "empty") {
     showSuccessNotification(
-      "Process Successful! Log files saved to the desktop folder called DataPilotFiles"
+      `Process Successful! CSV files have been saved to: ${completedOutputFolder}`
     );
   } else if (result === "empty") {
-    alert("Please make sure the input folder is selected before converting.");
+    alert(
+      "Please make sure both input and output folders are specified before converting."
+    );
   }
 }
 

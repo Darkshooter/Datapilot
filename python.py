@@ -6,6 +6,69 @@ sys.stdout = stream
 sys.stderr = stream
 
 import sys
+import logging
+import os
+from datetime import datetime
+
+# Setup logging to file
+def setup_logging():
+    """Setup logging to write to a file in the application directory"""
+    try:
+        # Use absolute path for logs directory (works with PyInstaller)
+        log_dir = r"C:\Program Files (x86)\IBDS\Datapilot\logs"
+        
+        # Try to create the logs directory
+        try:
+            os.makedirs(log_dir, exist_ok=True)
+        except PermissionError:
+            # If permission denied, try user's temp directory as fallback
+            import tempfile
+            log_dir = os.path.join(tempfile.gettempdir(), "DataPilot_logs")
+            os.makedirs(log_dir, exist_ok=True)
+        
+        # Create log filename with timestamp
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        log_filename = f"datapilot_debug_{timestamp}.log"
+        log_filepath = os.path.join(log_dir, log_filename)
+        
+        # Configure logging
+        logging.basicConfig(
+            level=logging.DEBUG,
+            format='%(asctime)s - %(levelname)s - %(funcName)s:%(lineno)d - %(message)s',
+            handlers=[
+                logging.FileHandler(log_filepath, mode='w', encoding='utf-8'),
+                # Also keep a rotating handler for the latest log
+                logging.FileHandler(os.path.join(log_dir, "datapilot_latest.log"), mode='w', encoding='utf-8')
+            ]
+        )
+        
+        # Create a logger instance
+        logger = logging.getLogger('DataPilot')
+        logger.info("=== DataPilot Application Started ===")
+        logger.info(f"Log directory: {log_dir}")
+        logger.info(f"Log file: {log_filepath}")
+        logger.info(f"Python version: {sys.version}")
+        logger.info(f"Working directory: {os.getcwd()}")
+        logger.info(f"Frozen (PyInstaller): {getattr(sys, 'frozen', False)}")
+        if getattr(sys, 'frozen', False):
+            logger.info(f"Executable path: {sys.executable}")
+            if hasattr(sys, '_MEIPASS'):
+                logger.info(f"PyInstaller temp dir: {sys._MEIPASS}")
+        
+        return logger
+    except Exception as e:
+        # If logging setup fails, create a minimal logger that writes to temp
+        import tempfile
+        temp_log = os.path.join(tempfile.gettempdir(), "datapilot_error.log")
+        logging.basicConfig(filename=temp_log, level=logging.ERROR)
+        logger = logging.getLogger('DataPilot')
+        logger.error(f"Failed to setup main logging: {e}")
+        logger.error(f"Attempted log directory: C:\\Program Files (x86)\\IBDS\\Datapilot\\logs")
+        return logger
+
+# Initialize logger
+logger = setup_logging()
+
 # Splash screen initiation
 if getattr(sys, 'frozen', False):
     import pyi_splash
@@ -159,10 +222,10 @@ def update_csv_units_from_dbc(csv_file_path):
             writer = csv.writer(file)
             writer.writerows(rows)
             
-        pass  # Units updated successfully
+        logger.debug(f"Successfully updated units in CSV: {csv_file_path}")
         
-    except Exception:
-        pass  # Error updating CSV units
+    except Exception as e:
+        logger.error(f"Error updating CSV units for {csv_file_path}: {e}")
 
 
 def add_converted_unit_columns(csv_file_path):
@@ -228,10 +291,10 @@ def add_converted_unit_columns(csv_file_path):
             writer = csv.writer(file)
             writer.writerows(rows)
             
-        pass  # Unit conversions updated successfully
+        logger.debug(f"Successfully updated unit conversions in CSV: {csv_file_path}")
         
-    except Exception:
-        pass  # Error converting units
+    except Exception as e:
+        logger.error(f"Error converting units for {csv_file_path}: {e}")
 
 
 
@@ -242,6 +305,9 @@ process = None
 
 @eel.expose
 def convert_multiple_files(input, output):
+    logger.info(f"=== CONVERT MULTIPLE FILES STARTED ===")
+    logger.info(f"Input folder: {input}")
+    logger.info(f"Output folder: {output}")
 
     import psutil
     global process
@@ -250,18 +316,22 @@ def convert_multiple_files(input, output):
     single_tb = True
     if process is not None:  # if process is already running
         try:
+            logger.info(f"Terminating existing process with PID: {process.pid}")
             parent = psutil.Process(process.pid)
             for child in parent.children(recursive=True):
                 child.kill()
             parent.kill()
             process = None  # reset the global variable
-        except Exception:
-            pass
+            logger.info("Successfully terminated existing process")
+        except Exception as e:
+            logger.error(f"Error terminating process: {e}")
 
     raster_rate = float('0.25')
     if input == "" or output == "":
+        logger.warning("Input or output folder is empty")
         return "empty"
     else:
+        logger.info("Starting file conversion process")
         from pathlib import Path
         from asammdf import MDF
         from pathlib import Path
@@ -286,11 +356,13 @@ def convert_multiple_files(input, output):
 
         if zip_files:  # Check if the list is not empty
             zip_file = zip_files[0]  # Take the first ZIP file from the list
+            logger.info(f"Found ZIP file: {zip_file}, extracting...")
             passwd = b'0000'
             with ZipFile(zip_file, 'r') as zObject:
                 zObject.extractall(path=input_folder, pwd=passwd)
+            logger.info("ZIP file extracted successfully")
         else:
-            pass
+            logger.info("No ZIP files found in input folder")
 
 
         # RXD to MF4 Conversion
@@ -379,7 +451,10 @@ def convert_multiple_files(input, output):
                 input_folder, output_folder, dbc_file_path
             )
         ]
+        logger.info("Starting RXD to MF4 conversion")
+        logger.debug(f"Conversion command: {' && '.join(rxd_mf4)}")
         subprocess.run('&&'.join(rxd_mf4), shell=True)
+        logger.info("RXD to MF4 conversion completed")
     
 
         # load MDF/DBC files from input folder
@@ -394,24 +469,30 @@ def convert_multiple_files(input, output):
         dbc_files = {"CAN": [(dbc, 0)
                                 for dbc in list(dbc_path.glob("*" + ".dbc"))]}
         # DBC files loaded
+        logger.info(f"DBC files loaded: {dbc_files}")
         # contains path of the log files
         logfiles = list(path_out.glob("*" + mdf_extension))
         
         from glob import glob
         file_list = glob(os.path.join(output_folder, '*.mf4'))
+        logger.info(f"Found {len(file_list)} MF4 files to process: {file_list}")
         
         try:
             # Extract File Name from MF4
             for a in file_list:
+                filename = os.path.splitext(os.path.basename(a))[0]
+                logger.info(f"Processing MF4 file: {filename}")
+                
                 newlist = []
                 newlist.append(a)
                 mdf = MDF.concatenate(newlist)
                 newlist = []
-                filename = os.path.splitext(os.path.basename(a))[0]
 
                 # Scaled
                 try:
                     available_signals = set(mdf.channels_db.keys())
+                    logger.debug(f"Available signals in {filename}: {len(available_signals)} total")
+                    logger.debug(f"First 10 available signals: {list(sorted(available_signals))[:10]}")
                     
                     signals = [
                         'Accelerometer_X',
@@ -469,6 +550,9 @@ def convert_multiple_files(input, output):
                     # Find missing signals
                     missing_signals = [signal for signal in signals if signal not in available_signals]
                     
+                    logger.info(f"Found {len(filtered_signals)} exact signal matches")
+                    logger.info(f"Missing {len(missing_signals)} signals, searching for similar ones...")
+                    
                     # Try to find similar signal names for missing ones
                     for missing_sig in missing_signals:
                         # Look for signals that contain parts of the missing signal name
@@ -479,41 +563,79 @@ def convert_multiple_files(input, output):
                         if similar:
                             # Add the first similar match to filtered signals
                             filtered_signals.append(similar[0])
+                            logger.debug(f"Found similar signal for {missing_sig}: {similar[0]}")
 
-                    if filtered_signals:
-                        mdf_scaled_signal_list = mdf.filter(filtered_signals)
+                    # Remove problematic channels that cause ambiguity issues
+                    problematic_channels = ['Timestamp', 'Time', 'time', 'timestamp']
+                    cleaned_signals = []
+                    removed_signals = []
+                    
+                    for signal in filtered_signals:
+                        if signal in problematic_channels:
+                            removed_signals.append(signal)
+                            logger.debug(f"Removing problematic signal: {signal}")
+                        else:
+                            cleaned_signals.append(signal)
+                    
+                    if removed_signals:
+                        logger.info(f"Removed {len(removed_signals)} problematic signals: {removed_signals}")
+                    
+                    logger.info(f"Final signal count for {filename}: {len(cleaned_signals)}")
+                    
+                    if cleaned_signals:
+                        logger.info(f"Filtering and exporting signals for {filename}")
+                        try:
+                            mdf_scaled_signal_list = mdf.filter(cleaned_signals)
 
-                        mdf_scaled_signal_list.save(
-                            "{}".format(filename), overwrite=True)
+                            mdf_scaled_signal_list.save(
+                                "{}".format(filename), overwrite=True)
 
-                        mdf_scaled_signal_list.export("csv", filename=Path(path_out, "{}".format(
-                            filename)), time_as_date=time_ad, time_from_zero=time_fz, single_time_base=single_tb, raster=raster_rate, add_units=True)
+                            mdf_scaled_signal_list.export("csv", filename=Path(path_out, "{}".format(
+                                filename)), time_as_date=time_ad, time_from_zero=time_fz, single_time_base=single_tb, raster=raster_rate, add_units=True)
+                            logger.info(f"Successfully exported CSV for {filename}")
+                        except Exception as filter_error:
+                            logger.error(f"Error during signal filtering for {filename}: {filter_error}")
+                            # Try alternative approach - export without filtering
+                            try:
+                                logger.info(f"Attempting alternative export method for {filename}")
+                                mdf.export("csv", filename=Path(path_out, "{}".format(
+                                    filename)), time_as_date=time_ad, time_from_zero=time_fz, single_time_base=single_tb, raster=raster_rate, add_units=True)
+                                logger.info(f"Successfully exported CSV using alternative method for {filename}")
+                            except Exception as export_error:
+                                logger.error(f"Alternative export also failed for {filename}: {export_error}")
+                                raise export_error
                     else:
-                        pass  # No signals found
+                        logger.warning(f"No signals found for {filename}")
                         
-                except ValueError:
-                    pass
+                except ValueError as e:
+                    logger.error(f"ValueError during signal processing for {filename}: {e}")
 
                 # Update CSV units based on DBC mapping
                 myfilepath = os.path.join(output_folder, f"{filename}.csv")
+                logger.info(f"Updating CSV units for {filename}")
                 update_csv_units_from_dbc(myfilepath)
                 
                 # Add converted unit columns
+                logger.info(f"Adding converted unit columns for {filename}")
                 add_converted_unit_columns(myfilepath)
 
                 import csv
                 from datetime import datetime, timedelta
 
                 # Read the CSV file and store the rows in a list
+                logger.info(f"Processing CSV timestamps and formatting for {filename}")
                 with open(myfilepath, 'r') as file:
                     reader = csv.reader(file)
                     rows = [row for row in reader]
 
+                logger.debug(f"CSV has {len(rows)} rows")
+                
                 # Rename DATETIME column to GPS_DATE_TIME in the header row (if it exists)
                 if rows and len(rows[0]) > 0:
                     for i, header in enumerate(rows[0]):
                         if header == 'DATETIME':
                             rows[0][i] = 'GPS_DATE_TIME'
+                            logger.info(f"Renamed DATETIME column to GPS_DATE_TIME at index {i}")
                             break
 
                 # Modify the rows
@@ -544,6 +666,7 @@ def convert_multiple_files(input, output):
                         try:
                             dt = datetime.strptime(new_str, '%Y-%m-%d %H:%M:%S')
                         except ValueError:
+                            logger.warning(f"Failed to parse date in row {i}: {new_str}")
                             continue
 
                     # Adjust the datetime by subtracting hours and minutes
@@ -575,6 +698,7 @@ def convert_multiple_files(input, output):
                 file.close()
 
         except Exception as e:
+            logger.error(f"Critical error in convert_multiple_files: {e}", exc_info=True)
             return f"An error occurred: {e}"
 
         # file_list = glob(os.path.join(output_folder, '*.mf4'))
@@ -621,11 +745,15 @@ def convert_multiple_files(input, output):
         for file in file_list:
             os.remove(file)
 
+        logger.info("=== CONVERT MULTIPLE FILES COMPLETED SUCCESSFULLY ===")
         return "Congratulations! Your files have been converted."
 
 
 @eel.expose
 def pythonFunction(output, wildcard="*"):  
+    logger.info("=== SINGLE FILE CONVERSION STARTED ===")
+    logger.info(f"Output folder: {output}")
+    logger.info(f"Wildcard: {wildcard}")
 
     import psutil
     global process
@@ -634,13 +762,15 @@ def pythonFunction(output, wildcard="*"):
     single_tb = True
     if process is not None:  # if process is already running
         try:
+            logger.info(f"Terminating existing process with PID: {process.pid}")
             parent = psutil.Process(process.pid)
             for child in parent.children(recursive=True):
                 child.kill()
             parent.kill()
             process = None  # reset the global variable
-        except Exception:
-            pass
+            logger.info("Successfully terminated existing process")
+        except Exception as e:
+            logger.error(f"Error terminating process: {e}")
 
 
     # Get the path of the uploaded file
@@ -651,8 +781,10 @@ def pythonFunction(output, wildcard="*"):
     dialog = wx.FileDialog(None, 'Open', wildcard=wildcard, style=style)
     if dialog.ShowModal() == wx.ID_OK:
         path_single = dialog.GetPath()
+        logger.info(f"User selected input file: {path_single}")
     else:
         path_single = None
+        logger.warning("User cancelled file selection")
     dialog.Destroy()
 
     # Output folder selected
@@ -852,16 +984,44 @@ def pythonFunction(output, wildcard="*"):
                     # Add the first similar match to filtered signals
                     filtered_signals.append(similar[0])
 
-            if filtered_signals:
-                mdf_scaled_signal_list = mdf.filter(filtered_signals)
+            # Remove problematic channels that cause ambiguity issues
+            problematic_channels = ['Timestamp', 'Time', 'time', 'timestamp']
+            cleaned_signals = []
+            removed_signals = []
+            
+            for signal in filtered_signals:
+                if signal in problematic_channels:
+                    removed_signals.append(signal)
+                    logger.debug(f"Removing problematic signal: {signal}")
+                else:
+                    cleaned_signals.append(signal)
+            
+            if removed_signals:
+                logger.info(f"Removed {len(removed_signals)} problematic signals: {removed_signals}")
+            
+            if cleaned_signals:
+                try:
+                    mdf_scaled_signal_list = mdf.filter(cleaned_signals)
 
-                mdf_scaled_signal_list.save(
-                    "{}".format(filename), overwrite=True)
+                    mdf_scaled_signal_list.save(
+                        "{}".format(filename), overwrite=True)
 
-                mdf_scaled_signal_list.export("csv", filename=Path(path_out, "{}".format(
-                    filename)), time_as_date=time_ad, time_from_zero=time_fz, single_time_base=single_tb, raster=raster_rate, add_units=True)
+                    mdf_scaled_signal_list.export("csv", filename=Path(path_out, "{}".format(
+                        filename)), time_as_date=time_ad, time_from_zero=time_fz, single_time_base=single_tb, raster=raster_rate, add_units=True)
+                    logger.info(f"Successfully exported single file CSV for {filename}")
+                except Exception as filter_error:
+                    logger.error(f"Error during single file signal filtering for {filename}: {filter_error}")
+                    # Try alternative approach - export without filtering
+                    try:
+                        logger.info(f"Attempting alternative export method for single file {filename}")
+                        mdf.export("csv", filename=Path(path_out, "{}".format(
+                            filename)), time_as_date=time_ad, time_from_zero=time_fz, single_time_base=single_tb, raster=raster_rate, add_units=True)
+                        logger.info(f"Successfully exported single file CSV using alternative method for {filename}")
+                    except Exception as export_error:
+                        logger.error(f"Alternative export also failed for single file {filename}: {export_error}")
+                        raise export_error
             else:
-                pass  # No signals found
+                logger.warning(f"No signals found for single file {filename}")
                 
         except ValueError:
             pass
@@ -971,6 +1131,7 @@ def pythonFunction(output, wildcard="*"):
         for file in file_list:
             os.remove(file)
 
+        logger.info("=== SINGLE FILE CONVERSION COMPLETED SUCCESSFULLY ===")
         return path_single
 
 
@@ -1025,6 +1186,7 @@ def select_output_folder():
 @eel.expose
 def create_automatic_output_folder(input_folder_path):
     """Create automatic output folder structure in Desktop/DataPilotFiles"""
+    logger.info(f"Creating automatic output folder for: {input_folder_path}")
     import os
     import winreg
     
@@ -1089,6 +1251,7 @@ def create_automatic_output_folder(input_folder_path):
                     
                     # Check if it exists or the parent directory exists
                     if os.path.exists(desktop_path) or os.path.isdir(os.path.dirname(desktop_path)):
+                        logger.info(f"Found valid desktop path: {desktop_path}")
                         return desktop_path
                 except Exception:
                     continue
@@ -1123,6 +1286,7 @@ def create_automatic_output_folder(input_folder_path):
         output_folder = os.path.join(datapilot_folder, input_folder_name)
         os.makedirs(output_folder, exist_ok=True)
         
+        logger.info(f"Successfully created output folder: {output_folder}")
         return output_folder
         
     except Exception:
@@ -1141,13 +1305,14 @@ def create_automatic_output_folder(input_folder_path):
             
             return output_folder
             
-        except Exception:
+        except Exception as e:
+            logger.error(f"Failed to create emergency fallback folder: {e}")
             return None
 
 
 @eel.expose
 def setup_logger(format_logger):
-    # print(firmware_update,format_logger,send_config)
+    logger.info(f"Setup logger called with format_logger={format_logger}")
     import subprocess
     import os
 
@@ -1160,6 +1325,7 @@ def setup_logger(format_logger):
     for usb in wmi.InstancesOf("Win32_USBHub"):
         if 'ReXgen' in usb.Name:
             list.append('1')
+            logger.info(f"Found ReXgen device: {usb.Name}")
         else:
             list.append('0')
 
@@ -1189,11 +1355,13 @@ def setup_logger(format_logger):
 
         if format_logger == True:
             # Format Rexgen Logger
+            logger.info("Starting ReXgen logger formatting")
             os.environ['PATH'] += os.pathsep + \
                 r"C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert"
             format = r'''cd "C:\Program Files (x86)\IBDS\DataPilot\ReXdeskConvert" && rexdeskconvert format '''
             format_proc = subprocess.Popen(format, shell=True)
             format_proc.wait()
+            logger.info("ReXgen logger formatting completed")
 
         # if send_config == True:
         #     # Send Configuration to Rexgen Logger
@@ -1220,18 +1388,22 @@ def setup_logger(format_logger):
         #         pass
 
     else:
+        logger.warning("No ReXgen device found - not connected")
         return "not connected"
 
 
 @eel.expose
 def extract_data():
+    logger.info("Starting data extraction process")
     import subprocess
     global process
     try:
         process = subprocess.Popen(
             r"C:\Program Files (x86)\IBDS\DataPilot\InfluxSelfExtract.exe", shell=True)
+        logger.info("Data extraction process started successfully")
         return "done"
-    except Exception:
+    except Exception as e:
+        logger.error(f"Failed to start data extraction process: {e}")
         return "error"
 
 
@@ -1318,4 +1490,5 @@ def set_date_time():
 if getattr(sys, 'frozen', False):
     pyi_splash.close()
 
+logger.info("Starting EEL web interface")
 eel.start('opening.html', size=(1500, 700))

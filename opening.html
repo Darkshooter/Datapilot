@@ -322,6 +322,64 @@
                           No RXD files folder selected yet
                         </div>
                       </div>
+
+                      <!-- Output folder input field -->
+                      <div class="folder-selection-group" style="margin-bottom: 20px;">
+                        <label 
+                          for="output-folder-input" 
+                          style="
+                            color: rgb(238, 238, 238);
+                            font-size: 16px;
+                            font-family: 'Poppins', sans-serif;
+                            margin: 10px;
+                            display: block;
+                            font-weight: 500;
+                          "
+                        >
+                          Output Folder Path:
+                        </label>
+                        <input
+                          type="text"
+                          id="output-folder-input"
+                          placeholder="Enter full path for output folder (e.g., C:\Users\YourName\Documents\ConvertedFiles)"
+                          style="
+                            height: 40px;
+                            width: 480px;
+                            color: rgb(238, 238, 238);
+                            outline: none;
+                            background-color: #1a2b35ab;
+                            font-size: 16px;
+                            border: 2px solid transparent;
+                            font-family: 'Poppins', sans-serif;
+                            border-radius: 10px;
+                            margin: 10px;
+                            padding: 0 15px;
+                            transition: all 0.3s ease;
+                          "
+                          onfocus="this.style.backgroundColor='#1a2b3580'; this.style.borderColor='#4a90e2';"
+                          onblur="this.style.backgroundColor='#1a2b35ab'; this.style.borderColor='transparent';"
+                          oninput="validateOutputPath()"
+                        />
+                        <div 
+                          id="output-folder-status" 
+                          class="folder-status-display" 
+                          style="
+                            color: #c4c4c4;
+                            border-radius: 10px;
+                            padding: 5px 10px;
+                            font-size: 14px;
+                            font-family: 'Poppins', sans-serif;
+                            word-wrap: break-word;
+                            min-height: 30px;
+                            display: flex;
+                            align-items: center;
+                            margin: 10px;
+                          "
+                        >
+                          Enter the full path where you want to save the converted CSV files
+                        </div>
+                      </div>
+
                         <!-- raster button -->
                         <!-- <input
                           class="text"

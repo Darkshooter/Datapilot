@@ -1,0 +1,84 @@
+2025-09-08 17:27:53,946 - INFO - setup_logging:47 - === DataPilot Application Started ===
+2025-09-08 17:27:53,947 - INFO - setup_logging:48 - Log directory: C:\Program Files (x86)\IBDS\Datapilot\logs
+2025-09-08 17:27:53,947 - INFO - setup_logging:49 - Log file: C:\Program Files (x86)\IBDS\Datapilot\logs\datapilot_debug_20250908_172753.log
+2025-09-08 17:27:53,947 - INFO - setup_logging:50 - Python version: 3.10.9 (tags/v3.10.9:1dd9be6, Dec  6 2022, 20:01:21) [MSC v.1934 64 bit (AMD64)]
+2025-09-08 17:27:53,947 - INFO - setup_logging:51 - Working directory: C:\Program Files (x86)\IBDS\Datapilot\dist
+2025-09-08 17:27:53,947 - INFO - setup_logging:52 - Frozen (PyInstaller): True
+2025-09-08 17:27:53,947 - INFO - setup_logging:54 - Executable path: C:\Program Files (x86)\IBDS\Datapilot\dist\DataPilot.exe
+2025-09-08 17:27:53,947 - INFO - setup_logging:56 - PyInstaller temp dir: C:\Users\user\AppData\Local\Temp\_MEI254242
+2025-09-08 17:27:53,952 - INFO - _log:64 - A connection to the splash screen was successfully established.
+2025-09-08 17:27:59,831 - INFO - <module>:1493 - Starting EEL web interface
+2025-09-08 17:28:00,721 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,721 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,722 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /opening.html HTTP/1.1" 200 19444 0.001000
+2025-09-08 17:28:00,733 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,734 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,735 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /jquery-1.11.1.min.js HTTP/1.1" 200 95996 0.002000
+2025-09-08 17:28:00,735 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,735 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,737 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /jquery-ui.min.js HTTP/1.1" 200 239775 0.002002
+2025-09-08 17:28:00,737 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,737 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,738 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /bootstrap.min.css HTTP/1.1" 200 220992 0.000997
+2025-09-08 17:28:00,738 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,739 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,739 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /opening_style.css HTTP/1.1" 200 6719 0.001000
+2025-09-08 17:28:00,741 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,741 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,741 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /bootstrap.bundle.min.js HTTP/1.1" 200 80809 0.001000
+2025-09-08 17:28:00,742 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,742 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,743 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /opening_js.js HTTP/1.1" 200 15459 0.001001
+2025-09-08 17:28:00,744 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,744 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,745 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /all.js HTTP/1.1" 200 680707 0.000999
+2025-09-08 17:28:00,746 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,746 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,746 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /eel.js HTTP/1.1" 200 6201 0.000000
+2025-09-08 17:28:00,797 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,797 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,798 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /fonts/poppins-local.css HTTP/1.1" 200 3039 0.001002
+2025-09-08 17:28:00,802 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,802 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,806 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /img/background2.png HTTP/1.1" 200 2638497 0.004001
+2025-09-08 17:28:00,838 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,838 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,839 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /fonts/Poppins/Poppins-Medium.ttf HTTP/1.1" 200 156733 0.001000
+2025-09-08 17:28:00,840 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,840 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,841 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /fonts/Poppins/Poppins-Thin.ttf HTTP/1.1" 200 161865 0.001001
+2025-09-08 17:28:00,842 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,842 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,843 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /fonts/Poppins/Poppins-ExtraLight.ttf HTTP/1.1" 200 161669 0.000999
+2025-09-08 17:28:00,844 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,844 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,845 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /fonts/Poppins/Poppins-Regular.ttf HTTP/1.1" 200 158453 0.001001
+2025-09-08 17:28:00,846 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,846 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,847 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /fonts/Poppins/Poppins-MediumItalic.ttf HTTP/1.1" 200 180657 0.001001
+2025-09-08 17:28:00,942 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:00,942 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:00,944 - INFO - log_request:242 - 127.0.0.1 - - [2025-09-08 17:28:00] "GET /favicon.ico HTTP/1.1" 404 876 0.001999
+2025-09-08 17:28:01,156 - DEBUG - run_application:68 - Initializing WebSocket
+2025-09-08 17:28:01,156 - DEBUG - upgrade_websocket:100 - Validating WebSocket request
+2025-09-08 17:28:01,156 - DEBUG - upgrade_connection:151 - Attempting to upgrade connection
+2025-09-08 17:28:01,156 - DEBUG - upgrade_connection:230 - WebSocket request accepted, switching protocols
+2025-09-08 17:28:15,455 - INFO - convert_multiple_files:308 - === CONVERT MULTIPLE FILES STARTED ===
+2025-09-08 17:28:15,455 - INFO - convert_multiple_files:309 - Input folder: C:\Program Files\Airforce_Application\Data\nithin
+2025-09-08 17:28:15,455 - INFO - convert_multiple_files:310 - Output folder: C:\Users\user\Desktop\DataPilotFiles\New folder
+2025-09-08 17:28:15,464 - INFO - convert_multiple_files:334 - Starting file conversion process
+2025-09-08 17:28:15,543 - INFO - _init_num_threads:160 - NumExpr defaulting to 6 threads.
+2025-09-08 17:28:15,561 - WARNING - <module>:28 - csv is not supported
+2025-09-08 17:28:15,561 - WARNING - <module>:28 - dbf is not supported
+2025-09-08 17:28:15,561 - WARNING - <module>:28 - json is not supported
+2025-09-08 17:28:15,562 - WARNING - <module>:28 - ldf is not supported
+2025-09-08 17:28:15,562 - WARNING - <module>:28 - kcd is not supported
+2025-09-08 17:28:15,562 - WARNING - <module>:28 - fibex is not supported
+2025-09-08 17:28:15,562 - WARNING - <module>:28 - sym is not supported
+2025-09-08 17:28:15,562 - WARNING - <module>:28 - xls is not supported
+2025-09-08 17:28:15,562 - WARNING - <module>:28 - xlsx is not supported
+2025-09-08 17:28:15,562 - WARNING - <module>:28 - yaml is not supported
+2025-09-08 17:28:15,562 - WARNING - <module>:28 - scapy is not supported
+2025-09-08 17:28:15,562 - WARNING - <module>:28 - wireshark is not supported
+2025-09-08 17:28:15,563 - WARNING - <module>:28 - odx is not supported
+2025-09-08 17:28:15,875 - INFO - convert_multiple_files:359 - Found ZIP file: C:\Program Files\Airforce_Application\Data\nithin\ReXgen0002906.zip, extracting...
