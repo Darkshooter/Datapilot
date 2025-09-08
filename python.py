@@ -159,10 +159,10 @@ def update_csv_units_from_dbc(csv_file_path):
             writer = csv.writer(file)
             writer.writerows(rows)
             
-        print(f"Updated units in CSV: {csv_file_path}")
+        pass  # Units updated successfully
         
-    except Exception as e:
-        print(f"Error updating CSV units: {e}")
+    except Exception:
+        pass  # Error updating CSV units
 
 
 def add_converted_unit_columns(csv_file_path):
@@ -228,10 +228,10 @@ def add_converted_unit_columns(csv_file_path):
             writer = csv.writer(file)
             writer.writerows(rows)
             
-        print(f"Updated unit conversions in CSV: {csv_file_path}")
+        pass  # Unit conversions updated successfully
         
-    except Exception as e:
-        print(f"Error converting units: {e}")
+    except Exception:
+        pass  # Error converting units
 
 
 
@@ -250,19 +250,13 @@ def convert_multiple_files(input, output):
     single_tb = True
     if process is not None:  # if process is already running
         try:
-            print('Process found, attempting to terminate...')
             parent = psutil.Process(process.pid)
             for child in parent.children(recursive=True):
-                print(f'Terminating child process {child.pid}...')
                 child.kill()
-            print(f'Terminating parent process {parent.pid}...')
             parent.kill()
-            print('Successfully terminated process.')
             process = None  # reset the global variable
-        except Exception as e:
-            print(f'Error while terminating process: {e}')
-    else:  # if process is not running
-        print('No process found, proceeding...')
+        except Exception:
+            pass
 
     raster_rate = float('0.25')
     if input == "" or output == "":
@@ -296,7 +290,7 @@ def convert_multiple_files(input, output):
             with ZipFile(zip_file, 'r') as zObject:
                 zObject.extractall(path=input_folder, pwd=passwd)
         else:
-            print("No ZIP files found. Moving on...")
+            pass
 
 
         # RXD to MF4 Conversion
@@ -399,7 +393,7 @@ def convert_multiple_files(input, output):
         dbc_path = Path(r"C:\Program Files (x86)\IBDS\DataPilot")
         dbc_files = {"CAN": [(dbc, 0)
                                 for dbc in list(dbc_path.glob("*" + ".dbc"))]}
-        print('DBC FILESS---', dbc_files)
+        # DBC files loaded
         # contains path of the log files
         logfiles = list(path_out.glob("*" + mdf_extension))
         
@@ -409,24 +403,15 @@ def convert_multiple_files(input, output):
         try:
             # Extract File Name from MF4
             for a in file_list:
-                print("a VLUEEEE: ",a)
                 newlist = []
                 newlist.append(a)
                 mdf = MDF.concatenate(newlist)
                 newlist = []
                 filename = os.path.splitext(os.path.basename(a))[0]
-                print(filename)
 
                 # Scaled
                 try:
                     available_signals = set(mdf.channels_db.keys())
-                    
-                    # Print available signals for debugging
-                    print(f"=== SIGNAL ANALYSIS FOR {filename} ===")
-                    print(f"Total available signals in MDF: {len(available_signals)}")
-                    print("Available signals:")
-                    for sig in sorted(available_signals):
-                        print(f"  - {sig}")
                     
                     signals = [
                         'Accelerometer_X',
@@ -484,16 +469,7 @@ def convert_multiple_files(input, output):
                     # Find missing signals
                     missing_signals = [signal for signal in signals if signal not in available_signals]
                     
-                    print(f"\nFOUND SIGNALS ({len(filtered_signals)}):")
-                    for sig in filtered_signals:
-                        print(f"  ✓ {sig}")
-                    
-                    print(f"\nMISSING SIGNALS ({len(missing_signals)}):")
-                    for sig in missing_signals:
-                        print(f"  ✗ {sig}")
-                    
                     # Try to find similar signal names for missing ones
-                    print(f"\nLOOKING FOR SIMILAR SIGNALS:")
                     for missing_sig in missing_signals:
                         # Look for signals that contain parts of the missing signal name
                         similar = [avail_sig for avail_sig in available_signals 
@@ -501,14 +477,8 @@ def convert_multiple_files(input, output):
                                        for part in missing_sig.replace('_', ' ').split() 
                                        if len(part) > 2)]
                         if similar:
-                            print(f"  {missing_sig} -> Possible matches: {similar}")
                             # Add the first similar match to filtered signals
                             filtered_signals.append(similar[0])
-                    
-                    print(f"\nFINAL FILTERED SIGNALS ({len(filtered_signals)}):")
-                    for sig in filtered_signals:
-                        print(f"  → {sig}")
-                    print("=" * 50)
 
                     if filtered_signals:
                         mdf_scaled_signal_list = mdf.filter(filtered_signals)
@@ -519,7 +489,7 @@ def convert_multiple_files(input, output):
                         mdf_scaled_signal_list.export("csv", filename=Path(path_out, "{}".format(
                             filename)), time_as_date=time_ad, time_from_zero=time_fz, single_time_base=single_tb, raster=raster_rate, add_units=True)
                     else:
-                        print(f"WARNING: No signals found for {filename}")
+                        pass  # No signals found
                         
                 except ValueError:
                     pass
@@ -544,7 +514,6 @@ def convert_multiple_files(input, output):
                     for i, header in enumerate(rows[0]):
                         if header == 'DATETIME':
                             rows[0][i] = 'GPS_DATE_TIME'
-                            print(f"Renamed column 'DATETIME' to 'GPS_DATE_TIME' at index {i}")
                             break
 
                 # Modify the rows
@@ -575,7 +544,6 @@ def convert_multiple_files(input, output):
                         try:
                             dt = datetime.strptime(new_str, '%Y-%m-%d %H:%M:%S')
                         except ValueError:
-                            print(f"Failed to parse date: {new_str}")
                             continue
 
                     # Adjust the datetime by subtracting hours and minutes
@@ -666,19 +634,13 @@ def pythonFunction(output, wildcard="*"):
     single_tb = True
     if process is not None:  # if process is already running
         try:
-            print('Process found, attempting to terminate...')
             parent = psutil.Process(process.pid)
             for child in parent.children(recursive=True):
-                print(f'Terminating child process {child.pid}...')
                 child.kill()
-            print(f'Terminating parent process {parent.pid}...')
             parent.kill()
-            print('Successfully terminated process.')
             process = None  # reset the global variable
-        except Exception as e:
-            print(f'Error while terminating process: {e}')
-    else:  # if process is not running
-        print('No process found, proceeding...')
+        except Exception:
+            pass
 
 
     # Get the path of the uploaded file
@@ -693,7 +655,7 @@ def pythonFunction(output, wildcard="*"):
         path_single = None
     dialog.Destroy()
 
-    print("output:::: ", output)
+    # Output folder selected
     output_folder = output
 
     raster_rate = float('0.25')
@@ -738,13 +700,9 @@ def pythonFunction(output, wildcard="*"):
         input_file = input
         output_file = os.path.join(output_folder, f"{filename}.mf4")
 
-    print("input: ", input_file)
-    print("output: ", output_file)
-
     # Extract input file path
     input_folder = "{}".format(input_file)
     input_folder_path = os.path.dirname(input_folder)
-    print("folder: ", input_folder_path)
 
     # RXD to MF4 Conversion
     import subprocess
@@ -807,7 +765,7 @@ def pythonFunction(output, wildcard="*"):
     path_in = Path(path, input_folder_path)  # input folder path
     path_out = Path(path, output_folder)  # output folder path
 
-    print("OUTPUT FOLDER ----", path_out)
+    # Output folder path determined
 
     # contains path of the DBC file (Customise)
     
@@ -824,20 +782,12 @@ def pythonFunction(output, wildcard="*"):
         mdf = MDF.concatenate(newlist)
         newlist = []
         filename = os.path.splitext(os.path.basename(a))[0]
-        print(filename)
 
         # Scaled
         # mdf_scaled = mdf.extract_bus_logging(
         #     dbc_files, ignore_invalid_signals=True)
         try:
             available_signals = set(mdf.channels_db.keys())
-            
-            # Print available signals for debugging
-            print(f"=== SIGNAL ANALYSIS FOR {filename} ===")
-            print(f"Total available signals in MDF: {len(available_signals)}")
-            print("Available signals:")
-            for sig in sorted(available_signals):
-                print(f"  - {sig}")
             
             signals = [
                 'Accelerometer X',
@@ -891,16 +841,7 @@ def pythonFunction(output, wildcard="*"):
             # Find missing signals
             missing_signals = [signal for signal in signals if signal not in available_signals]
             
-            print(f"\nFOUND SIGNALS ({len(filtered_signals)}):")
-            for sig in filtered_signals:
-                print(f"  ✓ {sig}")
-            
-            print(f"\nMISSING SIGNALS ({len(missing_signals)}):")
-            for sig in missing_signals:
-                print(f"  ✗ {sig}")
-            
             # Try to find similar signal names for missing ones
-            print(f"\nLOOKING FOR SIMILAR SIGNALS:")
             for missing_sig in missing_signals:
                 # Look for signals that contain parts of the missing signal name
                 similar = [avail_sig for avail_sig in available_signals 
@@ -908,14 +849,8 @@ def pythonFunction(output, wildcard="*"):
                                for part in missing_sig.replace('_', ' ').split() 
                                if len(part) > 2)]
                 if similar:
-                    print(f"  {missing_sig} -> Possible matches: {similar}")
                     # Add the first similar match to filtered signals
                     filtered_signals.append(similar[0])
-            
-            print(f"\nFINAL FILTERED SIGNALS ({len(filtered_signals)}):")
-            for sig in filtered_signals:
-                print(f"  → {sig}")
-            print("=" * 50)
 
             if filtered_signals:
                 mdf_scaled_signal_list = mdf.filter(filtered_signals)
@@ -926,7 +861,7 @@ def pythonFunction(output, wildcard="*"):
                 mdf_scaled_signal_list.export("csv", filename=Path(path_out, "{}".format(
                     filename)), time_as_date=time_ad, time_from_zero=time_fz, single_time_base=single_tb, raster=raster_rate, add_units=True)
             else:
-                print(f"WARNING: No signals found for {filename}")
+                pass  # No signals found
                 
         except ValueError:
             pass
@@ -951,7 +886,6 @@ def pythonFunction(output, wildcard="*"):
             for i, header in enumerate(rows[0]):
                 if header == 'DATETIME':
                     rows[0][i] = 'GPS_DATE_TIME'
-                    print(f"Renamed column 'DATETIME' to 'GPS_DATE_TIME' at index {i}")
                     break
 
         # Modify the rows
@@ -982,7 +916,6 @@ def pythonFunction(output, wildcard="*"):
                 try:
                     dt = datetime.strptime(new_str, '%Y-%m-%d %H:%M:%S')
                 except ValueError:
-                    print(f"Failed to parse date: {new_str}")
                     continue
 
             # Adjust the datetime by subtracting hours and minutes
@@ -1066,8 +999,7 @@ def select_input_folder():
             selected_path = None
         dialog.Destroy()
         return selected_path
-    except Exception as e:
-        print(f"Error in select_input_folder: {e}")
+    except Exception:
         return None
 
 @eel.expose
@@ -1087,8 +1019,7 @@ def select_output_folder():
             selected_path = None
         dialog.Destroy()
         return selected_path
-    except Exception as e:
-        print(f"Error in select_output_folder: {e}")
+    except Exception:
         return None
 
 @eel.expose
@@ -1096,38 +1027,121 @@ def create_automatic_output_folder(input_folder_path):
     """Create automatic output folder structure in Desktop/DataPilotFiles"""
     import os
     import winreg
-    try:
-        # Get desktop path from Windows registry (works across different PCs)
-        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders") as key:
-            desktop_path = winreg.QueryValueEx(key, "Desktop")[0]
+    
+    def get_desktop_path():
+        """Try multiple methods to get the desktop path"""
+        desktop_paths_to_try = []
         
-        # Create DataPilotFiles folder on desktop
-        datapilot_folder = os.path.join(desktop_path, "DataPilotFiles")
+        # Method 1: Try modern registry key first
+        try:
+            with winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders") as key:
+                desktop_path = winreg.QueryValueEx(key, "Desktop")[0]
+                # Expand environment variables if present (like %USERPROFILE%)
+                desktop_path = os.path.expandvars(desktop_path)
+                desktop_paths_to_try.append(desktop_path)
+        except Exception:
+            pass
+        
+        # Method 2: Try legacy registry key
+        try:
+            with winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders") as key:
+                desktop_path = winreg.QueryValueEx(key, "Desktop")[0]
+                desktop_paths_to_try.append(desktop_path)
+        except Exception:
+            pass
+        
+        # Method 3: Use Windows API via environment variables
+        try:
+            userprofile = os.environ.get('USERPROFILE')
+            if userprofile:
+                desktop_path = os.path.join(userprofile, 'Desktop')
+                desktop_paths_to_try.append(desktop_path)
+        except Exception:
+            pass
+        
+        # Method 4: Use os.path.expanduser
+        try:
+            home_path = os.path.expanduser("~")
+            desktop_path = os.path.join(home_path, "Desktop")
+            desktop_paths_to_try.append(desktop_path)
+        except Exception:
+            pass
+        
+        # Method 5: Try common Windows desktop locations
+        try:
+            common_paths = [
+                os.path.join(os.environ.get('HOMEDRIVE', 'C:'), os.environ.get('HOMEPATH', ''), 'Desktop'),
+                r"C:\Users\{}\Desktop".format(os.environ.get('USERNAME', 'Default')),
+            ]
+            
+            for path in common_paths:
+                if path and path not in desktop_paths_to_try:
+                    desktop_paths_to_try.append(path)
+        except Exception:
+            pass
+        
+        # Test each path and return the first one that exists or can be accessed
+        for desktop_path in desktop_paths_to_try:
+            if desktop_path:
+                try:
+                    # Normalize the path
+                    desktop_path = os.path.normpath(desktop_path)
+                    
+                    # Check if it exists or the parent directory exists
+                    if os.path.exists(desktop_path) or os.path.isdir(os.path.dirname(desktop_path)):
+                        return desktop_path
+                except Exception:
+                    continue
+        
+        # If all methods fail, return None
+        return None
+    
+    try:
+        # Get desktop path using multiple methods
+        desktop_path = get_desktop_path()
+        
+        if not desktop_path:
+            # Ultimate fallback - use a folder in the user's home directory
+            fallback_base = os.path.expanduser("~")
+            if not fallback_base or fallback_base == "~":
+                fallback_base = os.environ.get('USERPROFILE', r"C:\Users\Default")
+            
+            datapilot_folder = os.path.join(fallback_base, "DataPilotFiles")
+        else:
+            # Create DataPilotFiles folder on desktop
+            datapilot_folder = os.path.join(desktop_path, "DataPilotFiles")
+        
+        # Create the DataPilot folder
         os.makedirs(datapilot_folder, exist_ok=True)
         
         # Get input folder name
         input_folder_name = os.path.basename(input_folder_path.rstrip(os.sep))
+        if not input_folder_name:
+            input_folder_name = "DataPilot_Output"
         
         # Create subfolder with same name as input folder
         output_folder = os.path.join(datapilot_folder, input_folder_name)
         os.makedirs(output_folder, exist_ok=True)
         
         return output_folder
-    except Exception as e:
-        print(f"Error creating automatic output folder: {e}")
-        # Fallback to user's home directory if desktop path fails
+        
+    except Exception:
+        # Final emergency fallback
         try:
-            home_path = os.path.expanduser("~")
-            datapilot_folder = os.path.join(home_path, "Desktop", "DataPilotFiles")
-            os.makedirs(datapilot_folder, exist_ok=True)
+            import tempfile
+            temp_dir = tempfile.gettempdir()
+            emergency_folder = os.path.join(temp_dir, "DataPilotFiles")
             
             input_folder_name = os.path.basename(input_folder_path.rstrip(os.sep))
-            output_folder = os.path.join(datapilot_folder, input_folder_name)
+            if not input_folder_name:
+                input_folder_name = "DataPilot_Output"
+                
+            output_folder = os.path.join(emergency_folder, input_folder_name)
             os.makedirs(output_folder, exist_ok=True)
             
             return output_folder
-        except Exception as e2:
-            print(f"Fallback also failed: {e2}")
+            
+        except Exception:
             return None
 
 
@@ -1142,7 +1156,7 @@ def setup_logger(format_logger):
     wmi = win32com.client.GetObject("winmgmts:")
     list = []
     
-    print("format logger: ", format_logger)
+    # Format logger parameter received
     for usb in wmi.InstancesOf("Win32_USBHub"):
         if 'ReXgen' in usb.Name:
             list.append('1')
@@ -1213,20 +1227,17 @@ def setup_logger(format_logger):
 def extract_data():
     import subprocess
     global process
-    print('Starting new process...')
     try:
         process = subprocess.Popen(
             r"C:\Program Files (x86)\IBDS\DataPilot\InfluxSelfExtract.exe", shell=True)
-        print('Successfully started new process.')
         return "done"
-    except Exception as e:
-        print(f'Error while starting process: {e}')
+    except Exception:
+        return "error"
 
 
 @eel.expose
 def test_debug():
     """Simple test function to verify eel communication"""
-    print("TEST FUNCTION CALLED - EEL IS WORKING!")
     return "Test function executed successfully"
 
 @eel.expose

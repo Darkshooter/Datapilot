@@ -1,0 +1,11 @@
+[2025-09-08 12:38:35] Creating automatic output folder for input: C:\Program Files\Airforce_Application\Data\nithin
+[2025-09-08 12:38:35] Found desktop path via modern registry: C:\Users\user\Desktop
+[2025-09-08 12:38:35] Found desktop path via legacy registry: C:\Users\user\Desktop
+[2025-09-08 12:38:35] Found desktop path via USERPROFILE: C:\Users\user\Desktop
+[2025-09-08 12:38:35] Found desktop path via expanduser: C:\Users\user\Desktop
+[2025-09-08 12:38:35] Testing desktop path: C:\Users\user\Desktop
+[2025-09-08 12:38:35] Desktop path verified: C:\Users\user\Desktop
+[2025-09-08 12:38:35] Creating DataPilot folder at: C:\Users\user\Desktop\DataPilotFiles
+[2025-09-08 12:38:35] Creating output folder at: C:\Users\user\Desktop\DataPilotFiles\nithin
+[2025-09-08 12:38:35] Successfully created output folder: C:\Users\user\Desktop\DataPilotFiles\nithin
+[2025-09-08 12:38:35] No process found, proceeding...
